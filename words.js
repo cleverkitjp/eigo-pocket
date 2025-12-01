@@ -1,21 +1,245 @@
-// 560語ぶんの英単語リスト（英語だけ）
-// ※ かな・日本語訳はあとで埋める前提
-const RAW_WORDS = `
-I, you, he, she, we, they, me, my, your, his, her, our, their, family, father, mother, brother, sister, grandpa, grandma, baby, friend, teacher, student, boy, girl, man, woman, child, people, name, school, house, room, kitchen, bathroom, park, garden, store, hospital, station, library, zoo, city, town, country, world, home, place, apple, banana, orange, grape, bread, rice, egg, meat, fish, vegetable, fruit, milk, water, juice, tea, coffee, sandwich, cake, ice cream, lunch, dinner, breakfast, food, dog, cat, bird, elephant, monkey, panda, lion, tiger, rabbit, bear, animal, book, pen, pencil, desk, chair, bag, clock, car, bus, train, bicycle, phone, computer, door, window, key, money, ball, toy, gift, paper, picture, box, thing, idea, help, word, question, answer, story, weather, sound, light, air, ground, tree, flower, sun, moon, star, snow, rain, wind, fire, game, time, day, week, month, year, minute, hour, second, morning, afternoon, evening, night, today, tomorrow, yesterday, zero, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, twenty, hundred, number, color, red, blue, green, yellow, white, black, brown, pink, go, come, walk, run, jump, swim, fly, eat, drink, sleep, play, talk, sing, dance, read, write, draw, look, see, watch, hear, listen, open, close, clean, wash, study, work, live, move, start, stop, turn, be, have, like, love, want, know, think, feel, believe, try, need, get, give, take, make, do, say, tell, ask, call, become, learn, put, hold, wear, buy, find, show, mean, meet, teach, remember, forget, use, good, bad, happy, sad, big, small, long, short, tall, new, old, young, easy, hard, great, nice, kind, busy, hungry, thirsty, sleepy, tired, cool, hot, warm, cold, clean, fast, slow, favorite, much, many, a lot of, few, little, all, some, any, first, second, last, whole, here, there, now, then, very, really, always, sometimes, often, never, too, so, well, also, again, maybe, outside, inside, in, on, at, by, for, to, from, with, about, under, over, above, near, next to, before, after, up, down, of, across, and, but, or, because, hello, hi, goodbye, thank you, please, yes, no, sorry, excuse me, wow, spoon, fork, knife, plate, cup, glass, hat, shoes, coat, shirt, skirt, dress, socks, pants, map, camera, keyboard, screen, music, song, letter, email, address, bridge, road, street, hospital, office, market, mountain, river, beach, field, grass, leaf, sky, cloud, star, planet, earth, moon, air, water, salt, sugar, soap, smell, taste, touch, sound, voice, laugh, cry, smile, face, head, hair, eye, ear, nose, mouth, hand, foot, body, arm, leg, back, front, morning, evening, afternoon, noon, midnight, today, tomorrow, yesterday, date, season, spring, summer, fall, winter, weather, temperature, rain, snow, cloud, sunny, cloudy, windy, beautiful, ugly, strong, weak, important, different, same, better, best, more, less, away, together, straight, left, right, home, upstairs, downstairs, ready, careful, quiet, loud, excited, bored, alone, enough, soon, late, early, just, most, only, once, twice, third, a, an, the, this, that, those, what, where, when, why, how, which, who, whom, whose, thing, anything, nothing, everything, someone, everybody, nobody, itself, yourself, himself, herself, ourselves, yourselves, themselves, across, behind, between, through, onto, into, out of, above, below, near, far, around, past, since, until, without, though, although, while, if, unless, whether, after, before, so that, in order to, because of, instead of, except, including, such as, able, afraid, alive, amazing, angry, asleep, awful, brave, bright, busy, calm, clever, comfortable, common, crazy, curious, dark, deep, difficult, dirty, easy, empty, fantastic, friendly, full, funny, gentle, happy, healthy, heavy, honest, huge, hungry, important, kind, lazy, light, lonely, lucky, magic, messy, nervous, noisy, odd, perfect, pleasant, polite, poor, possible, proud, quick, quiet, ready, rich, safe, serious, sharp, silly, simple, sleepy, slow, small, soft, special, strange, strong, sudden, sure, sweet, tall, tired, true, warm, weak, wet, whole, wide, worried, wrong, wonderful, young, beautiful, delicious, exciting, famous, interesting, lovely, popular, wonderful, a.m., p.m.
-`;
+// ======================================
+// えいごポケット：動作確認用 210語サンプル
+// 各ステージ 30語 × 7 = 210語
+// ======================================
 
-// id: 1 〜 の配列に変換
-const WORDS = RAW_WORDS
-  .split(",")
-  .map((raw, index) => {
-    const english = raw.trim();
-    if (!english) return null;
-    const id = index + 1;
-    return {
-      id,
-      english,
-      kana: "",      // ← 後で埋める
-      japanese: ""   // ← 後で埋める
-    };
-  })
-  .filter((item) => item !== null);
+const WORDS = [
+
+  // ------------------------
+  // Stage 1（1〜30）
+  // ------------------------
+  {id: 1,  english: "apple",     kana: "アップル",     japanese: "りんご"},
+  {id: 2,  english: "banana",    kana: "バナナ",        japanese: "バナナ"},
+  {id: 3,  english: "orange",    kana: "オレンジ",      japanese: "オレンジ"},
+  {id: 4,  english: "grape",     kana: "グレープ",      japanese: "ぶどう"},
+  {id: 5,  english: "dog",       kana: "ドッグ",        japanese: "いぬ"},
+  {id: 6,  english: "cat",       kana: "キャット",      japanese: "ねこ"},
+  {id: 7,  english: "bird",      kana: "バード",        japanese: "とり"},
+  {id: 8,  english: "fish",      kana: "フィッシュ",    japanese: "さかな"},
+  {id: 9,  english: "school",    kana: "スクール",      japanese: "学校"},
+  {id:10,  english: "teacher",   kana: "ティーチャー",  japanese: "先生"},
+  {id:11,  english: "student",   kana: "スチューデント",japanese: "生徒"},
+  {id:12,  english: "desk",      kana: "デスク",        japanese: "つくえ"},
+  {id:13,  english: "chair",     kana: "チェア",        japanese: "いす"},
+  {id:14,  english: "book",      kana: "ブック",        japanese: "本"},
+  {id:15,  english: "pen",       kana: "ペン",          japanese: "ペン"},
+  {id:16,  english: "bag",       kana: "バッグ",        japanese: "かばん"},
+  {id:17,  english: "car",       kana: "カー",          japanese: "くるま"},
+  {id:18,  english: "bus",       kana: "バス",          japanese: "バス"},
+  {id:19,  english: "train",     kana: "トレイン",      japanese: "電車"},
+  {id:20,  english: "house",     kana: "ハウス",        japanese: "いえ"},
+  {id:21,  english: "room",      kana: "ルーム",        japanese: "へや"},
+  {id:22,  english: "park",      kana: "パーク",        japanese: "公園"},
+  {id:23,  english: "tree",      kana: "ツリー",        japanese: "木"},
+  {id:24,  english: "flower",    kana: "フラワー",      japanese: "花"},
+  {id:25,  english: "sun",       kana: "サン",          japanese: "太陽"},
+  {id:26,  english: "moon",      kana: "ムーン",        japanese: "月"},
+  {id:27,  english: "star",      kana: "スター",        japanese: "ほし"},
+  {id:28,  english: "water",     kana: "ウォーター",    japanese: "みず"},
+  {id:29,  english: "milk",      kana: "ミルク",        japanese: "ぎゅうにゅう"},
+  {id:30,  english: "juice",     kana: "ジュース",       japanese: "ジュース"},
+
+  // ------------------------
+  // Stage 2（31〜60）
+  // ------------------------
+  {id:31, english:"father", kana:"ファザー", japanese:"ちち"},
+  {id:32, english:"mother", kana:"マザー", japanese:"はは"},
+  {id:33, english:"brother", kana:"ブラザー", japanese:"あに・おとうと"},
+  {id:34, english:"sister", kana:"シスター", japanese:"あね・いもうと"},
+  {id:35, english:"baby", kana:"ベイビー", japanese:"あかちゃん"},
+  {id:36, english:"friend", kana:"フレンド", japanese:"ともだち"},
+  {id:37, english:"man", kana:"マン", japanese:"おとこのひと"},
+  {id:38, english:"woman", kana:"ウーマン", japanese:"おんなのひと"},
+  {id:39, english:"boy", kana:"ボーイ", japanese:"おとこのこ"},
+  {id:40, english:"girl", kana:"ガール", japanese:"おんなのこ"},
+  {id:41, english:"town", kana:"タウン", japanese:"まち"},
+  {id:42, english:"city", kana:"シティ", japanese:"都市"},
+  {id:43, english:"country", kana:"カントリー", japanese:"国"},
+  {id:44, english:"world", kana:"ワールド", japanese:"世界"},
+  {id:45, english:"food", kana:"フード", japanese:"たべもの"},
+  {id:46, english:"bread", kana:"ブレッド", japanese:"パン"},
+  {id:47, english:"meat", kana:"ミート", japanese:"肉"},
+  {id:48, english:"egg", kana:"エッグ", japanese:"たまご"},
+  {id:49, english:"rice", kana:"ライス", japanese:"ごはん"},
+  {id:50, english:"cake", kana:"ケーキ", japanese:"ケーキ"},
+  {id:51, english:"ice cream", kana:"アイスクリーム", japanese:"アイス"},
+  {id:52, english:"doghouse", kana:"ドッグハウス", japanese:"犬小屋"},
+  {id:53, english:"zoo", kana:"ズー", japanese:"どうぶつえん"},
+  {id:54, english:"hospital", kana:"ホスピタル", japanese:"びょういん"},
+  {id:55, english:"store", kana:"ストア", japanese:"みせ"},
+  {id:56, english:"library", kana:"ライブラリー", japanese:"としょかん"},
+  {id:57, english:"key", kana:"キー", japanese:"かぎ"},
+  {id:58, english:"door", kana:"ドア", japanese:"ドア"},
+  {id:59, english:"window", kana:"ウィンドウ", japanese:"まど"},
+  {id:60, english:"paper", kana:"ペーパー", japanese:"かみ"},
+
+  // ------------------------
+  // Stage 3（61〜90）
+  // ------------------------
+  {id:61, english:"run", kana:"ラン", japanese:"はしる"},
+  {id:62, english:"walk", kana:"ウォーク", japanese:"あるく"},
+  {id:63, english:"jump", kana:"ジャンプ", japanese:"とぶ"},
+  {id:64, english:"swim", kana:"スイム", japanese:"およぐ"},
+  {id:65, english:"fly", kana:"フライ", japanese:"とぶ"},
+  {id:66, english:"eat", kana:"イート", japanese:"たべる"},
+  {id:67, english:"drink", kana:"ドリンク", japanese:"のむ"},
+  {id:68, english:"sleep", kana:"スリープ", japanese:"ねる"},
+  {id:69, english:"read", kana:"リード", japanese:"よむ"},
+  {id:70, english:"write", kana:"ライト", japanese:"かく"},
+  {id:71, english:"draw", kana:"ドロー", japanese:"えをかく"},
+  {id:72, english:"sing", kana:"シング", japanese:"うたう"},
+  {id:73, english:"dance", kana:"ダンス", japanese:"おどる"},
+  {id:74, english:"play", kana:"プレイ", japanese:"あそぶ"},
+  {id:75, english:"see", kana:"シー", japanese:"みる"},
+  {id:76, english:"look", kana:"ルック", japanese:"みる"},
+  {id:77, english:"watch", kana:"ウォッチ", japanese:"みる"},
+  {id:78, english:"hear", kana:"ヒア", japanese:"きく"},
+  {id:79, english:"listen", kana:"リッスン", japanese:"きく"},
+  {id:80, english:"open", kana:"オープン", japanese:"あける"},
+  {id:81, english:"close", kana:"クローズ", japanese:"しめる"},
+  {id:82, english:"study", kana:"スタディ", japanese:"べんきょうする"},
+  {id:83, english:"work", kana:"ワーク", japanese:"はたらく"},
+  {id:84, english:"live", kana:"リブ", japanese:"くらす"},
+  {id:85, english:"move", kana:"ムーブ", japanese:"うごく"},
+  {id:86, english:"start", kana:"スタート", japanese:"はじめる"},
+  {id:87, english:"stop", kana:"ストップ", japanese:"とめる"},
+  {id:88, english:"turn", kana:"ターン", japanese:"まがる"},
+  {id:89, english:"like", kana:"ライク", japanese:"すき"},
+  {id:90, english:"love", kana:"ラブ", japanese:"あいする"},
+
+  // ------------------------
+  // Stage 4（91〜120）
+  // ------------------------
+  {id:91, english:"happy", kana:"ハッピー", japanese:"しあわせ"},
+  {id:92, english:"sad", kana:"サッド", japanese:"かなしい"},
+  {id:93, english:"big", kana:"ビッグ", japanese:"おおきい"},
+  {id:94, english:"small", kana:"スモール", japanese:"ちいさい"},
+  {id:95, english:"tall", kana:"トール", japanese:"せがたかい"},
+  {id:96, english:"short", kana:"ショート", japanese:"みじかい"},
+  {id:97, english:"hot", kana:"ホット", japanese:"あつい"},
+  {id:98, english:"cold", kana:"コールド", japanese:"さむい"},
+  {id:99, english:"warm", kana:"ウォーム", japanese:"あたたかい"},
+  {id:100, english:"cool", kana:"クール", japanese:"すずしい"},
+  {id:101, english:"red", kana:"レッド", japanese:"あか"},
+  {id:102, english:"blue", kana:"ブルー", japanese:"あお"},
+  {id:103, english:"green", kana:"グリーン", japanese:"みどり"},
+  {id:104, english:"yellow", kana:"イエロー", japanese:"きいろ"},
+  {id:105, english:"white", kana:"ホワイト", japanese:"しろ"},
+  {id:106, english:"black", kana:"ブラック", japanese:"くろ"},
+  {id:107, english:"brown", kana:"ブラウン", japanese:"ちゃいろ"},
+  {id:108, english:"pink", kana:"ピンク", japanese:"ピンク"},
+  {id:109, english:"fast", kana:"ファスト", japanese:"はやい"},
+  {id:110, english:"slow", kana:"スロー", japanese:"おそい"},
+  {id:111, english:"new", kana:"ニュー", japanese:"あたらしい"},
+  {id:112, english:"old", kana:"オールド", japanese:"ふるい"},
+  {id:113, english:"funny", kana:"ファニー", japanese:"おもしろい"},
+  {id:114, english:"kind", kana:"カインド", japanese:"やさしい"},
+  {id:115, english:"busy", kana:"ビジー", japanese:"いそがしい"},
+  {id:116, english:"hungry", kana:"ハングリー", japanese:"おなかすいた"},
+  {id:117, english:"tired", kana:"タイアード", japanese:"つかれた"},
+  {id:118, english:"sleepy", kana:"スリーピー", japanese:"ねむい"},
+  {id:119, english:"favorite", kana:"フェイバリット", japanese:"お気に入り"},
+  {id:120, english:"important", kana:"インポータント", japanese:"たいせつ"},
+
+  // ------------------------
+  // Stage 5（121〜150）
+  // ------------------------
+  {id:121, english:"time", kana:"タイム", japanese:"じかん"},
+  {id:122, english:"day", kana:"デイ", japanese:"ひ"},
+  {id:123, english:"week", kana:"ウィーク", japanese:"しゅう"},
+  {id:124, english:"month", kana:"マンス", japanese:"つき"},
+  {id:125, english:"year", kana:"イヤー", japanese:"ねん"},
+  {id:126, english:"morning", kana:"モーニング", japanese:"あさ"},
+  {id:127, english:"afternoon", kana:"アフタヌーン", japanese:"ごご"},
+  {id:128, english:"evening", kana:"イブニング", japanese:"ゆうがた"},
+  {id:129, english:"night", kana:"ナイト", japanese:"よる"},
+  {id:130, english:"today", kana:"トゥデイ", japanese:"きょう"},
+  {id:131, english:"tomorrow", kana:"トゥモロー", japanese:"あした"},
+  {id:132, english:"yesterday", kana:"イエスタデイ", japanese:"きのう"},
+  {id:133, english:"here", kana:"ヒア", japanese:"ここ"},
+  {id:134, english:"there", kana:"ゼア", japanese:"そこ"},
+  {id:135, english:"now", kana:"ナウ", japanese:"いま"},
+  {id:136, english:"then", kana:"ゼン", japanese:"そのとき"},
+  {id:137, english:"very", kana:"ベリー", japanese:"とても"},
+  {id:138, english:"sometimes", kana:"サムタイムズ", japanese:"ときどき"},
+  {id:139, english:"always", kana:"オールウェイズ", japanese:"いつも"},
+  {id:140, english:"never", kana:"ネバー", japanese:"けっして〜ない"},
+  {id:141, english:"yes", kana:"イエス", japanese:"はい"},
+  {id:142, english:"no", kana:"ノー", japanese:"いいえ"},
+  {id:143, english:"hello", kana:"ハロー", japanese:"こんにちは"},
+  {id:144, english:"goodbye", kana:"グッバイ", japanese:"さようなら"},
+  {id:145, english:"please", kana:"プリーズ", japanese:"おねがいします"},
+  {id:146, english:"sorry", kana:"ソーリー", japanese:"ごめんなさい"},
+  {id:147, english:"thank you", kana:"サンキュー", japanese:"ありがとう"},
+  {id:148, english:"wow", kana:"ワオ", japanese:"わあ！"},
+  {id:149, english:"maybe", kana:"メイビー", japanese:"たぶん"},
+  {id:150, english:"again", kana:"アゲイン", japanese:"もういちど"},
+
+  // ------------------------
+  // Stage 6（151〜180）
+  // ------------------------
+  {id:151, english:"in", kana:"イン", japanese:"〜の中に"},
+  {id:152, english:"on", kana:"オン", japanese:"〜の上に"},
+  {id:153, english:"under", kana:"アンダー", japanese:"〜の下に"},
+  {id:154, english:"over", kana:"オーバー", japanese:"〜の上方に"},
+  {id:155, english:"near", kana:"ニア", japanese:"ちかくに"},
+  {id:156, english:"before", kana:"ビフォー", japanese:"〜の前に"},
+  {id:157, english:"after", kana:"アフター", japanese:"〜のあとに"},
+  {id:158, english:"up", kana:"アップ", japanese:"うえに"},
+  {id:159, english:"down", kana:"ダウン", japanese:"したに"},
+  {id:160, english:"with", kana:"ウィズ", japanese:"〜といっしょに"},
+  {id:161, english:"about", kana:"アバウト", japanese:"〜について"},
+  {id:162, english:"from", kana:"フロム", japanese:"〜から"},
+  {id:163, english:"to", kana:"トゥー", japanese:"〜へ"},
+  {id:164, english:"at", kana:"アット", japanese:"〜で"},
+  {id:165, english:"by", kana:"バイ", japanese:"〜によって"},
+  {id:166, english:"because", kana:"ビコーズ", japanese:"なぜなら"},
+  {id:167, english:"and", kana:"アンド", japanese:"そして"},
+  {id:168, english:"but", kana:"バット", japanese:"しかし"},
+  {id:169, english:"or", kana:"オア", japanese:"または"},
+  {id:170, english:"if", kana:"イフ", japanese:"もし〜なら"},
+  {id:171, english:"when", kana:"ウェン", japanese:"〜のとき"},
+  {id:172, english:"who", kana:"フー", japanese:"だれ"},
+  {id:173, english:"what", kana:"ワット", japanese:"なに"},
+  {id:174, english:"where", kana:"ウェア", japanese:"どこ"},
+  {id:175, english:"why", kana:"ワイ", japanese:"なぜ"},
+  {id:176, english:"how", kana:"ハウ", japanese:"どうやって"},
+  {id:177, english:"which", kana:"ウィッチ", japanese:"どちら"},
+  {id:178, english:"home", kana:"ホーム", japanese:"いえ"},
+  {id:179, english:"street", kana:"ストリート", japanese:"とおり"},
+  {id:180, english:"market", kana:"マーケット", japanese:"市場"},
+
+  // ------------------------
+  // Stage 7（181〜210）
+  // ------------------------
+  {id:181, english:"face", kana:"フェイス", japanese:"かお"},
+  {id:182, english:"head", kana:"ヘッド", japanese:"あたま"},
+  {id:183, english:"eye", kana:"アイ", japanese:"め"},
+  {id:184, english:"ear", kana:"イヤー", japanese:"みみ"},
+  {id:185, english:"nose", kana:"ノーズ", japanese:"はな"},
+  {id:186, english:"mouth", kana:"マウス", japanese:"くち"},
+  {id:187, english:"hand", kana:"ハンド", japanese:"て"},
+  {id:188, english:"foot", kana:"フット", japanese:"あし"},
+  {id:189, english:"body", kana:"ボディ", japanese:"からだ"},
+  {id:190, english:"arm", kana:"アーム", japanese:"うで"},
+  {id:191, english:"leg", kana:"レッグ", japanese:"あし"},
+  {id:192, english:"back", kana:"バック", japanese:"せなか"},
+  {id:193, english:"front", kana:"フロント", japanese:"まえ"},
+  {id:194, english:"rain", kana:"レイン", japanese:"あめ"},
+  {id:195, english:"snow", kana:"スノー", japanese:"ゆき"},
+  {id:196, english:"cloud", kana:"クラウド", japanese:"くも"},
+  {id:197, english:"wind", kana:"ウィンド", japanese:"かぜ"},
+  {id:198, english:"sunny", kana:"サニー", japanese:"はれ"},
+  {id:199, english:"cloudy", kana:"クラウディ", japanese:"くもり"},
+  {id:200, english:"warm", kana:"ウォーム", japanese:"あたたかい"},
+  {id:201, english:"cold", kana:"コールド", japanese:"さむい"},
+  {id:202, english:"beautiful", kana:"ビューティフル", japanese:"うつくしい"},
+  {id:203, english:"strong", kana:"ストロング", japanese:"つよい"},
+  {id:204, english:"weak", kana:"ウィーク", japanese:"よわい"},
+  {id:205, english:"fun", kana:"ファン", japanese:"たのしい"},
+  {id:206, english:"clean", kana:"クリーン", japanese:"きれい"},
+  {id:207, english:"dirty", kana:"ダーティ", japanese:"きたない"},
+  {id:208, english:"quiet", kana:"クワイエット", japanese:"しずか"},
+  {id:209, english:"loud", kana:"ラウド", japanese:"うるさい"},
+  {id:210, english:"special", kana:"スペシャル", japanese:"とくべつな"},
+];
