@@ -1,16 +1,33 @@
 // ===============================
+//  ステージ定義（7つ）
+// ===============================
+
+const STAGES = [
+  { id: 1, name: "はじまりの森", startId: 1, endId: 80 },
+  { id: 2, name: "ことばの川",   startId: 81, endId: 160 },
+  { id: 3, name: "おんがくの丘", startId: 161, endId: 240 },
+  { id: 4, name: "ひかりの草原", startId: 241, endId: 320 },
+  { id: 5, name: "ふしぎな町",   startId: 321, endId: 400 },
+  { id: 6, name: "そらの城",     startId: 401, endId: 480 },
+  { id: 7, name: "ほしの王国",   startId: 481, endId: 560 }
+];
+
+// ===============================
 //  進捗・スタンプ管理
 // ===============================
 
-let currentIndex = 0;          // 現在のカードインデックス（WORDS配列の添字）
-let totalViewedCount = 0;      // 「つぎ」ボタンで進んだ枚数の累計
+let currentStageId = 1;        // いま選んでいるステージID
+let activeWords = [];          // このステージで使う単語配列（ランダム順）
+
+let currentIndex = 0;          // activeWords 内でのインデックス
+let totalViewedCount = 0;      // このステージで「つぎ」を押した枚数累計
 let cardsNeededForTest = 10;   // 次のミニテストまでに必要な枚数
-let testAvailableBlockIndex = null; // いまミニテスト可能なブロック（10枚ごと）のID
+let testAvailableBlockKey = null; // "stageId-blockIndex"
 let isCooldown = false;        // 「つぎ」ボタンのクールダウン中かどうか
 
 // ミニテスト状態
 let isInTest = false;
-let currentTest = null; // { blockIndex, questions, currentQuestionIndex, correctCount }
+let currentTest = null; // { blockKey, questions, currentQuestionIndex, correctCount }
 
 // ローカルストレージ関連
 const STORAGE_KEY = "eigo-pocket-progress";
@@ -18,10 +35,11 @@ const MAX_STAMPS_PER_DAY = 3;
 
 // ローカルに保存する進捗構造
 let progress = {
-  date: "",          // "YYYY-MM-DD"
-  todayStamps: 0,    // 今日のスタンプ数（0〜3）
-  totalStamps: 0,    // 通算スタンプ数
-  clearedBlocks: []  // スタンプ取得済みブロックID（数値配列）
+  date: "",
+  todayStamps: 0,
+  totalStamps: 0,
+  // "1-0", "1-1" ... みたいな blockKey の配列
+  clearedBlocks: []
 };
 
 // ===============================
@@ -58,13 +76,15 @@ const resultStampInfoEl = document.getElementById("result-stamp-info");
 const retryTestButton = document.getElementById("retry-test-button");
 const closeResultButton = document.getElementById("close-result-button");
 
+const stageButtons = document.querySelectorAll(".stage-button");
+
 // ===============================
 //  ローカルストレージ読み書き
 // ===============================
 
 function getTodayString() {
   const d = new Date();
-  return d.toISOString().slice(0, 10); // "YYYY-MM-DD"
+  return d.toISOString().slice(0, 10);
 }
 
 function loadProgress() {
@@ -79,26 +99,20 @@ function loadProgress() {
   try {
     const data = JSON.parse(raw);
     const today = getTodayString();
+    const cleared = Array.isArray(data.clearedBlocks) ? data.clearedBlocks : [];
+    progress.clearedBlocks = cleared.map((x) => String(x));
+
     if (data.date !== today) {
-      // 日付が変わったら「今日のスタンプ」だけリセット
+      // 日付が変わっていたらきょうのスタンプをリセット
       progress.date = today;
       progress.todayStamps = 0;
       progress.totalStamps = data.totalStamps || 0;
-      progress.clearedBlocks = Array.isArray(data.clearedBlocks)
-        ? data.clearedBlocks
-        : [];
     } else {
-      progress = {
-        date: today,
-        todayStamps: data.todayStamps || 0,
-        totalStamps: data.totalStamps || 0,
-        clearedBlocks: Array.isArray(data.clearedBlocks)
-          ? data.clearedBlocks
-          : []
-      };
+      progress.date = today;
+      progress.todayStamps = data.todayStamps || 0;
+      progress.totalStamps = data.totalStamps || 0;
     }
   } catch (e) {
-    // 何かおかしければ初期化
     progress.date = getTodayString();
     progress.todayStamps = 0;
     progress.totalStamps = 0;
@@ -119,22 +133,69 @@ function getRankLabel(totalStamps) {
   if (totalStamps >= 300) return "（ちょう名人）";
   if (totalStamps >= 200) return "（スーパー名人）";
   if (totalStamps >= 100) return "（名人）";
-  if (totalStamps >= 50)  return "（ちいさな名人）";
-  if (totalStamps >= 30)  return "（がんばり屋）";
-  if (totalStamps >= 10)  return "（れんしゅう中）";
+  if (totalStamps >= 50) return "（ちいさな名人）";
+  if (totalStamps >= 30) return "（がんばり屋）";
+  if (totalStamps >= 10) return "（れんしゅう中）";
   return "（ビギナー）";
 }
 
 function renderProgress() {
-  // 今日のスタンプ表示（★☆☆）
   const stars =
     "★".repeat(progress.todayStamps) +
     "☆".repeat(MAX_STAMPS_PER_DAY - progress.todayStamps);
   todayStampsEl.textContent = stars;
 
-  // 通算スタンプ表示
   totalStampsEl.textContent = `${progress.totalStamps}こ`;
   rankLabelEl.textContent = getRankLabel(progress.totalStamps);
+}
+
+// ===============================
+//  ステージ切り替え
+// ===============================
+
+function getCurrentStageDef() {
+  return STAGES.find((s) => s.id === currentStageId) || STAGES[0];
+}
+
+// セット内ランダム表示：ステージごとの単語を抽出してシャッフル
+function updateActiveWords() {
+  const stage = getCurrentStageDef();
+
+  // 該当範囲を抽出
+  activeWords = WORDS.filter(
+    (w) => w.id >= stage.startId && w.id <= stage.endId
+  );
+
+  // Fisher–Yates shuffle でランダム並びにする
+  for (let i = activeWords.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [activeWords[i], activeWords[j]] = [activeWords[j], activeWords[i]];
+  }
+}
+
+function setActiveStage(stageId) {
+  if (stageId === currentStageId) return;
+  currentStageId = stageId;
+
+  // ボタンの見た目更新
+  stageButtons.forEach((btn) => {
+    const id = Number(btn.dataset.stage);
+    if (id === currentStageId) {
+      btn.classList.add("is-active");
+    } else {
+      btn.classList.remove("is-active");
+    }
+  });
+
+  // ステージ内状態リセット
+  updateActiveWords();
+  currentIndex = 0;
+  totalViewedCount = 0;
+  cardsNeededForTest = 10;
+  testAvailableBlockKey = null;
+  isCooldown = false;
+
+  renderCard();
 }
 
 // ===============================
@@ -142,19 +203,31 @@ function renderProgress() {
 // ===============================
 
 function renderCard() {
-  const word = WORDS[currentIndex];
-  if (!word) return;
+  if (!activeWords || activeWords.length === 0) {
+    englishEl.textContent = "-";
+    kanaEl.textContent = "";
+    japaneseEl.textContent = "";
+    cardCounterEl.textContent = "0 / 0";
+    prevButton.disabled = true;
+    nextButton.disabled = true;
+    updateTestInfo();
+    return;
+  }
+
+  if (currentIndex < 0) currentIndex = 0;
+  if (currentIndex >= activeWords.length) currentIndex = activeWords.length - 1;
+
+  const word = activeWords[currentIndex];
 
   englishEl.textContent = word.english;
   kanaEl.textContent = word.kana;
   japaneseEl.textContent = word.japanese;
 
-  cardCounterEl.textContent = `${currentIndex + 1} / ${WORDS.length}`;
+  cardCounterEl.textContent = `${currentIndex + 1} / ${activeWords.length}`;
 
-  // ボタン制御
   prevButton.disabled = currentIndex === 0;
   nextButton.disabled =
-    currentIndex >= WORDS.length - 1 || isCooldown;
+    currentIndex >= activeWords.length - 1 || isCooldown;
 
   updateTestInfo();
 }
@@ -165,7 +238,7 @@ function startNextCooldown() {
   nextButton.disabled = true;
   setTimeout(() => {
     isCooldown = false;
-    if (currentIndex < WORDS.length - 1) {
+    if (currentIndex < activeWords.length - 1) {
       nextButton.disabled = false;
     }
   }, 1200);
@@ -173,7 +246,7 @@ function startNextCooldown() {
 
 // ミニテスト表示のための情報更新
 function updateTestInfo() {
-  if (testAvailableBlockIndex !== null) {
+  if (testAvailableBlockKey !== null) {
     testInfoEl.textContent = "この10まいの ミニテストが できます";
     testButton.disabled = false;
   } else {
@@ -185,11 +258,12 @@ function updateTestInfo() {
 }
 
 // ===============================
-//  音声再生
+//  音声再生（Web Speech API）
 // ===============================
 
 function speakCurrentWord() {
-  const word = WORDS[currentIndex];
+  if (!activeWords || activeWords.length === 0) return;
+  const word = activeWords[currentIndex];
   if (!word) return;
   const utter = new SpeechSynthesisUtterance(word.english);
   utter.lang = "en-US";
@@ -206,54 +280,61 @@ function goPrev() {
   if (currentIndex <= 0) return;
   currentIndex -= 1;
   renderCard();
+  // 「まえ」では自動再生しない（必要ならここで speakCurrentWord() を呼ぶ）
 }
 
 function goNext() {
-  if (currentIndex >= WORDS.length - 1) return;
+  if (!activeWords || activeWords.length === 0) return;
+  if (currentIndex >= activeWords.length - 1) return;
   if (isCooldown) return;
 
   currentIndex += 1;
   totalViewedCount += 1;
 
-  // 10枚ごとにミニテストのチャンス
   const remainder = totalViewedCount % 10;
   if (remainder === 0) {
-    // いま見ている位置からブロックIDを計算
     const blockIndex = Math.floor((totalViewedCount - 1) / 10);
-    testAvailableBlockIndex = blockIndex;
+    const blockKey = `${currentStageId}-${blockIndex}`;
+    testAvailableBlockKey = blockKey;
     cardsNeededForTest = 10;
   } else {
-    testAvailableBlockIndex = null;
+    testAvailableBlockKey = null;
     cardsNeededForTest = 10 - remainder;
   }
 
   renderCard();
   startNextCooldown();
+
+  // ▼ ここで自動音声再生（「つぎ→」でカードが変わったら読み上げ）
+  speakCurrentWord();
 }
 
 // ===============================
 //  ミニテスト作成
 // ===============================
 
-function createTestForBlock(blockIndex) {
-  // 現状は「全体から3問ランダム」で十分
-  // 将来「ブロックごと」や「セットごと」にしたいときはここを拡張
-  const pool = WORDS;
+function createTestForBlock(blockKey) {
+  const pool = activeWords;
+  if (!pool || pool.length === 0) {
+    return {
+      blockKey,
+      questions: [],
+      currentQuestionIndex: 0,
+      correctCount: 0
+    };
+  }
 
-  // ランダムに3語選ぶ
   const indices = [];
   while (indices.length < 3 && indices.length < pool.length) {
     const idx = Math.floor(Math.random() * pool.length);
     if (!indices.includes(idx)) indices.push(idx);
   }
 
-  const questions = indices.map(idx => {
+  const questions = indices.map((idx) => {
     const word = pool[idx];
 
-    // 正解位置
     const correctIndex = Math.floor(Math.random() * 4);
 
-    // 誤選択肢候補
     const wrongPoolIndices = [];
     for (let i = 0; i < pool.length; i++) {
       if (i !== idx) wrongPoolIndices.push(i);
@@ -261,20 +342,19 @@ function createTestForBlock(blockIndex) {
 
     const wrongChoices = [];
     while (wrongChoices.length < 3 && wrongPoolIndices.length > 0) {
-      const wp = wrongPoolIndices.splice(
-        Math.floor(Math.random() * wrongPoolIndices.length),
-        1
-      )[0];
+      const wpIndex = Math.floor(Math.random() * wrongPoolIndices.length);
+      const wp = wrongPoolIndices.splice(wpIndex, 1)[0];
       wrongChoices.push(pool[wp].japanese);
     }
 
-    // 不足分は全体から補充
-    while (wrongChoices.length < 3) {
+    while (wrongChoices.length < 3 && pool.length > 0) {
       const r = pool[Math.floor(Math.random() * pool.length)];
       if (
         r.japanese !== word.japanese &&
         !wrongChoices.includes(r.japanese)
       ) {
+        wrongChoices.push(r.japanese);
+      } else if (pool.length <= 3) {
         wrongChoices.push(r.japanese);
       }
     }
@@ -285,7 +365,7 @@ function createTestForBlock(blockIndex) {
       if (i === correctIndex) {
         choices.push(word.japanese);
       } else {
-        choices.push(wrongChoices[wi++]);
+        choices.push(wrongChoices[wi++] ?? "");
       }
     }
 
@@ -298,7 +378,7 @@ function createTestForBlock(blockIndex) {
   });
 
   return {
-    blockIndex,
+    blockKey,
     questions,
     currentQuestionIndex: 0,
     correctCount: 0
@@ -310,9 +390,9 @@ function createTestForBlock(blockIndex) {
 // ===============================
 
 function openTest() {
-  if (testAvailableBlockIndex === null) return;
+  if (testAvailableBlockKey === null) return;
   isInTest = true;
-  currentTest = createTestForBlock(testAvailableBlockIndex);
+  currentTest = createTestForBlock(testAvailableBlockKey);
   renderTestQuestion();
   testOverlay.classList.remove("hidden");
 }
@@ -337,7 +417,7 @@ function renderTestQuestion() {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "choice-button";
-    btn.textContent = choice;
+    btn.textContent = choice || "（まだ いみ が ない よ）";
     btn.addEventListener("click", () => handleChoice(index));
     testChoicesEl.appendChild(btn);
   });
@@ -355,7 +435,6 @@ function handleChoice(selectedIndex) {
     currentTest.currentQuestionIndex += 1;
     renderTestQuestion();
   } else {
-    // テスト終了
     testOverlay.classList.add("hidden");
     handleTestResult();
   }
@@ -366,14 +445,14 @@ function handleChoice(selectedIndex) {
 // ===============================
 
 function handleTestResult() {
-  const { correctCount, questions, blockIndex } = currentTest;
+  const { correctCount, questions, blockKey } = currentTest;
   const total = questions.length;
 
   let title = "テストけっか";
   let message = "";
   let stampInfo = "";
 
-  const alreadyCleared = progress.clearedBlocks.includes(blockIndex);
+  const alreadyCleared = progress.clearedBlocks.includes(String(blockKey));
   const canGetStamp =
     correctCount === total &&
     !alreadyCleared &&
@@ -385,7 +464,7 @@ function handleTestResult() {
 
       progress.todayStamps += 1;
       progress.totalStamps += 1;
-      progress.clearedBlocks.push(blockIndex);
+      progress.clearedBlocks.push(String(blockKey));
       saveProgress();
       renderProgress();
 
@@ -452,9 +531,8 @@ testCancelButton.addEventListener("click", () => {
 
 retryTestButton.addEventListener("click", () => {
   if (!currentTest) return;
-  // 同じブロックで再テスト（問題は再ランダム）
-  const blockIndex = currentTest.blockIndex;
-  currentTest = createTestForBlock(blockIndex);
+  const blockKey = currentTest.blockKey;
+  currentTest = createTestForBlock(blockKey);
   renderTestQuestion();
   resultOverlay.classList.add("hidden");
   testOverlay.classList.remove("hidden");
@@ -465,6 +543,14 @@ closeResultButton.addEventListener("click", () => {
   isInTest = false;
 });
 
+// ステージボタン
+stageButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const stageId = Number(btn.dataset.stage);
+    setActiveStage(stageId);
+  });
+});
+
 // ===============================
 //  初期化
 // ===============================
@@ -472,10 +558,15 @@ closeResultButton.addEventListener("click", () => {
 function init() {
   loadProgress();
   renderProgress();
+
+  currentStageId = 1;
+  updateActiveWords();      // セット内ランダム生成
   currentIndex = 0;
   totalViewedCount = 0;
-  testAvailableBlockIndex = null;
   cardsNeededForTest = 10;
+  testAvailableBlockKey = null;
+  isCooldown = false;
+
   renderCard();
 }
 
