@@ -1,23 +1,22 @@
-// 生のカンマ区切りリスト
+// 生のカンマ区切りリスト（英単語だけ）
+// ※ かな・日本語の意味は後で別途埋める前提
 const RAW_WORDS = `
 I, you, he, she, we, they, me, my, your, his, her, our, their, family, father, mother, brother, sister, grandpa, grandma, baby, friend, teacher, student, boy, girl, man, woman, child, people, name, school, house, room, kitchen, bathroom, park, garden, store, hospital, station, library, zoo, city, town, country, world, home, place, apple, banana, orange, grape, bread, rice, egg, meat, fish, vegetable, fruit, milk, water, juice, tea, coffee, sandwich, cake, ice cream, lunch, dinner, breakfast, food, dog, cat, bird, elephant, monkey, panda, lion, tiger, rabbit, bear, animal, book, pen, pencil, desk, chair, bag, clock, car, bus, train, bicycle, phone, computer, door, window, key, money, ball, toy, gift, paper, picture, box, thing, idea, help, word, question, answer, story, weather, sound, light, air, ground, tree, flower, sun, moon, star, snow, rain, wind, fire, game, time, day, week, month, year, minute, hour, second, morning, afternoon, evening, night, today, tomorrow, yesterday, zero, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, twenty, hundred, number, color, red, blue, green, yellow, white, black, brown, pink, go, come, walk, run, jump, swim, fly, eat, drink, sleep, play, talk, sing, dance, read, write, draw, look, see, watch, hear, listen, open, close, clean, wash, study, work, live, move, start, stop, turn, be, have, like, love, want, know, think, feel, believe, try, need, get, give, take, make, do, say, tell, ask, call, become, learn, put, hold, wear, buy, find, show, mean, meet, teach, remember, forget, use, good, bad, happy, sad, big, small, long, short, tall, new, old, young, easy, hard, great, nice, kind, busy, hungry, thirsty, sleepy, tired, cool, hot, warm, cold, clean, fast, slow, favorite, much, many, a lot of, few, little, all, some, any, first, second, last, whole, here, there, now, then, very, really, always, sometimes, often, never, too, so, well, also, again, maybe, outside, inside, in, on, at, by, for, to, from, with, about, under, over, above, near, next to, before, after, up, down, of, across, and, but, or, because, hello, hi, goodbye, thank you, please, yes, no, sorry, excuse me, wow, spoon, fork, knife, plate, cup, glass, hat, shoes, coat, shirt, skirt, dress, socks, pants, map, camera, keyboard, screen, music, song, letter, email, address, bridge, road, street, hospital, office, market, mountain, river, beach, field, grass, leaf, sky, cloud, star, planet, earth, moon, air, water, salt, sugar, soap, smell, taste, touch, sound, voice, laugh, cry, smile, face, head, hair, eye, ear, nose, mouth, hand, foot, body, arm, leg, back, front, morning, evening, afternoon, noon, midnight, today, tomorrow, yesterday, date, season, spring, summer, fall, winter, weather, temperature, rain, snow, cloud, sunny, cloudy, windy, beautiful, ugly, strong, weak, important, different, same, better, best, more, less, away, together, straight, left, right, home, upstairs, downstairs, ready, careful, quiet, loud, excited, bored, alone, enough, soon, late, early, just, most, only, once, twice, third, a, an, the, this, that, those, what, where, when, why, how, which, who, whom, whose, thing, anything, nothing, everything, someone, everybody, nobody, itself, yourself, himself, herself, ourselves, yourselves, themselves, across, behind, between, through, onto, into, out of, above, below, near, far, around, past, since, until, without, though, although, while, if, unless, whether, after, before, so that, in order to, because of, instead of, except, including, such as, able, afraid, alive, amazing, angry, asleep, awful, brave, bright, busy, calm, clever, comfortable, common, crazy, curious, dark, deep, difficult, dirty, easy, empty, fantastic, friendly, full, funny, gentle, happy, healthy, heavy, honest, huge, hungry, important, kind, lazy, light, lonely, lucky, magic, messy, nervous, noisy, odd, perfect, pleasant, polite, poor, possible, proud, quick, quiet, ready, rich, safe, serious, sharp, silly, simple, sleepy, slow, small, soft, special, strange, strong, sudden, sure, sweet, tall, tired, true, warm, weak, wet, whole, wide, worried, wrong, wonderful, young, beautiful, delicious, exciting, famous, interesting, lovely, popular, wonderful, a.m., p.m.
 `;
 
 // RAW_WORDS を分割して WORDS 配列をつくる
-// 80語ごとに set 番号 (1,2,3,...) を振る
+// id は 1 から連番。STAGES の startId / endId はこの id を前提にしている。
 const WORDS = RAW_WORDS
   .split(",")
   .map((raw, index) => {
     const english = raw.trim();
-    if (!english) return null; // 空要素は捨てる
+    if (!english) return null; // 空要素は除外
     const id = index + 1;
-    const set = Math.floor(index / 80) + 1;
     return {
       id,
-      set,
       english,
-      kana: "",
-      japanese: ""
+      kana: "",      // ← 後で埋める
+      japanese: ""   // ← 後で埋める
     };
   })
-  .filter(item => item !== null);
+  .filter((item) => item !== null);
