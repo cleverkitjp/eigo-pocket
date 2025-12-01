@@ -1,344 +1,376 @@
-/* ---------------------------------
-   全体レイアウト
---------------------------------- */
-
 :root {
-  --bg1: #fff7e6;     /* うすいクリーム */
-  --bg2: #e6f7ff;     /* うすい水色 */
+  --bg1: #fff7eb;
+  --bg2: #e6f7ff;
   --card-bg: #ffffff;
-  --primary: #ff6b6b; /* タイトル用のポップなピンク */
-  --muted: #666666;
-  --border-light: #ddd;
-  --button-blue: #4a90e2;
-  --button-blue-dark: #3575b3;
-  --radius: 14px;
+  --primary: #4a90e2;
+  --accent: #ff7fa5;
+  --accent-soft: #ffe5ec;
+  --text-main: #333333;
+  --text-sub: #777777;
+  --border-soft: #f0e0d0;
 }
 
-html, body {
-  padding: 0;
+* {
+  box-sizing: border-box;
+}
+
+body {
   margin: 0;
+  padding: 0;
   font-family: "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(135deg, var(--bg1), var(--bg2));
-  min-height: 100vh;
+  background: linear-gradient(180deg, var(--bg1), var(--bg2));
+  color: var(--text-main);
 }
 
 .app-root {
-  padding: 16px;
-  max-width: 480px;
+  max-width: 540px;
   margin: 0 auto;
+  padding: 16px 12px 32px;
 }
 
-/* ---------------------------------
-   ヘッダー
---------------------------------- */
+/* ヘッダー */
 
 .app-header {
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .app-title {
-  font-size: 1.7rem;
-  margin: 0 0 4px;
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  color: #ff6b9c;
   font-weight: 700;
-  color: var(--primary); /* ポップ色 */
 }
 
 .app-subtitle {
-  margin: 0;
-  font-size: 0.8rem;
-  color: var(--muted);
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-sub);
 }
 
-/* ---------------------------------
-   スタンプ表示（2段構成）
---------------------------------- */
+/* ステージ選択バー */
+
+.stage-bar {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.stage-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 2px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.stage-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.stage-button {
+  flex: 0 0 auto;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 11px;
+  background: #f2f3ff;
+  color: #555555;
+  white-space: nowrap;
+}
+
+.stage-button.is-active {
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ステータスバー */
 
 .status-bar {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.75);
-  border-radius: 12px;
-  padding: 8px 12px;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 4px;
   margin-bottom: 12px;
-}
-
-@media (min-width: 400px) {
-  .status-bar {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
+  font-size: 12px;
 }
 
 .status-item {
   display: flex;
-  align-items: baseline;
-  gap: 6px;
+  flex-direction: column;
 }
 
-/* 通算スタンプだけ 2行レイアウト */
 .status-item-total {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
+  align-items: flex-end;
 }
 
 .status-total-line {
   display: flex;
-  align-items: baseline;
   gap: 6px;
+  align-items: baseline;
 }
 
 .status-label {
-  font-size: 0.85rem;
-  color: #555;
+  color: var(--text-sub);
+  font-size: 11px;
 }
 
 .status-value {
-  font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .status-rank {
-  font-size: 0.8rem;
-  color: #777;
+  font-size: 11px;
+  color: var(--accent);
+  margin-top: 2px;
 }
 
-/* ---------------------------------
-   カードエリア
---------------------------------- */
+/* メイン領域 */
+
+.main-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* カード */
 
 .card-area {
-  margin-top: 12px;
+  margin-top: 4px;
 }
 
 .word-card {
   background: var(--card-bg);
-  border-radius: var(--radius);
-  padding: 18px 14px;
-  box-shadow: 0 0 6px rgba(0,0,0,0.08);
+  border-radius: 16px;
+  padding: 16px 14px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .card-section {
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .card-label {
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-bottom: 4px;
+  font-size: 11px;
+  color: var(--text-sub);
+  margin-bottom: 2px;
 }
 
 .card-text-english {
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-size: 28px;
+  font-weight: 700;
   text-align: center;
+  word-wrap: break-word;
 }
 
 .card-text-kana {
-  font-size: 1.2rem;
+  font-size: 16px;
   text-align: center;
+  color: var(--text-main);
 }
 
 .card-text-japanese {
-  font-size: 1.4rem;
+  font-size: 16px;
   text-align: center;
+  color: var(--text-main);
 }
 
 /* 発音ボタン */
+
 .speak-button {
-  display: block;
   width: 100%;
-  padding: 12px 0;
-  font-size: 1rem;
-  margin-top: 4px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 999px;
   border: none;
-  border-radius: 10px;
-  background: #ffe1e1;
-  color: #d44;
+  background: var(--accent-soft);
+  color: #cc4069;
+  font-size: 14px;
 }
 
-.speak-button:active {
-  background: #ffd2d2;
-}
-
-/* ---------------------------------
-   次へ・前へ
---------------------------------- */
+/* ナビゲーション */
 
 .nav-area {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin: 12px 0;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .nav-button {
-  font-size: 1rem;
-  padding: 10px 16px;
-  border-radius: 10px;
+  flex: 0 0 80px;
+  padding: 10px 0;
+  border-radius: 999px;
   border: none;
-  background: var(--button-blue);
-  color: white;
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 14px;
 }
 
-.nav-button:active {
-  background: var(--button-blue-dark);
+.nav-button:disabled {
+  opacity: 0.4;
 }
 
 .nav-progress {
-  font-size: 0.9rem;
-  color: #444;
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-sub);
 }
 
-/* ---------------------------------
-   ミニテスト誘導
---------------------------------- */
+/* テストセクション */
 
 .test-section {
-  margin-top: 10px;
+  margin-top: 4px;
 }
 
 .test-info {
-  font-size: 0.9rem;
-  color: #444;
+  font-size: 12px;
   margin-bottom: 6px;
+  color: var(--text-sub);
 }
 
 .test-button {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
   border: none;
-  font-size: 1rem;
-  background: #ffd27f;
-  color: #8a5100;
+  background: #fff6d8;
+  color: #b07a00;
+  font-size: 14px;
 }
 
 .test-button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
-/* ---------------------------------
-   つかいかた
---------------------------------- */
+/* 使い方ヘルパー */
 
 .helper-section {
-  margin-top: 16px;
+  margin-top: 4px;
 }
 
 .helper-text {
-  font-size: 0.85rem;
-  color: #555;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-sub);
 }
 
-/* ---------------------------------
-   ミニテスト・オーバーレイ
---------------------------------- */
+/* オーバーレイ・ダイアログ */
 
 .test-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right:0;
-  bottom:0;
-  background: rgba(0,0,0,0.45);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 14px;
+  padding: 16px;
+  z-index: 100;
 }
 
-.hidden {
-  display: none !important;
+.test-overlay.hidden {
+  display: none;
 }
 
 .test-dialog {
   width: 100%;
-  max-width: 380px;
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px 16px 14px;
 }
 
 .test-header {
-  font-size: 1rem;
-  color: #333;
-  margin-bottom: 10px;
-  text-align: center;
+  font-size: 13px;
+  color: var(--text-sub);
+  margin-bottom: 4px;
 }
 
 .test-question {
-  font-size: 1.2rem;
-  text-align: center;
-  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
 .test-choices {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.choice-button {
-  padding: 12px;
-  font-size: 1rem;
-  border-radius: 10px;
-  background: #f2f2f2;
-  border: 1px solid #ccc;
-}
-
-.choice-button:active {
-  background: #e4e4e4;
-}
-
-/* ---------------------------------
-   結果
---------------------------------- */
-
-.result-title {
-  text-align: center;
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.result-message {
-  text-align: center;
-  font-size: 1.1rem;
+  gap: 8px;
   margin-bottom: 12px;
 }
 
-.result-stamp-info {
-  text-align: center;
-  font-size: 0.9rem;
-  margin-bottom: 16px;
+.choice-button {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+  text-align: left;
+  font-size: 14px;
 }
 
-/* ---------------------------------
-   結果ボタン
---------------------------------- */
+.test-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.primary-button,
+.secondary-button {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: none;
+  font-size: 13px;
+}
 
 .primary-button {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 10px;
-  background: #4caf50;
-  color: white;
-  font-size: 1rem;
+  background: var(--primary);
+  color: #ffffff;
 }
 
 .secondary-button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #ddd;
-  color: #333;
-  font-size: 1rem;
+  background: #f2f2f2;
+  color: var(--text-main);
+}
+
+/* 結果表示 */
+
+.result-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.result-message {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.result-stamp-info {
+  font-size: 12px;
+  color: var(--text-sub);
+  margin-bottom: 10px;
+}
+
+/* 小さい端末向け微調整 */
+
+@media (max-width: 360px) {
+  .app-root {
+    padding-inline: 8px;
+  }
+
+  .card-text-english {
+    font-size: 24px;
+  }
+
+  .nav-button {
+    flex: 0 0 72px;
+  }
+
+  .stage-button {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
 }
