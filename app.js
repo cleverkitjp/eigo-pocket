@@ -264,8 +264,7 @@ let progress = {
   totalStamps: 0,
   clearedBlocks: [],
 };
-
-// ---------- DOM ----------
+// ---------- DOM 取得 ----------
 
 const englishEl = document.getElementById("word-english");
 const kanaEl = document.getElementById("word-kana");
@@ -372,7 +371,7 @@ function updateActiveWords() {
     (w) => w.id >= stage.startId && w.id <= stage.endId
   );
 
-  // ランダム並び
+  // フィッシャー–イェーツでランダム並び
   for (let i = activeWords.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [activeWords[i], activeWords[j]] = [activeWords[j], activeWords[i]];
@@ -484,4 +483,224 @@ function goNext() {
   currentIndex += 1;
   totalViewedCount += 1;
 
-  const remainder = 
+  const remainder = totalViewedCount % 10;
+  if (remainder === 0) {
+    const blockIndex = Math.floor((totalViewedCount - 1) / 10);
+    testAvailableBlockKey = `${currentStageId}-${blockIndex}`;
+    cardsNeededForTest = 10;
+  } else {
+    testAvailableBlockKey = null;
+    cardsNeededForTest = 10 - remainder;
+  }
+
+  renderCard();
+  startNextCooldown();
+  speakCurrentWord();
+}
+
+// ---------- ミニテスト作成 ----------
+
+function createTestForBlock(blockKey) {
+  const pool = activeWords;
+  if (!pool.length) {
+    return { blockKey, questions: [], currentQuestionIndex: 0, correctCount: 0 };
+  }
+
+  const indices = [];
+  while (indices.length < 3 && indices.length < pool.length) {
+    const idx = Math.floor(Math.random() * pool.length);
+    if (!indices.includes(idx)) indices.push(idx);
+  }
+
+  const questions = indices.map((idx) => {
+    const word = pool[idx];
+    const correctIndex = Math.floor(Math.random() * 4);
+
+    const wrongPoolIndices = [];
+    for (let i = 0; i < pool.length; i++) if (i !== idx) wrongPoolIndices.push(i);
+
+    const wrongChoices = [];
+    while (wrongChoices.length < 3 && wrongPoolIndices.length > 0) {
+      const wpIndex = Math.floor(Math.random() * wrongPoolIndices.length);
+      const wp = wrongPoolIndices.splice(wpIndex, 1)[0];
+      wrongChoices.push(pool[wp].japanese);
+    }
+
+    while (wrongChoices.length < 3 && pool.length > 0) {
+      const r = pool[Math.floor(Math.random() * pool.length)];
+      if (r.japanese !== word.japanese && !wrongChoices.includes(r.japanese)) {
+        wrongChoices.push(r.japanese);
+      } else if (pool.length <= 3) {
+        wrongChoices.push(r.japanese);
+      }
+    }
+
+    const choices = [];
+    let wi = 0;
+    for (let i = 0; i < 4; i++) {
+      if (i === correctIndex) choices.push(word.japanese);
+      else choices.push(wrongChoices[wi++] ?? "");
+    }
+
+    return {
+      english: word.english,
+      correctJapanese: word.japanese,
+      choices,
+      correctIndex,
+    };
+  });
+
+  return { blockKey, questions, currentQuestionIndex: 0, correctCount: 0 };
+}
+// ---------- ミニテスト画面 ----------
+
+function openTest() {
+  if (testAvailableBlockKey === null) return;
+  isInTest = true;
+  currentTest = createTestForBlock(testAvailableBlockKey);
+  renderTestQuestion();
+  testOverlay.classList.remove("hidden");
+}
+
+function closeTestOverlay() {
+  isInTest = false;
+  currentTest = null;
+  testOverlay.classList.add("hidden");
+}
+
+function renderTestQuestion() {
+  const { questions, currentQuestionIndex } = currentTest;
+  const q = questions[currentQuestionIndex];
+
+  testQuestionHeader.textContent =
+    `Q${currentQuestionIndex + 1} / ${questions.length}`;
+  testQuestionText.textContent = `"${q.english}" の いみは どれ？`;
+
+  testChoicesEl.innerHTML = "";
+  q.choices.forEach((choice, index) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "choice-button";
+    btn.textContent = choice || "（まだ いみ が ない よ）";
+    btn.addEventListener("click", () => handleChoice(index));
+    testChoicesEl.appendChild(btn);
+  });
+}
+
+function handleChoice(selectedIndex) {
+  const { questions, currentQuestionIndex } = currentTest;
+  const q = questions[currentQuestionIndex];
+
+  if (selectedIndex === q.correctIndex) currentTest.correctCount += 1;
+
+  if (currentQuestionIndex + 1 < questions.length) {
+    currentTest.currentQuestionIndex += 1;
+    renderTestQuestion();
+  } else {
+    testOverlay.classList.add("hidden");
+    handleTestResult();
+  }
+}
+
+// ---------- テスト結果 ----------
+
+function handleTestResult() {
+  const { correctCount, questions, blockKey } = currentTest;
+  const total = questions.length;
+
+  let title;
+  let message;
+  let stampInfo;
+
+  const alreadyCleared = progress.clearedBlocks.includes(String(blockKey));
+  const canGetStamp =
+    correctCount === total &&
+    !alreadyCleared &&
+    progress.todayStamps < MAX_STAMPS_PER_DAY;
+
+  if (correctCount === total) {
+    if (canGetStamp) {
+      const beforeStars = progress.todayStamps;
+      progress.todayStamps += 1;
+      progress.totalStamps += 1;
+      progress.clearedBlocks.push(String(blockKey));
+      saveProgress();
+      renderProgress();
+
+      title = "すごい！ ぜんぶ せいかい！";
+      message = `${total}問 中 ${correctCount}問 せいかい！`;
+
+      const beforeStr =
+        "★".repeat(beforeStars) +
+        "☆".repeat(MAX_STAMPS_PER_DAY - beforeStars);
+      const afterStr =
+        "★".repeat(progress.todayStamps) +
+        "☆".repeat(MAX_STAMPS_PER_DAY - progress.todayStamps);
+      stampInfo = `スタンプ：${beforeStr} → ${afterStr}`;
+    } else if (alreadyCleared) {
+      title = "ぜんぶ せいかい！";
+      message = `${total}問 中 ${correctCount}問 せいかい！`;
+      stampInfo =
+        "この10まいぶんの スタンプは もう もらっているよ。つぎは べつの 10まいで チャレンジしよう！";
+    } else {
+      title = "ぜんぶ せいかい！";
+      message = `${total}問 中 ${correctCount}問 せいかい！`;
+      stampInfo =
+        "きょうの スタンプは もう 3こ いっぱいだよ。 また あした チャレンジしよう！";
+    }
+  } else {
+    title = "おしい！";
+    message =
+      `${total}問 中 ${correctCount}問 せいかい。 ` +
+      `あと ${total - correctCount}問で スタンプだったよ。`;
+    stampInfo =
+      "もういちど カードを みてから チャレンジしてみよう。";
+  }
+
+  resultTitleEl.textContent = title;
+  resultMessageEl.textContent = message;
+  resultStampInfoEl.textContent = stampInfo;
+  resultOverlay.classList.remove("hidden");
+}
+
+// ---------- イベント登録 ----------
+
+prevButton.addEventListener("click", goPrev);
+nextButton.addEventListener("click", goNext);
+speakButton.addEventListener("click", speakCurrentWord);
+
+testButton.addEventListener("click", openTest);
+testCancelButton.addEventListener("click", closeTestOverlay);
+
+retryTestButton.addEventListener("click", () => {
+  if (!currentTest) return;
+  const blockKey = currentTest.blockKey;
+  currentTest = createTestForBlock(blockKey);
+  renderTestQuestion();
+  resultOverlay.classList.add("hidden");
+  testOverlay.classList.remove("hidden");
+});
+
+closeResultButton.addEventListener("click", () => {
+  resultOverlay.classList.add("hidden");
+  isInTest = false;
+});
+
+stageButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const stageId = Number(btn.dataset.stage);
+    setActiveStage(stageId);
+  });
+});
+
+// ---------- 初期化 ----------
+
+function init() {
+  loadProgress();
+  renderProgress();
+  currentStageId = 1;
+  resetStageState();
+  renderCard();
+}
+
+document.addEventListener("DOMContentLoaded", init);
