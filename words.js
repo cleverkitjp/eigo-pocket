@@ -309,4 +309,4 @@ const WORDS = [
   { id: 308, set: 4, english: "near", kana: "", japanese: "" },
   { id: 309, set: 4, english: "next to", kana: "", japanese: "" },
   { id: 310, set: 4, english: "before", kana: "", japanese: "" },
-  { id: 311, set: 4, english: "after", kana: "", japanese: "" 
+  ]
