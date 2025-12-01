@@ -16,34 +16,32 @@ const STAGES = [
 //  進捗・スタンプ管理
 // ===============================
 
-let currentStageId = 1;        // いま選んでいるステージID
-let activeWords = [];          // このステージで使う単語配列（ランダム順）
+let currentStageId = 1;
+let activeWords = [];
 
-let currentIndex = 0;          // activeWords 内でのインデックス
-let totalViewedCount = 0;      // このステージで「つぎ」を押した枚数累計
-let cardsNeededForTest = 10;   // 次のミニテストまでに必要な枚数
-let testAvailableBlockKey = null; // "stageId-blockIndex"
-let isCooldown = false;        // 「つぎ」ボタンのクールダウン中かどうか
+let currentIndex = 0;
+let totalViewedCount = 0;
+let cardsNeededForTest = 10;
+let testAvailableBlockKey = null;
+let isCooldown = false;
 
 // ミニテスト状態
 let isInTest = false;
-let currentTest = null; // { blockKey, questions, currentQuestionIndex, correctCount }
+let currentTest = null;
 
 // ローカルストレージ関連
 const STORAGE_KEY = "eigo-pocket-progress";
 const MAX_STAMPS_PER_DAY = 3;
 
-// ローカルに保存する進捗構造
 let progress = {
   date: "",
   todayStamps: 0,
   totalStamps: 0,
-  // "1-0", "1-1" ... みたいな blockKey の配列
   clearedBlocks: []
 };
 
 // ===============================
-//  DOM 取得
+//  DOM
 // ===============================
 
 const englishEl = document.getElementById("word-english");
@@ -79,7 +77,7 @@ const closeResultButton = document.getElementById("close-result-button");
 const stageButtons = document.querySelectorAll(".stage-button");
 
 // ===============================
-//  ローカルストレージ読み書き
+//  ローカルストレージ
 // ===============================
 
 function getTodayString() {
@@ -103,7 +101,6 @@ function loadProgress() {
     progress.clearedBlocks = cleared.map((x) => String(x));
 
     if (data.date !== today) {
-      // 日付が変わっていたらきょうのスタンプをリセット
       progress.date = today;
       progress.todayStamps = 0;
       progress.totalStamps = data.totalStamps || 0;
@@ -125,7 +122,7 @@ function saveProgress() {
 }
 
 // ===============================
-//  称号（ランク）表示
+//  ランク表示
 // ===============================
 
 function getRankLabel(totalStamps) {
@@ -150,34 +147,51 @@ function renderProgress() {
 }
 
 // ===============================
-//  ステージ切り替え
+//  ステージ・単語
 // ===============================
 
 function getCurrentStageDef() {
   return STAGES.find((s) => s.id === currentStageId) || STAGES[0];
 }
 
-// セット内ランダム表示：ステージごとの単語を抽出してシャッフル
+// セット内ランダム用：現在のステージの単語を抽出＆シャッフル
 function updateActiveWords() {
   const stage = getCurrentStageDef();
 
-  // 該当範囲を抽出
+  if (!Array.isArray(window.WORDS)) {
+    activeWords = [];
+    return;
+  }
+
   activeWords = WORDS.filter(
     (w) => w.id >= stage.startId && w.id <= stage.endId
   );
 
-  // Fisher–Yates shuffle でランダム並びにする
   for (let i = activeWords.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [activeWords[i], activeWords[j]] = [activeWords[j], activeWords[i]];
   }
 }
 
+// ステージ状態をリセットしてランダムな位置からスタート
+function resetStageState() {
+  updateActiveWords();
+  if (activeWords.length === 0) {
+    currentIndex = 0;
+  } else {
+    currentIndex = Math.floor(Math.random() * activeWords.length);
+  }
+  totalViewedCount = 0;
+  cardsNeededForTest = 10;
+  testAvailableBlockKey = null;
+  isCooldown = false;
+}
+
+// ステージ切り替え
 function setActiveStage(stageId) {
   if (stageId === currentStageId) return;
   currentStageId = stageId;
 
-  // ボタンの見た目更新
   stageButtons.forEach((btn) => {
     const id = Number(btn.dataset.stage);
     if (id === currentStageId) {
@@ -187,14 +201,7 @@ function setActiveStage(stageId) {
     }
   });
 
-  // ステージ内状態リセット
-  updateActiveWords();
-  currentIndex = 0;
-  totalViewedCount = 0;
-  cardsNeededForTest = 10;
-  testAvailableBlockKey = null;
-  isCooldown = false;
-
+  resetStageState();
   renderCard();
 }
 
@@ -232,19 +239,10 @@ function renderCard() {
   updateTestInfo();
 }
 
-// 「つぎ」ボタンのクールダウン（1.2秒）
-function startNextCooldown() {
-  isCooldown = true;
-  nextButton.disabled = true;
-  setTimeout(() => {
-    isCooldown = false;
-    if (currentIndex < activeWords.length - 1) {
-      nextButton.disabled = false;
-    }
-  }, 1200);
-}
+// ===============================
+//  テスト情報
+// ===============================
 
-// ミニテスト表示のための情報更新
 function updateTestInfo() {
   if (testAvailableBlockKey !== null) {
     testInfoEl.textContent = "この10まいの ミニテストが できます";
@@ -258,13 +256,15 @@ function updateTestInfo() {
 }
 
 // ===============================
-//  音声再生（Web Speech API）
+//  音声
 // ===============================
 
 function speakCurrentWord() {
   if (!activeWords || activeWords.length === 0) return;
   const word = activeWords[currentIndex];
   if (!word) return;
+  if (!("speechSynthesis" in window)) return;
+
   const utter = new SpeechSynthesisUtterance(word.english);
   utter.lang = "en-US";
   utter.rate = 0.9;
@@ -276,11 +276,22 @@ function speakCurrentWord() {
 //  カード移動
 // ===============================
 
+function startNextCooldown() {
+  isCooldown = true;
+  nextButton.disabled = true;
+  setTimeout(() => {
+    isCooldown = false;
+    if (currentIndex < activeWords.length - 1) {
+      nextButton.disabled = false;
+    }
+  }, 1200);
+}
+
 function goPrev() {
   if (currentIndex <= 0) return;
   currentIndex -= 1;
   renderCard();
-  // 「まえ」では自動再生しない（必要ならここで speakCurrentWord() を呼ぶ）
+  // 必要ならここで speakCurrentWord() を呼ぶ
 }
 
 function goNext() {
@@ -304,9 +315,7 @@ function goNext() {
 
   renderCard();
   startNextCooldown();
-
-  // ▼ ここで自動音声再生（「つぎ→」でカードが変わったら読み上げ）
-  speakCurrentWord();
+  speakCurrentWord(); // 「つぎ→」で自動発音
 }
 
 // ===============================
@@ -441,7 +450,7 @@ function handleChoice(selectedIndex) {
 }
 
 // ===============================
-//  テスト結果処理
+//  テスト結果
 // ===============================
 
 function handleTestResult() {
@@ -506,28 +515,15 @@ function handleTestResult() {
 }
 
 // ===============================
-//  イベント設定
+//  イベント
 // ===============================
 
-prevButton.addEventListener("click", () => {
-  goPrev();
-});
+prevButton.addEventListener("click", goPrev);
+nextButton.addEventListener("click", goNext);
+speakButton.addEventListener("click", speakCurrentWord);
 
-nextButton.addEventListener("click", () => {
-  goNext();
-});
-
-speakButton.addEventListener("click", () => {
-  speakCurrentWord();
-});
-
-testButton.addEventListener("click", () => {
-  openTest();
-});
-
-testCancelButton.addEventListener("click", () => {
-  closeTestOverlay();
-});
+testButton.addEventListener("click", openTest);
+testCancelButton.addEventListener("click", closeTestOverlay);
 
 retryTestButton.addEventListener("click", () => {
   if (!currentTest) return;
@@ -543,7 +539,6 @@ closeResultButton.addEventListener("click", () => {
   isInTest = false;
 });
 
-// ステージボタン
 stageButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const stageId = Number(btn.dataset.stage);
@@ -560,13 +555,7 @@ function init() {
   renderProgress();
 
   currentStageId = 1;
-  updateActiveWords();      // セット内ランダム生成
-  currentIndex = 0;
-  totalViewedCount = 0;
-  cardsNeededForTest = 10;
-  testAvailableBlockKey = null;
-  isCooldown = false;
-
+  resetStageState();
   renderCard();
 }
 
