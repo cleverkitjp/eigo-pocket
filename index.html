@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>えいごポケット｜こども向け英単語カード</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="小学生向け・発音つきの英単語カード学習ツール。シンプルで見やすいUI、スマホ最適化。10まいめくるごとにミニテストでスタンプがたまる『えいごポケット』。">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app-root">
+
+    <!-- ヘッダー -->
+    <header class="app-header">
+      <h1 class="app-title">えいごポケット</h1>
+      <p class="app-subtitle">こども向け えいたんごカード（発音つき・ミニテストつき）</p>
+    </header>
+
+    <!-- きょうのスタンプ・通算スタンプ -->
+    <section class="status-bar">
+      <div class="status-item">
+        <span class="status-label">きょうのスタンプ</span>
+        <span id="today-stamps" class="status-value">☆☆☆</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">つうさんスタンプ</span>
+        <span id="total-stamps" class="status-value">0こ</span>
+        <span id="rank-label" class="status-rank">（ビギナー）</span>
+      </div>
+    </section>
+
+    <!-- カード本体 -->
+    <main class="main-area">
+
+      <section class="card-area">
+        <div class="word-card" id="word-card">
+
+          <div class="card-section card-english">
+            <div class="card-label">えいご</div>
+            <div id="word-english" class="card-text-english">apple</div>
+          </div>
+
+          <div class="card-section card-kana">
+            <div class="card-label">よみかた</div>
+            <div id="word-kana" class="card-text-kana">アップル</div>
+          </div>
+
+          <div class="card-section card-japanese">
+            <div class="card-label">いみ</div>
+            <div id="word-japanese" class="card-text-japanese">りんご</div>
+          </div>
+
+          <button id="speak-button" class="speak-button" type="button">
+            🔊 はつおんを きく
+          </button>
+
+        </div>
+      </section>
+
+      <!-- 次へ・前へ -->
+      <section class="nav-area">
+        <button id="prev-button" class="nav-button" type="button">&larr; まえ</button>
+        <div class="nav-progress">
+          <span id="card-counter">1 / 20</span>
+        </div>
+        <button id="next-button" class="nav-button" type="button">つぎ &rarr;</button>
+      </section>
+
+      <!-- ミニテスト誘導 -->
+      <section class="test-section">
+        <div id="test-info" class="test-info">
+          あと <span id="cards-to-test">10</span> まい みると、ミニテストが ひらけます
+        </div>
+        <button id="test-button" class="test-button" type="button" disabled>
+          ⭐ ミニテストに チャレンジ（3問）
+        </button>
+      </section>
+
+      <!-- つかいかた -->
+      <section class="helper-section">
+        <p class="helper-text">
+          🔍 つかいかた：カードの たんごを よんで、「🔊 はつおん」を きいてみよう。<br>
+          10まい みたら、ミニテストで チャレンジ！  
+          3問ぜんぶ せいかい できたら、スタンプを 1こ ゲットできます（1日に 3こまで）。
+        </p>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ▼ ミニテスト用オーバーレイ -->
+  <div id="test-overlay" class="test-overlay hidden">
+    <div class="test-dialog">
+
+      <div id="test-question-header" class="test-header">
+        Q1 / 3
+      </div>
+
+      <div id="test-question-text" class="test-question">
+        "apple" の いみは どれ？
+      </div>
+
+      <div id="test-choices" class="test-choices">
+        <!-- JSで生成 -->
+      </div>
+
+      <div id="test-footer" class="test-footer">
+        <button id="test-cancel-button" type="button" class="secondary-button">
+          カードにもどる
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ▼ ミニテスト結果 -->
+  <div id="result-overlay" class="test-overlay hidden">
+    <div class="test-dialog">
+
+      <div id="result-title" class="result-title">テストけっか</div>
+
+      <div id="result-message" class="result-message">
+        3問中 3問 せいかい！
+      </div>
+
+      <div id="result-stamp-info" class="result-stamp-info">
+        スタンプ：★☆☆ → ★★☆
+      </div>
+
+      <div class="test-footer">
+        <button id="retry-test-button" type="button" class="primary-button">
+          もういちど テストする
+        </button>
+        <button id="close-result-button" type="button" class="secondary-button">
+          カードにもどる
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ▼ JS -->
+  <script src="words.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
