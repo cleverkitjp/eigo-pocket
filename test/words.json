@@ -1,0 +1,4489 @@
+{
+  "version": "eigo-pocket-v1",
+  "stages": [
+    {
+      "id": 1,
+      "name": "ことばの入り口",
+      "description": "小学校3年生"
+    },
+    {
+      "id": 2,
+      "name": "ひらめきの小道",
+      "description": "小学校3年生"
+    },
+    {
+      "id": 3,
+      "name": "アルファベットの丘",
+      "description": "小学校4年生"
+    },
+    {
+      "id": 4,
+      "name": "ことばの森",
+      "description": "小学校4年生"
+    },
+    {
+      "id": 5,
+      "name": "フレーズの橋",
+      "description": "小学校5年生"
+    },
+    {
+      "id": 6,
+      "name": "イメージのどうくつ",
+      "description": "小学校5年生"
+    },
+    {
+      "id": 7,
+      "name": "表現の滝",
+      "description": "小学校5年生"
+    },
+    {
+      "id": 8,
+      "name": "ことばの塔",
+      "description": "小学校6年生"
+    },
+    {
+      "id": 9,
+      "name": "英文の迷宮",
+      "description": "小学校6年生"
+    },
+    {
+      "id": 10,
+      "name": "ことばの神殿",
+      "description": "小学校6年生"
+    }
+  ],
+  "words": [
+    {
+      "id": 1,
+      "stageId": 1,
+      "english": "I",
+      "kana": "アイ",
+      "japanese": "わたし",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 2,
+      "stageId": 1,
+      "english": "you",
+      "kana": "ユー",
+      "japanese": "あなた",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 3,
+      "stageId": 1,
+      "english": "he",
+      "kana": "ヒー",
+      "japanese": "かれ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 4,
+      "stageId": 1,
+      "english": "she",
+      "kana": "シー",
+      "japanese": "かのじょ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 5,
+      "stageId": 1,
+      "english": "it",
+      "kana": "イット",
+      "japanese": "それ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 6,
+      "stageId": 1,
+      "english": "we",
+      "kana": "ウィー",
+      "japanese": "わたしたち",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 7,
+      "stageId": 1,
+      "english": "they",
+      "kana": "ゼイ",
+      "japanese": "かれら",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 8,
+      "stageId": 1,
+      "english": "my",
+      "kana": "マイ",
+      "japanese": "わたしの",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 9,
+      "stageId": 1,
+      "english": "your",
+      "kana": "ユア",
+      "japanese": "あなたの",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 10,
+      "stageId": 1,
+      "english": "his",
+      "kana": "ヒズ",
+      "japanese": "かれの",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 11,
+      "stageId": 1,
+      "english": "her",
+      "kana": "ハー",
+      "japanese": "かのじょの",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 12,
+      "stageId": 1,
+      "english": "its",
+      "kana": "イッツ",
+      "japanese": "それの",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 13,
+      "stageId": 1,
+      "english": "our",
+      "kana": "アワー",
+      "japanese": "わたしたちの",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 14,
+      "stageId": 1,
+      "english": "their",
+      "kana": "ゼア",
+      "japanese": "かれらの",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 15,
+      "stageId": 1,
+      "english": "this",
+      "kana": "ディス",
+      "japanese": "これ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 16,
+      "stageId": 1,
+      "english": "that",
+      "kana": "ザット",
+      "japanese": "あれ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 17,
+      "stageId": 1,
+      "english": "these",
+      "kana": "ディーズ",
+      "japanese": "これら",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 18,
+      "stageId": 1,
+      "english": "those",
+      "kana": "ドーズ",
+      "japanese": "あれら",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 19,
+      "stageId": 1,
+      "english": "what",
+      "kana": "ワット",
+      "japanese": "なに",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 20,
+      "stageId": 1,
+      "english": "who",
+      "kana": "フー",
+      "japanese": "だれ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 21,
+      "stageId": 1,
+      "english": "where",
+      "kana": "ウェア",
+      "japanese": "どこ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 22,
+      "stageId": 1,
+      "english": "when",
+      "kana": "ウェン",
+      "japanese": "いつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 23,
+      "stageId": 1,
+      "english": "why",
+      "kana": "ホワイ",
+      "japanese": "どうして",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 24,
+      "stageId": 1,
+      "english": "how",
+      "kana": "ハウ",
+      "japanese": "どうやって",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 25,
+      "stageId": 1,
+      "english": "a",
+      "kana": "エイ",
+      "japanese": "ひとつの",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 26,
+      "stageId": 1,
+      "english": "an",
+      "kana": "アン",
+      "japanese": "ひとつの",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 27,
+      "stageId": 1,
+      "english": "the",
+      "kana": "ザ",
+      "japanese": "その",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 28,
+      "stageId": 1,
+      "english": "and",
+      "kana": "アンド",
+      "japanese": "そして",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 29,
+      "stageId": 1,
+      "english": "but",
+      "kana": "バット",
+      "japanese": "しかし",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 30,
+      "stageId": 1,
+      "english": "or",
+      "kana": "オア",
+      "japanese": "または",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 31,
+      "stageId": 1,
+      "english": "because",
+      "kana": "ビコーズ",
+      "japanese": "〜だから",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 32,
+      "stageId": 1,
+      "english": "in",
+      "kana": "イン",
+      "japanese": "〜の中に",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 33,
+      "stageId": 1,
+      "english": "on",
+      "kana": "オン",
+      "japanese": "〜の上に",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 34,
+      "stageId": 1,
+      "english": "at",
+      "kana": "アット",
+      "japanese": "〜で",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 35,
+      "stageId": 1,
+      "english": "to",
+      "kana": "トゥ",
+      "japanese": "〜へ",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 36,
+      "stageId": 1,
+      "english": "from",
+      "kana": "フロム",
+      "japanese": "〜から",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 37,
+      "stageId": 1,
+      "english": "for",
+      "kana": "フォー",
+      "japanese": "〜のために",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 38,
+      "stageId": 1,
+      "english": "with",
+      "kana": "ウィズ",
+      "japanese": "いっしょに",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 39,
+      "stageId": 1,
+      "english": "look at __",
+      "kana": "ルック アット __",
+      "japanese": "〜をみる",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 40,
+      "stageId": 1,
+      "english": "listen to __",
+      "kana": "リスン トゥ __",
+      "japanese": "〜をきく",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 41,
+      "stageId": 2,
+      "english": "go",
+      "kana": "ゴー",
+      "japanese": "いく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 42,
+      "stageId": 2,
+      "english": "come",
+      "kana": "カム",
+      "japanese": "くる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 43,
+      "stageId": 2,
+      "english": "run",
+      "kana": "ラン",
+      "japanese": "はしる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 44,
+      "stageId": 2,
+      "english": "walk",
+      "kana": "ウォーク",
+      "japanese": "あるく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 45,
+      "stageId": 2,
+      "english": "move",
+      "kana": "ムーブ",
+      "japanese": "うごく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 46,
+      "stageId": 2,
+      "english": "travel",
+      "kana": "トラベル",
+      "japanese": "たびする",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 47,
+      "stageId": 2,
+      "english": "arrive",
+      "kana": "アライブ",
+      "japanese": "つく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 48,
+      "stageId": 2,
+      "english": "leave",
+      "kana": "リーブ",
+      "japanese": "でかける",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 49,
+      "stageId": 2,
+      "english": "enter",
+      "kana": "エンター",
+      "japanese": "はいる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 50,
+      "stageId": 2,
+      "english": "exit",
+      "kana": "エグジット",
+      "japanese": "でる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 51,
+      "stageId": 2,
+      "english": "fall",
+      "kana": "フォール",
+      "japanese": "おちる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 52,
+      "stageId": 2,
+      "english": "jump",
+      "kana": "ジャンプ",
+      "japanese": "とぶ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 53,
+      "stageId": 2,
+      "english": "sit",
+      "kana": "シット",
+      "japanese": "すわる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 54,
+      "stageId": 2,
+      "english": "stand",
+      "kana": "スタンド",
+      "japanese": "たつ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 55,
+      "stageId": 2,
+      "english": "lie",
+      "kana": "ライ",
+      "japanese": "ねる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 56,
+      "stageId": 2,
+      "english": "open",
+      "kana": "オープン",
+      "japanese": "あける",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 57,
+      "stageId": 2,
+      "english": "close",
+      "kana": "クローズ",
+      "japanese": "とじる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 58,
+      "stageId": 2,
+      "english": "take",
+      "kana": "テイク",
+      "japanese": "とる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 59,
+      "stageId": 2,
+      "english": "bring",
+      "kana": "ブリング",
+      "japanese": "もってくる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 60,
+      "stageId": 2,
+      "english": "carry",
+      "kana": "キャリー",
+      "japanese": "はこぶ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 61,
+      "stageId": 2,
+      "english": "send",
+      "kana": "セント",
+      "japanese": "おくる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 62,
+      "stageId": 2,
+      "english": "drive",
+      "kana": "ドライブ",
+      "japanese": "うんてんする",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 63,
+      "stageId": 2,
+      "english": "ride",
+      "kana": "ライド",
+      "japanese": "のる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 64,
+      "stageId": 2,
+      "english": "fly",
+      "kana": "フライ",
+      "japanese": "とぶ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 65,
+      "stageId": 2,
+      "english": "swim",
+      "kana": "スウィム",
+      "japanese": "およぐ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 66,
+      "stageId": 2,
+      "english": "climb",
+      "kana": "クライム",
+      "japanese": "のぼる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 67,
+      "stageId": 2,
+      "english": "stop",
+      "kana": "ストップ",
+      "japanese": "とまる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 68,
+      "stageId": 2,
+      "english": "start",
+      "kana": "スタート",
+      "japanese": "はじめる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 69,
+      "stageId": 2,
+      "english": "begin",
+      "kana": "ビギン",
+      "japanese": "はじまる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 70,
+      "stageId": 2,
+      "english": "finish",
+      "kana": "フィニッシュ",
+      "japanese": "おわる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 71,
+      "stageId": 2,
+      "english": "meet",
+      "kana": "ミート",
+      "japanese": "あう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 72,
+      "stageId": 2,
+      "english": "follow",
+      "kana": "フォロー",
+      "japanese": "ついていく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 73,
+      "stageId": 2,
+      "english": "pass",
+      "kana": "パス",
+      "japanese": "とおりすぎる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 74,
+      "stageId": 2,
+      "english": "wait",
+      "kana": "ウェイト",
+      "japanese": "まつ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 75,
+      "stageId": 2,
+      "english": "watch",
+      "kana": "ウォッチ",
+      "japanese": "みる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 76,
+      "stageId": 2,
+      "english": "look",
+      "kana": "ルック",
+      "japanese": "みる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 77,
+      "stageId": 2,
+      "english": "hear",
+      "kana": "ヒア",
+      "japanese": "きこえる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 78,
+      "stageId": 2,
+      "english": "listen",
+      "kana": "リスン",
+      "japanese": "きく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 79,
+      "stageId": 2,
+      "english": "talk to __",
+      "kana": "トーク トゥ __",
+      "japanese": "〜とはなす",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 80,
+      "stageId": 2,
+      "english": "go home",
+      "kana": "ゴー ホーム",
+      "japanese": "いえにかえる",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 81,
+      "stageId": 3,
+      "english": "think",
+      "kana": "シンク",
+      "japanese": "かんがえる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 82,
+      "stageId": 3,
+      "english": "believe",
+      "kana": "ビリーブ",
+      "japanese": "しんじる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 83,
+      "stageId": 3,
+      "english": "guess",
+      "kana": "ゲス",
+      "japanese": "あてる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 84,
+      "stageId": 3,
+      "english": "learn",
+      "kana": "ラーン",
+      "japanese": "ならう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 85,
+      "stageId": 3,
+      "english": "study",
+      "kana": "スタディ",
+      "japanese": "べんきょうする",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 86,
+      "stageId": 3,
+      "english": "imagine",
+      "kana": "イマジン",
+      "japanese": "そうぞうする",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 87,
+      "stageId": 3,
+      "english": "mean",
+      "kana": "ミーン",
+      "japanese": "いみする",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 88,
+      "stageId": 3,
+      "english": "show",
+      "kana": "ショー",
+      "japanese": "みせる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 89,
+      "stageId": 3,
+      "english": "explain",
+      "kana": "エクスプレイン",
+      "japanese": "せつめいする",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 90,
+      "stageId": 3,
+      "english": "ask",
+      "kana": "アスク",
+      "japanese": "きく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 91,
+      "stageId": 3,
+      "english": "answer",
+      "kana": "アンサー",
+      "japanese": "こたえる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 92,
+      "stageId": 3,
+      "english": "say",
+      "kana": "セイ",
+      "japanese": "いう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 93,
+      "stageId": 3,
+      "english": "tell",
+      "kana": "テル",
+      "japanese": "いう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 94,
+      "stageId": 3,
+      "english": "speak",
+      "kana": "スピーク",
+      "japanese": "はなす",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 95,
+      "stageId": 3,
+      "english": "talk",
+      "kana": "トーク",
+      "japanese": "はなす",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 96,
+      "stageId": 3,
+      "english": "read",
+      "kana": "リード",
+      "japanese": "よむ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 97,
+      "stageId": 3,
+      "english": "hold",
+      "kana": "ホールド",
+      "japanese": "もつ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 98,
+      "stageId": 3,
+      "english": "give",
+      "kana": "ギブ",
+      "japanese": "あげる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 99,
+      "stageId": 3,
+      "english": "make",
+      "kana": "メイク",
+      "japanese": "つくる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 100,
+      "stageId": 3,
+      "english": "do",
+      "kana": "ドゥ",
+      "japanese": "する",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 101,
+      "stageId": 3,
+      "english": "create",
+      "kana": "クリエイト",
+      "japanese": "つくる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 102,
+      "stageId": 3,
+      "english": "build",
+      "kana": "ビルド",
+      "japanese": "たてる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 103,
+      "stageId": 3,
+      "english": "fix",
+      "kana": "フィックス",
+      "japanese": "なおす",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 104,
+      "stageId": 3,
+      "english": "cook",
+      "kana": "クック",
+      "japanese": "りょうりする",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 105,
+      "stageId": 3,
+      "english": "clean",
+      "kana": "クリーン",
+      "japanese": "きれいにする",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 106,
+      "stageId": 3,
+      "english": "wash",
+      "kana": "ウォッシュ",
+      "japanese": "あらう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 107,
+      "stageId": 3,
+      "english": "cut",
+      "kana": "カット",
+      "japanese": "きる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 108,
+      "stageId": 3,
+      "english": "draw",
+      "kana": "ドロー",
+      "japanese": "かく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 109,
+      "stageId": 3,
+      "english": "write",
+      "kana": "ライト",
+      "japanese": "かく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 110,
+      "stageId": 3,
+      "english": "paint",
+      "kana": "ペイント",
+      "japanese": "ぬる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 111,
+      "stageId": 3,
+      "english": "use",
+      "kana": "ユーズ",
+      "japanese": "つかう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 112,
+      "stageId": 3,
+      "english": "enjoy",
+      "kana": "エンジョイ",
+      "japanese": "たのしむ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 113,
+      "stageId": 3,
+      "english": "smile",
+      "kana": "スマイル",
+      "japanese": "わらう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 114,
+      "stageId": 3,
+      "english": "cry",
+      "kana": "クライ",
+      "japanese": "なく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 115,
+      "stageId": 3,
+      "english": "laugh",
+      "kana": "ラフ",
+      "japanese": "わらう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 116,
+      "stageId": 3,
+      "english": "boy",
+      "kana": "ボーイ",
+      "japanese": "おとこのこ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 117,
+      "stageId": 3,
+      "english": "girl",
+      "kana": "ガール",
+      "japanese": "おんなのこ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 118,
+      "stageId": 3,
+      "english": "child",
+      "kana": "チャイルド",
+      "japanese": "こども",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 119,
+      "stageId": 3,
+      "english": "family",
+      "kana": "ファミリー",
+      "japanese": "かぞく",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 120,
+      "stageId": 3,
+      "english": "mother",
+      "kana": "マザー",
+      "japanese": "おかあさん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 121,
+      "stageId": 3,
+      "english": "father",
+      "kana": "ファザー",
+      "japanese": "おとうさん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 122,
+      "stageId": 3,
+      "english": "friend",
+      "kana": "フレンド",
+      "japanese": "ともだち",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 123,
+      "stageId": 3,
+      "english": "teacher",
+      "kana": "ティーチャー",
+      "japanese": "せんせい",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 124,
+      "stageId": 3,
+      "english": "student",
+      "kana": "スチューデント",
+      "japanese": "がくせい",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 125,
+      "stageId": 3,
+      "english": "school",
+      "kana": "スクール",
+      "japanese": "がっこう",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 126,
+      "stageId": 3,
+      "english": "class",
+      "kana": "クラス",
+      "japanese": "クラス",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 127,
+      "stageId": 3,
+      "english": "classroom",
+      "kana": "クラスルーム",
+      "japanese": "きょうしつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 128,
+      "stageId": 3,
+      "english": "desk",
+      "kana": "デスク",
+      "japanese": "つくえ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 129,
+      "stageId": 3,
+      "english": "chair",
+      "kana": "チェア",
+      "japanese": "いす",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 130,
+      "stageId": 3,
+      "english": "book",
+      "kana": "ブック",
+      "japanese": "ほん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 131,
+      "stageId": 3,
+      "english": "notebook",
+      "kana": "ノートブック",
+      "japanese": "ノート",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 132,
+      "stageId": 3,
+      "english": "pen",
+      "kana": "ペン",
+      "japanese": "ペン",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 133,
+      "stageId": 3,
+      "english": "pencil",
+      "kana": "ペンシル",
+      "japanese": "えんぴつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 134,
+      "stageId": 3,
+      "english": "eraser",
+      "kana": "イレーサー",
+      "japanese": "けしゴム",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 135,
+      "stageId": 3,
+      "english": "bag",
+      "kana": "バッグ",
+      "japanese": "かばん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 136,
+      "stageId": 3,
+      "english": "uniform",
+      "kana": "ユニフォーム",
+      "japanese": "せいふく",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 137,
+      "stageId": 3,
+      "english": "house",
+      "kana": "ハウス",
+      "japanese": "いえ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 138,
+      "stageId": 3,
+      "english": "room",
+      "kana": "ルーム",
+      "japanese": "へや",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 139,
+      "stageId": 3,
+      "english": "kitchen",
+      "kana": "キッチン",
+      "japanese": "だいどころ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 140,
+      "stageId": 3,
+      "english": "bathroom",
+      "kana": "バスルーム",
+      "japanese": "おふろ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 141,
+      "stageId": 3,
+      "english": "bed",
+      "kana": "ベッド",
+      "japanese": "ベッド",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 142,
+      "stageId": 3,
+      "english": "door",
+      "kana": "ドア",
+      "japanese": "ドア",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 143,
+      "stageId": 3,
+      "english": "window",
+      "kana": "ウィンドウ",
+      "japanese": "まど",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 144,
+      "stageId": 3,
+      "english": "table",
+      "kana": "テーブル",
+      "japanese": "テーブル",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 145,
+      "stageId": 3,
+      "english": "rice",
+      "kana": "ライス",
+      "japanese": "こめ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 146,
+      "stageId": 3,
+      "english": "bread",
+      "kana": "ブレッド",
+      "japanese": "パン",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 147,
+      "stageId": 3,
+      "english": "apple",
+      "kana": "アップル",
+      "japanese": "りんご",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 148,
+      "stageId": 3,
+      "english": "banana",
+      "kana": "バナナ",
+      "japanese": "バナナ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 149,
+      "stageId": 3,
+      "english": "water",
+      "kana": "ウォーター",
+      "japanese": "みず",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 150,
+      "stageId": 3,
+      "english": "milk",
+      "kana": "ミルク",
+      "japanese": "ぎゅうにゅう",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 151,
+      "stageId": 3,
+      "english": "juice",
+      "kana": "ジュース",
+      "japanese": "ジュース",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 152,
+      "stageId": 3,
+      "english": "tea",
+      "kana": "ティー",
+      "japanese": "ちゃ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 153,
+      "stageId": 3,
+      "english": "get up",
+      "kana": "ゲット アップ",
+      "japanese": "おきる",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 154,
+      "stageId": 3,
+      "english": "go to bed",
+      "kana": "ゴー トゥ ベッド",
+      "japanese": "ねる",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 155,
+      "stageId": 4,
+      "english": "play",
+      "kana": "プレイ",
+      "japanese": "あそぶ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 156,
+      "stageId": 4,
+      "english": "work",
+      "kana": "ワーク",
+      "japanese": "はたらく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 157,
+      "stageId": 4,
+      "english": "rest",
+      "kana": "レスト",
+      "japanese": "やすむ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 158,
+      "stageId": 4,
+      "english": "sleep",
+      "kana": "スリープ",
+      "japanese": "ねる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 159,
+      "stageId": 4,
+      "english": "dance",
+      "kana": "ダンス",
+      "japanese": "おどる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 160,
+      "stageId": 4,
+      "english": "sing",
+      "kana": "シング",
+      "japanese": "うたう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 161,
+      "stageId": 4,
+      "english": "call",
+      "kana": "コール",
+      "japanese": "よぶ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 162,
+      "stageId": 4,
+      "english": "try",
+      "kana": "トライ",
+      "japanese": "やってみる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 163,
+      "stageId": 4,
+      "english": "find",
+      "kana": "ファインド",
+      "japanese": "みつける",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 164,
+      "stageId": 4,
+      "english": "lose",
+      "kana": "ルーズ",
+      "japanese": "なくす",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 165,
+      "stageId": 4,
+      "english": "buy",
+      "kana": "バイ",
+      "japanese": "かう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 166,
+      "stageId": 4,
+      "english": "sell",
+      "kana": "セル",
+      "japanese": "うる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 167,
+      "stageId": 4,
+      "english": "pay",
+      "kana": "ペイ",
+      "japanese": "はらう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 168,
+      "stageId": 4,
+      "english": "change",
+      "kana": "チェンジ",
+      "japanese": "かわる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 169,
+      "stageId": 4,
+      "english": "wear",
+      "kana": "ウェア",
+      "japanese": "きる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 170,
+      "stageId": 4,
+      "english": "eat",
+      "kana": "イート",
+      "japanese": "たべる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 171,
+      "stageId": 4,
+      "english": "drink",
+      "kana": "ドリンク",
+      "japanese": "のむ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 172,
+      "stageId": 4,
+      "english": "count",
+      "kana": "カウント",
+      "japanese": "かぞえる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 173,
+      "stageId": 4,
+      "english": "choose",
+      "kana": "チューズ",
+      "japanese": "えらぶ",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 174,
+      "stageId": 4,
+      "english": "break",
+      "kana": "ブレイク",
+      "japanese": "こわす",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 175,
+      "stageId": 4,
+      "english": "catch",
+      "kana": "キャッチ",
+      "japanese": "つかまえる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 176,
+      "stageId": 4,
+      "english": "throw",
+      "kana": "スロー",
+      "japanese": "なげる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 177,
+      "stageId": 4,
+      "english": "kick",
+      "kana": "キック",
+      "japanese": "ける",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 178,
+      "stageId": 4,
+      "english": "hit",
+      "kana": "ヒット",
+      "japanese": "たたく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 179,
+      "stageId": 4,
+      "english": "push",
+      "kana": "プッシュ",
+      "japanese": "おす",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 180,
+      "stageId": 4,
+      "english": "pull",
+      "kana": "プル",
+      "japanese": "ひく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 181,
+      "stageId": 4,
+      "english": "lift",
+      "kana": "リフト",
+      "japanese": "もちあげる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 182,
+      "stageId": 4,
+      "english": "drop",
+      "kana": "ドロップ",
+      "japanese": "おとす",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 183,
+      "stageId": 4,
+      "english": "pick",
+      "kana": "ピック",
+      "japanese": "ひろう",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 184,
+      "stageId": 4,
+      "english": "put",
+      "kana": "プット",
+      "japanese": "おく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 185,
+      "stageId": 4,
+      "english": "burn",
+      "kana": "バーン",
+      "japanese": "やく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 186,
+      "stageId": 4,
+      "english": "blow",
+      "kana": "ブロー",
+      "japanese": "ふく",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 187,
+      "stageId": 4,
+      "english": "shake",
+      "kana": "シェイク",
+      "japanese": "ゆらす",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 188,
+      "stageId": 4,
+      "english": "wave",
+      "kana": "ウェイブ",
+      "japanese": "ふる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 189,
+      "stageId": 4,
+      "english": "point",
+      "kana": "ポイント",
+      "japanese": "さす",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 190,
+      "stageId": 4,
+      "english": "touch",
+      "kana": "タッチ",
+      "japanese": "ふれる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 191,
+      "stageId": 4,
+      "english": "hug",
+      "kana": "ハグ",
+      "japanese": "だきしめる",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 192,
+      "stageId": 4,
+      "english": "kiss",
+      "kana": "キス",
+      "japanese": "キスする",
+      "unitType": "word",
+      "pos": "verb",
+      "tags": []
+    },
+    {
+      "id": 193,
+      "stageId": 4,
+      "english": "dog",
+      "kana": "ドッグ",
+      "japanese": "いぬ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 194,
+      "stageId": 4,
+      "english": "cat",
+      "kana": "キャット",
+      "japanese": "ねこ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 195,
+      "stageId": 4,
+      "english": "bird",
+      "kana": "バード",
+      "japanese": "とり",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 196,
+      "stageId": 4,
+      "english": "fish",
+      "kana": "フィッシュ",
+      "japanese": "さかな",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 197,
+      "stageId": 4,
+      "english": "hand",
+      "kana": "ハンド",
+      "japanese": "て",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 198,
+      "stageId": 4,
+      "english": "foot",
+      "kana": "フット",
+      "japanese": "あし",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 199,
+      "stageId": 4,
+      "english": "head",
+      "kana": "ヘッド",
+      "japanese": "あたま",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 200,
+      "stageId": 4,
+      "english": "eye",
+      "kana": "アイ",
+      "japanese": "め",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 201,
+      "stageId": 4,
+      "english": "ear",
+      "kana": "イア",
+      "japanese": "みみ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 202,
+      "stageId": 4,
+      "english": "mouth",
+      "kana": "マウス",
+      "japanese": "くち",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 203,
+      "stageId": 4,
+      "english": "nose",
+      "kana": "ノーズ",
+      "japanese": "はな",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 204,
+      "stageId": 4,
+      "english": "hair",
+      "kana": "ヘア",
+      "japanese": "かみ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 205,
+      "stageId": 4,
+      "english": "face",
+      "kana": "フェイス",
+      "japanese": "かお",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 206,
+      "stageId": 4,
+      "english": "body",
+      "kana": "ボディ",
+      "japanese": "からだ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 207,
+      "stageId": 4,
+      "english": "clothes",
+      "kana": "クロウズ",
+      "japanese": "ふく",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 208,
+      "stageId": 4,
+      "english": "shoes",
+      "kana": "シューズ",
+      "japanese": "くつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 209,
+      "stageId": 4,
+      "english": "hat",
+      "kana": "ハット",
+      "japanese": "ぼうし",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 210,
+      "stageId": 4,
+      "english": "sock",
+      "kana": "ソック",
+      "japanese": "くつした",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 211,
+      "stageId": 4,
+      "english": "park",
+      "kana": "パーク",
+      "japanese": "こうえん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 212,
+      "stageId": 4,
+      "english": "shop",
+      "kana": "ショップ",
+      "japanese": "みせ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 213,
+      "stageId": 4,
+      "english": "hospital",
+      "kana": "ホスピタル",
+      "japanese": "びょういん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 214,
+      "stageId": 4,
+      "english": "station",
+      "kana": "ステーション",
+      "japanese": "えき",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 215,
+      "stageId": 4,
+      "english": "bus",
+      "kana": "バス",
+      "japanese": "バス",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 216,
+      "stageId": 4,
+      "english": "car",
+      "kana": "カー",
+      "japanese": "くるま",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 217,
+      "stageId": 4,
+      "english": "English",
+      "kana": "イングリッシュ",
+      "japanese": "えいご",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 218,
+      "stageId": 4,
+      "english": "music",
+      "kana": "ミュージック",
+      "japanese": "おんがく",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 219,
+      "stageId": 4,
+      "english": "game",
+      "kana": "ゲーム",
+      "japanese": "ゲーム",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 220,
+      "stageId": 4,
+      "english": "soccer",
+      "kana": "サッカー",
+      "japanese": "サッカー",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 221,
+      "stageId": 4,
+      "english": "baseball",
+      "kana": "ベースボール",
+      "japanese": "やきゅう",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 222,
+      "stageId": 4,
+      "english": "Monday",
+      "kana": "マンデイ",
+      "japanese": "げつようび",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 223,
+      "stageId": 4,
+      "english": "Tuesday",
+      "kana": "チューズデイ",
+      "japanese": "かようび",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 224,
+      "stageId": 4,
+      "english": "Wednesday",
+      "kana": "ウェンズデイ",
+      "japanese": "すいようび",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 225,
+      "stageId": 4,
+      "english": "Thursday",
+      "kana": "サーズデイ",
+      "japanese": "もくようび",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 226,
+      "stageId": 4,
+      "english": "Friday",
+      "kana": "フライデイ",
+      "japanese": "きんようび",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 227,
+      "stageId": 4,
+      "english": "Saturday",
+      "kana": "サタデイ",
+      "japanese": "どようび",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 228,
+      "stageId": 4,
+      "english": "Sunday",
+      "kana": "サンデイ",
+      "japanese": "にちようび",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 229,
+      "stageId": 4,
+      "english": "January",
+      "kana": "ジャニュアリ",
+      "japanese": "いちがつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 230,
+      "stageId": 4,
+      "english": "summer",
+      "kana": "サマー",
+      "japanese": "なつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 231,
+      "stageId": 4,
+      "english": "winter",
+      "kana": "ウィンター",
+      "japanese": "ふゆ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 232,
+      "stageId": 4,
+      "english": "Hello!",
+      "kana": "ハロー",
+      "japanese": "こんにちは",
+      "unitType": "phrase",
+      "pos": "phraseGreet",
+      "tags": [
+        "greeting"
+      ]
+    },
+    {
+      "id": 233,
+      "stageId": 4,
+      "english": "Good morning.",
+      "kana": "グッド モーニング",
+      "japanese": "おはよう",
+      "unitType": "phrase",
+      "pos": "phraseGreet",
+      "tags": [
+        "greeting"
+      ]
+    },
+    {
+      "id": 234,
+      "stageId": 4,
+      "english": "Good afternoon.",
+      "kana": "グッド アフターヌーン",
+      "japanese": "こんにちは",
+      "unitType": "phrase",
+      "pos": "phraseGreet",
+      "tags": [
+        "greeting"
+      ]
+    },
+    {
+      "id": 235,
+      "stageId": 4,
+      "english": "Good evening.",
+      "kana": "グッド イブニング",
+      "japanese": "こんばんは",
+      "unitType": "phrase",
+      "pos": "phraseGreet",
+      "tags": [
+        "greeting"
+      ]
+    },
+    {
+      "id": 236,
+      "stageId": 4,
+      "english": "Good night.",
+      "kana": "グッド ナイト",
+      "japanese": "おやすみなさい",
+      "unitType": "phrase",
+      "pos": "phraseGreet",
+      "tags": [
+        "greeting"
+      ]
+    },
+    {
+      "id": 237,
+      "stageId": 4,
+      "english": "do homework",
+      "kana": "ドゥ ホームワーク",
+      "japanese": "しゅくだいをする",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 238,
+      "stageId": 4,
+      "english": "have lunch",
+      "kana": "ハブ ランチ",
+      "japanese": "ひるごはんをたべる",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 239,
+      "stageId": 5,
+      "english": "man",
+      "kana": "マン",
+      "japanese": "おとこ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 240,
+      "stageId": 5,
+      "english": "woman",
+      "kana": "ウーマン",
+      "japanese": "おんな",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 241,
+      "stageId": 5,
+      "english": "baby",
+      "kana": "ベイビー",
+      "japanese": "あかちゃん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 242,
+      "stageId": 5,
+      "english": "brother",
+      "kana": "ブラザー",
+      "japanese": "おにいさん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 243,
+      "stageId": 5,
+      "english": "sister",
+      "kana": "シスター",
+      "japanese": "おねえさん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 244,
+      "stageId": 5,
+      "english": "doctor",
+      "kana": "ドクター",
+      "japanese": "いしゃ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 245,
+      "stageId": 5,
+      "english": "nurse",
+      "kana": "ナース",
+      "japanese": "かんごし",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 246,
+      "stageId": 5,
+      "english": "blackboard",
+      "kana": "ブラックボード",
+      "japanese": "こくばん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 247,
+      "stageId": 5,
+      "english": "name",
+      "kana": "ネーム",
+      "japanese": "なまえ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 248,
+      "stageId": 5,
+      "english": "age",
+      "kana": "エイジ",
+      "japanese": "とし",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 249,
+      "stageId": 5,
+      "english": "birthday",
+      "kana": "バースデイ",
+      "japanese": "たんじょうび",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 250,
+      "stageId": 5,
+      "english": "morning",
+      "kana": "モーニング",
+      "japanese": "あさ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 251,
+      "stageId": 5,
+      "english": "afternoon",
+      "kana": "アフターヌーン",
+      "japanese": "ごご",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 252,
+      "stageId": 5,
+      "english": "evening",
+      "kana": "イブニング",
+      "japanese": "ゆうがた",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 253,
+      "stageId": 5,
+      "english": "night",
+      "kana": "ナイト",
+      "japanese": "よる",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 254,
+      "stageId": 5,
+      "english": "today",
+      "kana": "トゥデイ",
+      "japanese": "きょう",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 255,
+      "stageId": 5,
+      "english": "tomorrow",
+      "kana": "トゥモロー",
+      "japanese": "あした",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 256,
+      "stageId": 5,
+      "english": "yesterday",
+      "kana": "イエスタデイ",
+      "japanese": "きのう",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 257,
+      "stageId": 5,
+      "english": "week",
+      "kana": "ウィーク",
+      "japanese": "しゅう",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 258,
+      "stageId": 5,
+      "english": "hour",
+      "kana": "アワー",
+      "japanese": "じかん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 259,
+      "stageId": 5,
+      "english": "minute",
+      "kana": "ミニット",
+      "japanese": "ふん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 260,
+      "stageId": 5,
+      "english": "day",
+      "kana": "デイ",
+      "japanese": "ひ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 261,
+      "stageId": 5,
+      "english": "month",
+      "kana": "マンス",
+      "japanese": "つき",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 262,
+      "stageId": 5,
+      "english": "year",
+      "kana": "イア",
+      "japanese": "ねん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 263,
+      "stageId": 5,
+      "english": "number",
+      "kana": "ナンバー",
+      "japanese": "かず",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 264,
+      "stageId": 5,
+      "english": "color",
+      "kana": "カラー",
+      "japanese": "いろ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 265,
+      "stageId": 5,
+      "english": "picture",
+      "kana": "ピクチャー",
+      "japanese": "え",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 266,
+      "stageId": 5,
+      "english": "song",
+      "kana": "ソング",
+      "japanese": "うた",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 267,
+      "stageId": 5,
+      "english": "story",
+      "kana": "ストーリー",
+      "japanese": "はなし",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 268,
+      "stageId": 5,
+      "english": "computer",
+      "kana": "コンピューター",
+      "japanese": "コンピューター",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 269,
+      "stageId": 5,
+      "english": "phone",
+      "kana": "フォン",
+      "japanese": "でんわ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 270,
+      "stageId": 5,
+      "english": "TV",
+      "kana": "ティーブイ",
+      "japanese": "テレビ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 271,
+      "stageId": 5,
+      "english": "radio",
+      "kana": "ラジオ",
+      "japanese": "ラジオ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 272,
+      "stageId": 5,
+      "english": "How are you?",
+      "kana": "ハウ アー ユー",
+      "japanese": "げんきですか",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 273,
+      "stageId": 5,
+      "english": "I'm fine, thank you.",
+      "kana": "アイム ファイン センキュー",
+      "japanese": "げんきです ありがとう",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 274,
+      "stageId": 5,
+      "english": "What's your name?",
+      "kana": "ワッツ ユア ネーム",
+      "japanese": "あなたの なまえは なんですか",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 275,
+      "stageId": 5,
+      "english": "My name is __.",
+      "kana": "マイ ネーム イズ __",
+      "japanese": "わたしの なまえは __です",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 276,
+      "stageId": 5,
+      "english": "Nice to meet you.",
+      "kana": "ナイス トゥ ミート ユー",
+      "japanese": "はじめまして",
+      "unitType": "phrase",
+      "pos": "phraseGreet",
+      "tags": [
+        "greeting"
+      ]
+    },
+    {
+      "id": 277,
+      "stageId": 5,
+      "english": "play with __",
+      "kana": "プレイ ウィズ __",
+      "japanese": "〜といっしょにあそぶ",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 278,
+      "stageId": 5,
+      "english": "wait for __",
+      "kana": "ウェイト フォー __",
+      "japanese": "〜をまつ",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 279,
+      "stageId": 6,
+      "english": "flower",
+      "kana": "フラワー",
+      "japanese": "はな",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 280,
+      "stageId": 6,
+      "english": "tree",
+      "kana": "ツリー",
+      "japanese": "き",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 281,
+      "stageId": 6,
+      "english": "river",
+      "kana": "リバー",
+      "japanese": "かわ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 282,
+      "stageId": 6,
+      "english": "mountain",
+      "kana": "マウンテン",
+      "japanese": "やま",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 283,
+      "stageId": 6,
+      "english": "sea",
+      "kana": "シー",
+      "japanese": "うみ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 284,
+      "stageId": 6,
+      "english": "sky",
+      "kana": "スカイ",
+      "japanese": "そら",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 285,
+      "stageId": 6,
+      "english": "big",
+      "kana": "ビッグ",
+      "japanese": "おおきい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 286,
+      "stageId": 6,
+      "english": "small",
+      "kana": "スモール",
+      "japanese": "ちいさい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 287,
+      "stageId": 6,
+      "english": "long",
+      "kana": "ロング",
+      "japanese": "ながい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 288,
+      "stageId": 6,
+      "english": "short",
+      "kana": "ショート",
+      "japanese": "みじかい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 289,
+      "stageId": 6,
+      "english": "tall",
+      "kana": "トール",
+      "japanese": "たかい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 290,
+      "stageId": 6,
+      "english": "fat",
+      "kana": "ファット",
+      "japanese": "ふとい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 291,
+      "stageId": 6,
+      "english": "thin",
+      "kana": "シン",
+      "japanese": "ほそい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 292,
+      "stageId": 6,
+      "english": "heavy",
+      "kana": "ヘビー",
+      "japanese": "おもい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 293,
+      "stageId": 6,
+      "english": "light",
+      "kana": "ライト",
+      "japanese": "かるい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 294,
+      "stageId": 6,
+      "english": "hot",
+      "kana": "ホット",
+      "japanese": "あつい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 295,
+      "stageId": 6,
+      "english": "cold",
+      "kana": "コールド",
+      "japanese": "さむい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 296,
+      "stageId": 6,
+      "english": "warm",
+      "kana": "ウォーム",
+      "japanese": "あたたかい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 297,
+      "stageId": 6,
+      "english": "cool",
+      "kana": "クール",
+      "japanese": "すずしい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 298,
+      "stageId": 6,
+      "english": "new",
+      "kana": "ニュー",
+      "japanese": "あたらしい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 299,
+      "stageId": 6,
+      "english": "old",
+      "kana": "オールド",
+      "japanese": "ふるい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 300,
+      "stageId": 6,
+      "english": "good",
+      "kana": "グッド",
+      "japanese": "よい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 301,
+      "stageId": 6,
+      "english": "bad",
+      "kana": "バッド",
+      "japanese": "わるい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 302,
+      "stageId": 6,
+      "english": "happy",
+      "kana": "ハッピー",
+      "japanese": "しあわせ",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 303,
+      "stageId": 6,
+      "english": "sad",
+      "kana": "サッド",
+      "japanese": "かなしい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 304,
+      "stageId": 6,
+      "english": "angry",
+      "kana": "アングリー",
+      "japanese": "おこっている",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 305,
+      "stageId": 6,
+      "english": "tired",
+      "kana": "タイアード",
+      "japanese": "つかれている",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 306,
+      "stageId": 6,
+      "english": "hungry",
+      "kana": "ハングリー",
+      "japanese": "おなかがすいている",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 307,
+      "stageId": 6,
+      "english": "full",
+      "kana": "フル",
+      "japanese": "おなかがいっぱい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 308,
+      "stageId": 6,
+      "english": "dirty",
+      "kana": "ダーティ",
+      "japanese": "よごれている",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 309,
+      "stageId": 6,
+      "english": "fast",
+      "kana": "ファスト",
+      "japanese": "はやい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 310,
+      "stageId": 6,
+      "english": "slow",
+      "kana": "スロー",
+      "japanese": "おそい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 311,
+      "stageId": 6,
+      "english": "easy",
+      "kana": "イージー",
+      "japanese": "かんたん",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 312,
+      "stageId": 6,
+      "english": "difficult",
+      "kana": "ディフィカルト",
+      "japanese": "むずかしい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 313,
+      "stageId": 6,
+      "english": "beautiful",
+      "kana": "ビューティフル",
+      "japanese": "うつくしい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 314,
+      "stageId": 6,
+      "english": "ugly",
+      "kana": "アグリー",
+      "japanese": "きたない",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 315,
+      "stageId": 6,
+      "english": "strong",
+      "kana": "ストロング",
+      "japanese": "つよい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 316,
+      "stageId": 6,
+      "english": "weak",
+      "kana": "ウィーク",
+      "japanese": "よわい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 317,
+      "stageId": 6,
+      "english": "loud",
+      "kana": "ラウド",
+      "japanese": "うるさい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 318,
+      "stageId": 6,
+      "english": "quiet",
+      "kana": "クワイエット",
+      "japanese": "しずか",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 319,
+      "stageId": 6,
+      "english": "bright",
+      "kana": "ブライト",
+      "japanese": "あかるい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 320,
+      "stageId": 6,
+      "english": "dark",
+      "kana": "ダーク",
+      "japanese": "くらい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 321,
+      "stageId": 6,
+      "english": "wet",
+      "kana": "ウェット",
+      "japanese": "ぬれている",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 322,
+      "stageId": 6,
+      "english": "dry",
+      "kana": "ドライ",
+      "japanese": "かわいている",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 323,
+      "stageId": 6,
+      "english": "cheap",
+      "kana": "チープ",
+      "japanese": "やすい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 324,
+      "stageId": 6,
+      "english": "expensive",
+      "kana": "エクスペンシブ",
+      "japanese": "たかい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 325,
+      "stageId": 6,
+      "english": "red",
+      "kana": "レッド",
+      "japanese": "あかい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 326,
+      "stageId": 6,
+      "english": "blue",
+      "kana": "ブルー",
+      "japanese": "あおい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 327,
+      "stageId": 6,
+      "english": "green",
+      "kana": "グリーン",
+      "japanese": "みどりいろ",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 328,
+      "stageId": 6,
+      "english": "yellow",
+      "kana": "イエロー",
+      "japanese": "きいろ",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 329,
+      "stageId": 6,
+      "english": "white",
+      "kana": "ホワイト",
+      "japanese": "しろい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 330,
+      "stageId": 6,
+      "english": "black",
+      "kana": "ブラック",
+      "japanese": "くろい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 331,
+      "stageId": 6,
+      "english": "I am a student.",
+      "kana": "アイ アム ア スチューデント",
+      "japanese": "わたしは がくせいです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 332,
+      "stageId": 6,
+      "english": "This is my friend.",
+      "kana": "ディス イズ マイ フレンド",
+      "japanese": "これは わたしの ともだちです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 333,
+      "stageId": 6,
+      "english": "I go to school.",
+      "kana": "アイ ゴー トゥ スクール",
+      "japanese": "わたしは がっこうへ いきます",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 334,
+      "stageId": 6,
+      "english": "This is my book.",
+      "kana": "ディス イズ マイ ブック",
+      "japanese": "これは わたしの ほんです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 335,
+      "stageId": 6,
+      "english": "I have a pen.",
+      "kana": "アイ ハブ ア ペン",
+      "japanese": "わたしは ペンを もっています",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 336,
+      "stageId": 6,
+      "english": "look for __",
+      "kana": "ルック フォー __",
+      "japanese": "〜をさがす",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 337,
+      "stageId": 6,
+      "english": "take care of __",
+      "kana": "テイク ケア オブ __",
+      "japanese": "〜のせわをする",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 338,
+      "stageId": 7,
+      "english": "math",
+      "kana": "マス",
+      "japanese": "さんすう",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 339,
+      "stageId": 7,
+      "english": "science",
+      "kana": "サイエンス",
+      "japanese": "かがく",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 340,
+      "stageId": 7,
+      "english": "art",
+      "kana": "アート",
+      "japanese": "びじゅつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 341,
+      "stageId": 7,
+      "english": "PE",
+      "kana": "ピーイー",
+      "japanese": "たいいく",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 342,
+      "stageId": 7,
+      "english": "ball",
+      "kana": "ボール",
+      "japanese": "ボール",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 343,
+      "stageId": 7,
+      "english": "My family is big.",
+      "kana": "マイ ファミリー イズ ビッグ",
+      "japanese": "わたしの かぞくは おおきいです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 344,
+      "stageId": 7,
+      "english": "This is my mother.",
+      "kana": "ディス イズ マイ マザー",
+      "japanese": "これは わたしの おかあさんです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 345,
+      "stageId": 7,
+      "english": "This is my father.",
+      "kana": "ディス イズ マイ ファザー",
+      "japanese": "これは わたしの おとうさんです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 346,
+      "stageId": 7,
+      "english": "I like apples.",
+      "kana": "アイ ライク アップルズ",
+      "japanese": "わたしは りんごが すきです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 347,
+      "stageId": 7,
+      "english": "See you!",
+      "kana": "シー ユー",
+      "japanese": "またね",
+      "unitType": "phrase",
+      "pos": "phraseGreet",
+      "tags": [
+        "greeting"
+      ]
+    },
+    {
+      "id": 348,
+      "stageId": 7,
+      "english": "give up __",
+      "kana": "ギブ アップ __",
+      "japanese": "〜をあきらめる",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 349,
+      "stageId": 7,
+      "english": "run away",
+      "kana": "ラン アウェイ",
+      "japanese": "にげる",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 350,
+      "stageId": 8,
+      "english": "sit down",
+      "kana": "シット ダウン",
+      "japanese": "いすにすわる",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 351,
+      "stageId": 8,
+      "english": "stand up",
+      "kana": "スタンド アップ",
+      "japanese": "たちあがる",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 352,
+      "stageId": 8,
+      "english": "one",
+      "kana": "ワン",
+      "japanese": "ひとつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 353,
+      "stageId": 8,
+      "english": "two",
+      "kana": "トゥー",
+      "japanese": "ふたつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 354,
+      "stageId": 8,
+      "english": "three",
+      "kana": "スリー",
+      "japanese": "みっつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 355,
+      "stageId": 8,
+      "english": "four",
+      "kana": "フォー",
+      "japanese": "よっつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 356,
+      "stageId": 8,
+      "english": "five",
+      "kana": "ファイブ",
+      "japanese": "いつつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 357,
+      "stageId": 8,
+      "english": "six",
+      "kana": "シックス",
+      "japanese": "むっつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 358,
+      "stageId": 8,
+      "english": "seven",
+      "kana": "セブン",
+      "japanese": "ななつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 359,
+      "stageId": 8,
+      "english": "eight",
+      "kana": "エイト",
+      "japanese": "やっつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 360,
+      "stageId": 8,
+      "english": "nine",
+      "kana": "ナイン",
+      "japanese": "ここのつ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 361,
+      "stageId": 8,
+      "english": "ten",
+      "kana": "テン",
+      "japanese": "とう",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 362,
+      "stageId": 8,
+      "english": "first",
+      "kana": "ファースト",
+      "japanese": "さいしょ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 363,
+      "stageId": 8,
+      "english": "next",
+      "kana": "ネクスト",
+      "japanese": "つぎ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 364,
+      "stageId": 8,
+      "english": "now",
+      "kana": "ナウ",
+      "japanese": "いま",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 365,
+      "stageId": 8,
+      "english": "here",
+      "kana": "ヒア",
+      "japanese": "ここ",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 366,
+      "stageId": 8,
+      "english": "there",
+      "kana": "ゼア",
+      "japanese": "そこ",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 367,
+      "stageId": 8,
+      "english": "yes",
+      "kana": "イエス",
+      "japanese": "はい",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 368,
+      "stageId": 8,
+      "english": "no",
+      "kana": "ノー",
+      "japanese": "いいえ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 369,
+      "stageId": 8,
+      "english": "some",
+      "kana": "サム",
+      "japanese": "いくつかの",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 370,
+      "stageId": 8,
+      "english": "any",
+      "kana": "エニー",
+      "japanese": "なにか",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 371,
+      "stageId": 8,
+      "english": "all",
+      "kana": "オール",
+      "japanese": "みんな",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 372,
+      "stageId": 8,
+      "english": "many",
+      "kana": "メニー",
+      "japanese": "たくさん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 373,
+      "stageId": 8,
+      "english": "much",
+      "kana": "マッチ",
+      "japanese": "たくさん",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 374,
+      "stageId": 8,
+      "english": "few",
+      "kana": "フィュー",
+      "japanese": "すくない",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 375,
+      "stageId": 8,
+      "english": "little",
+      "kana": "リトル",
+      "japanese": "すこし",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 376,
+      "stageId": 8,
+      "english": "every",
+      "kana": "エブリ",
+      "japanese": "まいにち",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 377,
+      "stageId": 8,
+      "english": "each",
+      "kana": "イーチ",
+      "japanese": "それぞれ",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 378,
+      "stageId": 8,
+      "english": "both",
+      "kana": "ボース",
+      "japanese": "りょうほう",
+      "unitType": "word",
+      "pos": "noun",
+      "tags": []
+    },
+    {
+      "id": 379,
+      "stageId": 8,
+      "english": "well",
+      "kana": "ウェル",
+      "japanese": "よく",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 380,
+      "stageId": 8,
+      "english": "badly",
+      "kana": "バッドリー",
+      "japanese": "わるく",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 381,
+      "stageId": 8,
+      "english": "quickly",
+      "kana": "クイックリー",
+      "japanese": "すばやく",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 382,
+      "stageId": 8,
+      "english": "Thank you.",
+      "kana": "センキュー",
+      "japanese": "ありがとう",
+      "unitType": "phrase",
+      "pos": "phraseGreet",
+      "tags": [
+        "greeting"
+      ]
+    },
+    {
+      "id": 383,
+      "stageId": 8,
+      "english": "You're welcome.",
+      "kana": "ユア ウェルカム",
+      "japanese": "どういたしまして",
+      "unitType": "phrase",
+      "pos": "phraseGreet",
+      "tags": [
+        "greeting"
+      ]
+    },
+    {
+      "id": 384,
+      "stageId": 8,
+      "english": "I play soccer.",
+      "kana": "アイ プレイ サッカー",
+      "japanese": "わたしは サッカーをします",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 385,
+      "stageId": 8,
+      "english": "What time is it?",
+      "kana": "ワット タイム イズ イット",
+      "japanese": "いま なんじですか",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 386,
+      "stageId": 8,
+      "english": "It's 3 o'clock.",
+      "kana": "イッツ スリー オクロック",
+      "japanese": "さんじです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 387,
+      "stageId": 8,
+      "english": "I get up at 7.",
+      "kana": "アイ ゲット アップ アット セブン",
+      "japanese": "わたしは しちじに おきます",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 388,
+      "stageId": 8,
+      "english": "I eat breakfast.",
+      "kana": "アイ イート ブレックファスト",
+      "japanese": "わたしは あさごはんを たべます",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 389,
+      "stageId": 8,
+      "english": "I go to bed at 9.",
+      "kana": "アイ ゴー トゥ ベッド アット ナイン",
+      "japanese": "わたしは きゅうじに ねます",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 390,
+      "stageId": 8,
+      "english": "in the morning",
+      "kana": "イン ザ モーニング",
+      "japanese": "あさ",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 391,
+      "stageId": 8,
+      "english": "after school",
+      "kana": "アフター スクール",
+      "japanese": "ほうかご",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 392,
+      "stageId": 9,
+      "english": "slowly",
+      "kana": "スロウリー",
+      "japanese": "ゆっくり",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 393,
+      "stageId": 9,
+      "english": "loudly",
+      "kana": "ラウドリー",
+      "japanese": "おおきなこえで",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 394,
+      "stageId": 9,
+      "english": "quietly",
+      "kana": "クワイエットリー",
+      "japanese": "しずかに",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 395,
+      "stageId": 9,
+      "english": "carefully",
+      "kana": "ケアフリー",
+      "japanese": "きをつけて",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 396,
+      "stageId": 9,
+      "english": "happily",
+      "kana": "ハッピリー",
+      "japanese": "たのしく",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 397,
+      "stageId": 9,
+      "english": "sadly",
+      "kana": "サッドリー",
+      "japanese": "かなしく",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 398,
+      "stageId": 9,
+      "english": "nicely",
+      "kana": "ナイスリー",
+      "japanese": "やさしく",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 399,
+      "stageId": 9,
+      "english": "politely",
+      "kana": "ポライトリー",
+      "japanese": "ていねいに",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 400,
+      "stageId": 9,
+      "english": "together",
+      "kana": "トゥゲザー",
+      "japanese": "いっしょに",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 401,
+      "stageId": 9,
+      "english": "alone",
+      "kana": "アローン",
+      "japanese": "ひとりで",
+      "unitType": "word",
+      "pos": "adv",
+      "tags": []
+    },
+    {
+      "id": 402,
+      "stageId": 9,
+      "english": "orange",
+      "kana": "オレンジ",
+      "japanese": "だいだいいろ",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 403,
+      "stageId": 9,
+      "english": "pink",
+      "kana": "ピンク",
+      "japanese": "ももいろ",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 404,
+      "stageId": 9,
+      "english": "purple",
+      "kana": "パープル",
+      "japanese": "むらさき",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 405,
+      "stageId": 9,
+      "english": "brown",
+      "kana": "ブラウン",
+      "japanese": "茶色",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 406,
+      "stageId": 9,
+      "english": "grey",
+      "kana": "グレイ",
+      "japanese": "はいいろ",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 407,
+      "stageId": 9,
+      "english": "silver",
+      "kana": "シルバー",
+      "japanese": "ぎんいろ",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 408,
+      "stageId": 9,
+      "english": "gold",
+      "kana": "ゴールド",
+      "japanese": "きんいろ",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 409,
+      "stageId": 9,
+      "english": "every day",
+      "kana": "エブリ デイ",
+      "japanese": "まいにち",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 410,
+      "stageId": 9,
+      "english": "I study English.",
+      "kana": "アイ スタディ イングリッシュ",
+      "japanese": "わたしは えいごを べんきょうします",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 411,
+      "stageId": 9,
+      "english": "The dog is big.",
+      "kana": "ザ ドッグ イズ ビッグ",
+      "japanese": "そのいぬは おおきいです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 412,
+      "stageId": 9,
+      "english": "The book is new.",
+      "kana": "ザ ブック イズ ニュー",
+      "japanese": "そのほんは あたらしいです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 413,
+      "stageId": 9,
+      "english": "He is my friend.",
+      "kana": "ヒー イズ マイ フレンド",
+      "japanese": "かれは わたしの ともだちです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 414,
+      "stageId": 9,
+      "english": "We go to school.",
+      "kana": "ウィー ゴー トゥ スクール",
+      "japanese": "わたしたちは がっこうへ いきます",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 415,
+      "stageId": 9,
+      "english": "How old are you?",
+      "kana": "ハウ オールド アー ユー",
+      "japanese": "あなたは なんさいですか",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 416,
+      "stageId": 9,
+      "english": "I am 10 years old.",
+      "kana": "アイ アム テン イアーズ オールド",
+      "japanese": "わたしは じゅっさいです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 417,
+      "stageId": 9,
+      "english": "Where are you from?",
+      "kana": "ウェア アー ユー フロム",
+      "japanese": "あなたは どこから ですか",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 418,
+      "stageId": 9,
+      "english": "I am from Japan.",
+      "kana": "アイ アム フロム ジャパン",
+      "japanese": "わたしは にほんから です",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 419,
+      "stageId": 9,
+      "english": "turn on __",
+      "kana": "ターン オン __",
+      "japanese": "〜をつける",
+      "unitType": "phrase",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 420,
+      "stageId": 9,
+      "english": "turn off __",
+      "kana": "ターン オフ __",
+      "japanese": "〜をけす",
+      "unitType": "phrase",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 421,
+      "stageId": 10,
+      "english": "high",
+      "kana": "ハイ",
+      "japanese": "たかい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 422,
+      "stageId": 10,
+      "english": "low",
+      "kana": "ロー",
+      "japanese": "ひくい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 423,
+      "stageId": 10,
+      "english": "far",
+      "kana": "ファー",
+      "japanese": "とおい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 424,
+      "stageId": 10,
+      "english": "near",
+      "kana": "ニア",
+      "japanese": "ちかい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 425,
+      "stageId": 10,
+      "english": "late",
+      "kana": "レイト",
+      "japanese": "おそい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 426,
+      "stageId": 10,
+      "english": "young",
+      "kana": "ヤング",
+      "japanese": "わかい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 427,
+      "stageId": 10,
+      "english": "ready",
+      "kana": "レディ",
+      "japanese": "よういできている",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 428,
+      "stageId": 10,
+      "english": "busy",
+      "kana": "ビジー",
+      "japanese": "いそがしい",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 429,
+      "stageId": 10,
+      "english": "free",
+      "kana": "フリー",
+      "japanese": "ひまがある",
+      "unitType": "word",
+      "pos": "adj",
+      "tags": []
+    },
+    {
+      "id": 430,
+      "stageId": 10,
+      "english": "What do you like?",
+      "kana": "ワット ドゥ ユー ライク",
+      "japanese": "あなたは なにが すきですか",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 431,
+      "stageId": 10,
+      "english": "I like music.",
+      "kana": "アイ ライク ミュージック",
+      "japanese": "わたしは おんがくが すきです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 432,
+      "stageId": 10,
+      "english": "Do you like dogs?",
+      "kana": "ドゥ ユー ライク ドッグズ",
+      "japanese": "あなたは いぬが すきですか",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 433,
+      "stageId": 10,
+      "english": "Yes, I do. / No, I don't.",
+      "kana": "イエス アイ ドゥ / ノー アイ ドント",
+      "japanese": "はい すきです / いいえ すきではありません",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 434,
+      "stageId": 10,
+      "english": "I want to travel.",
+      "kana": "アイ ウォント トゥ トラベル",
+      "japanese": "わたしは たびに いきたいです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 435,
+      "stageId": 10,
+      "english": "I want to speak English.",
+      "kana": "アイ ウォント トゥ スピーク イングリッシュ",
+      "japanese": "わたしは えいごを はなしたいです",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 436,
+      "stageId": 10,
+      "english": "Have a nice day!",
+      "kana": "ハブ ア ナイス デイ",
+      "japanese": "よい いちにちを",
+      "unitType": "phrase",
+      "pos": "phraseGreet",
+      "tags": [
+        "greeting"
+      ]
+    },
+    {
+      "id": 437,
+      "stageId": 10,
+      "english": "I'm sorry.",
+      "kana": "アイム ソーリー",
+      "japanese": "ごめんなさい",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 438,
+      "stageId": 10,
+      "english": "That's OK.",
+      "kana": "ザッツ オーケー",
+      "japanese": "きにしないで",
+      "unitType": "phrase",
+      "pos": "phraseOther",
+      "tags": []
+    },
+    {
+      "id": 439,
+      "stageId": 10,
+      "english": "Let's play together!",
+      "kana": "レッツ プレイ トゥゲザー",
+      "japanese": "いっしょに あそびましょう",
+      "unitType": "phrase",
+      "pos": "phraseGreet",
+      "tags": [
+        "greeting"
+      ]
+    },
+    {
+      "id": 440,
+      "stageId": 10,
+      "english": "put on __",
+      "kana": "プット オン __",
+      "japanese": "〜をきる",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    },
+    {
+      "id": 441,
+      "stageId": 10,
+      "english": "take off __",
+      "kana": "テイク オフ __",
+      "japanese": "〜をぬぐ",
+      "unitType": "idiom",
+      "pos": "idiomVerb",
+      "tags": []
+    }
+  ]
+}
