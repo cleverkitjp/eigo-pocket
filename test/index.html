@@ -2,103 +2,91 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>えいごポケット｜英単語カード</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="./style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>えいごポケット｜こどもむけ えいたんごカード</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <div class="container">
 
-  <!-- ヘッダー：サイト名だけ（もとの雰囲気を踏襲） -->
-  <header class="site-header">
+    <!-- タイトル -->
     <h1 class="site-title">えいごポケット</h1>
-  </header>
+    <div class="site-sub">こども向け えいたんごカード（発音つき）</div>
 
-  <!-- タイトルカード（文言変更） -->
-  <section class="card card-title">
-    <h2 class="card-title-main">カードをめくって、スタンプを集めよう。</h2>
-  </section>
+    <!-- ステージタブ -->
+    <div class="stage-tabs" id="stageTabs">
+      <!-- JSで挿入（はじまりの森・ことばの川など） -->
+    </div>
 
-  <!-- スタンプ状況：今日（最大10）と累計 -->
-  <section class="card card-stamps">
-    <div class="stamps-today">
-      <div class="stamps-label">今日のスタンプ</div>
-      <!-- ここはJSで動的に入れ替え。初期は0個表示 -->
-      <div class="stamps-row" id="today-stamps" aria-label="今日のスタンプ：0/10">
-        <span class="star empty">☆</span><span class="star empty">☆</span><span class="star empty">☆</span>
-        <span class="star empty">☆</span><span class="star empty">☆</span><span class="star empty">☆</span>
-        <span class="star empty">☆</span><span class="star empty">☆</span><span class="star empty">☆</span>
-        <span class="star empty">☆</span>
+    <!-- スタンプ行 -->
+    <div class="stamp-row">
+      <div class="stamp-today">
+        <span>きょうのスタンプ</span>
+        <span class="stamp-stars" id="todayStampStars">☆☆☆☆☆☆☆☆☆☆</span>
       </div>
-      <div class="stamps-note">※1日に10個まで</div>
+
+      <div class="stamp-total">
+        <span>あつめたスタンプ</span>
+        <span id="totalStampCount">0こ</span>
+      </div>
     </div>
 
-    <div class="stamps-total">
-      <div class="stamps-label">あつめたスタンプ</div>
-      <!-- ここもJSで数字更新 -->
-      <div class="stamps-total-number"><span id="total-stamps">0</span>個</div>
-    </div>
-  </section>
+    <!-- 単語カード -->
+    <div class="card">
+      <div class="card-inner">
 
-  <!-- 学習カード（表：えいご＋はつおん／裏：にほんご） -->
-  <section class="card card-learning">
-    <div class="card-face card-front" id="card-front" aria-live="polite">
-      <div class="card-front-inner">
-        <div class="label-row">
-          <span class="pill">えいご</span>
-          <span class="pill pill-pron">はつおん</span>
+        <div class="row">
+          <div class="label">えいご</div>
+          <div class="value word" id="cardEnglish">train</div>
         </div>
-        <div class="eng-word" id="eng-text">apple</div>
-        <div class="eng-pron" id="pron-text">アップル</div>
+
+        <div class="row">
+          <div class="label">はつおん</div>
+          <div class="value kana" id="cardKana">トレイン</div>
+        </div>
+
+        <div class="row">
+          <div class="label">にほんご</div>
+          <div class="value mean" id="cardJapanese">電車</div>
+        </div>
+
+        <button class="pronounce-bar" id="speakBtn">
+          🔈 はつおんを きく
+        </button>
+
       </div>
     </div>
 
-    <div class="card-face card-back" id="card-back" aria-live="polite">
-      <div class="label-row">
-        <span class="pill pill-ja">にほんご</span>
-      </div>
-      <div class="ja-word" id="ja-text">りんご</div>
+    <!-- カード操作 -->
+    <div class="navigator">
+      <button class="btn" id="prevBtn">← まえ</button>
+      <div class="counter" id="cardCounter">0 / 0</div>
+      <button class="btn" id="nextBtn">つぎ →</button>
     </div>
 
-    <!-- ナビ／アクション（はつおんをきく／まえへ／つぎへ） -->
-    <div class="card-actions">
-      <button class="btn btn-speak" id="btn-speak" type="button">
-        <span class="btn-emoji" aria-hidden="true">🔊</span> はつおんをきく
-      </button>
-
-      <div class="pager">
-        <button class="btn btn-nav" id="btn-prev" type="button" aria-label="まえへ">◀︎ まえへ</button>
-        <button class="btn btn-nav" id="btn-next" type="button" aria-label="つぎへ">つぎへ ▶︎</button>
-      </div>
+    <!-- ミニテスト -->
+    <div class="cta" id="miniTestCta">
+      ⭐ ミニテストに チャレンジ（3問）
     </div>
 
-    <!-- まいすう表示（JSで更新）。※仕様上ここは残す -->
-    <div class="counter" id="counter">0 / 0</div>
-  </section>
-
-  <!-- ミニテスト（枠だけ。ロジックは後で接続） -->
-  <section class="card card-quiz">
-    <h3 class="quiz-title">ミニテスト</h3>
-    <div class="quiz-body" id="quiz-body">
-      <!-- 出題・選択肢をJSで描画 -->
-      <p class="quiz-placeholder">ここに もんだい が でます。</p>
+    <!-- つかいかた -->
+    <div class="helper">
+      <p>ステージをえらんで、カードをめくりながら「🔈 はつおん」をきいてみよう。</p>
+      <p>10まいみたら ミニテスト！ 3問すべて正かいできたら、スタンプが1こもらえるよ（1日に10こまで）。</p>
     </div>
-  </section>
 
-  <!-- おうちのかたへ（本文差し替え） -->
-  <section class="card card-parents">
-    <h3 class="parents-title">おうちのかたへ</h3>
-    <ul class="parents-list">
-      <li>このツールは、主に小学生向けに作りました。</li>
-      <li>中学校での英語学習にむけて覚えておきたい英単語やフレーズを収録しています。</li>
-    </ul>
-  </section>
+    <!-- おうちのかたへ -->
+    <div class="helper" style="margin-top:16px;">
+      <p>・このツールは、主に小学生向けに作りました。</p>
+      <p>・中学校での英語学習にむけて覚えておきたい英単語やフレーズを収録しています。</p>
+    </div>
 
-  <footer class="site-footer">
-    <small>© えいごポケット</small>
-  </footer>
+    <a class="footer-link" href="https://cleverkitjp.github.io">cleverkitjp トップページへ戻る</a>
 
-  <!-- 将来のJS接続用（今は読み込まなくてOK）
-  <script src="./app.js"></script>
-  -->
+  </div>
+
+  <!-- アプリロジック -->
+  <script src="app.js"></script>
 </body>
 </html>
