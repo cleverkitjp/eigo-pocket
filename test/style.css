@@ -241,4 +241,53 @@ body {
     min-width: 140px;
   }
 }
-```0
+/* =========================
+   カード フリップアニメーション
+   ========================= */
+.word-card {
+  position: relative;
+  perspective: 1200px;        /* 立体感 */
+  background: transparent;    /* 見た目の背景は face 側でつける */
+  padding: 0;                 /* 余白も face 側へ移動 */
+}
+
+.word-card .card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.word-card .card-face {
+  position: absolute;
+  inset: 0;
+  padding: 16px 18px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backface-visibility: hidden;
+}
+
+.word-card .card-front {
+  transform: rotateY(0deg);
+}
+
+.word-card .card-back {
+  transform: rotateY(180deg);
+}
+
+.word-card.is-flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* 裏側のテキスト（ヒント）を少し小さく */
+.word-card .card-back .card-note {
+  font-size: 0.85rem;
+  text-align: center;
+  opacity: 0.8;
+}
