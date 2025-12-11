@@ -1,293 +1,359 @@
-/* 全体レイアウト */
-* {
+/* ================================
+   全体レイアウト・ベース
+================================ */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
-    "Segoe UI", "Yu Gothic", "YuGothic", "Hiragino Kaku Gothic ProN",
-    "Meiryo", sans-serif;
-  background: #fdf7ef; /* クリーム色の背景 */
-  color: #444;
+  padding: 0;
 }
 
-.container {
-  max-width: 680px;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    "Yu Gothic UI", "游ゴシック体", "Yu Gothic", "メイリオ", sans-serif;
+  background: linear-gradient(180deg, #e4f3ff 0%, #ffffff 40%, #e8f4ff 100%);
+  color: #333;
+}
+
+.app-container {
+  max-width: 480px;
   margin: 0 auto;
-  padding: 16px 16px 32px;
+  padding: 16px 12px 32px;
 }
 
-/* タイトル周り */
-.site-title {
-  margin: 8px 0 0;
-  text-align: center;
-  font-size: 32px;
-  letter-spacing: 0.12em;
-  color: #ff7aa5; /* 明るいピンク */
-}
-
-.site-sub {
-  margin-top: 4px;
-  text-align: center;
-  font-size: 13px;
-  color: #777;
-}
-
-/* ステージタブ */
-.stage-tabs {
-  margin: 20px 0 12px;
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  gap: 8px;
-  padding-bottom: 4px;
-}
-
-.stage-tabs::-webkit-scrollbar {
-  height: 4px;
-}
-
-.stage-tabs::-webkit-scrollbar-thumb {
-  background: #e3e3e3;
-  border-radius: 999px;
-}
-
-.stage-tab {
-  flex: 0 0 auto;
-  padding: 8px 16px;
-  border-radius: 999px;
-  border: none;
-  font-size: 13px;
-  background: #f3f3f7;
-  color: #777;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.stage-tab--active {
-  background: #ff9fbf;
-  color: #fff;
-  font-weight: 600;
-}
-
-/* スタンプ行 */
-.stamp-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 12px;
-  margin-bottom: 10px;
-}
-
-.stamp-today span:first-child,
-.stamp-total span:first-child {
-  color: #777;
-}
-
-.stamp-stars {
-  display: inline-block;
-  margin-left: 4px;
-  letter-spacing: 2px;
-  color: #ffbf4d; /* 星色 */
-}
-
-#totalStampCount {
-  margin-left: 4px;
-  font-weight: 600;
-  color: #ff7aa5;
-}
-
-/* 単語カード */
-.card {
-  margin-top: 8px;
-  border-radius: 24px;
+/* ================================
+   タイトルカード
+================================ */
+.title-card {
   background: #ffffff;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
-}
-
-.card-inner {
-  padding: 20px 20px 14px;
-}
-
-.row {
-  display: flex;
-  align-items: baseline;
-  margin-bottom: 12px;
-}
-
-.label {
-  width: 70px;
-  font-size: 12px;
-  color: #777;
-}
-
-.value {
-  flex: 1;
-  text-align: center;
-  font-size: 14px;
-}
-
-.value.word {
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  margin-top: 2px;
-}
-
-.value.kana {
-  font-size: 16px;
-  margin-top: 2px;
-}
-
-.value.mean {
-  font-size: 16px;
-  margin-top: 2px;
-}
-
-/* はつおんボタン（カード内バー） */
-.pronounce-bar {
-  margin-top: 18px;
-  width: 100%;
-  border-radius: 999px;
-  border: none;
-  padding: 10px 12px;
-  background: #ffe1ea;
-  color: #d65482;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.pronounce-bar:active {
-  transform: translateY(1px);
-}
-
-/* ナビゲーション */
-.navigator {
-  margin-top: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.btn {
-  min-width: 120px;
-  padding: 12px 0;
-  border-radius: 999px;
-  border: none;
-  background: #3c8dff;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.16);
-}
-
-.btn:active {
-  transform: translateY(1px);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-}
-
-.counter {
-  font-size: 14px;
-  color: #666;
-}
-
-/* ミニテスト CTA */
-.cta {
-  margin-top: 16px;
-  padding: 12px 16px;
-  border-radius: 18px;
-  background: #fff6ce;
-  font-size: 14px;
-  text-align: center;
-  color: #a8841a;
-}
-
-/* 説明・おうちのかたへ */
-.helper {
-  margin-top: 16px;
-  padding: 12px 14px;
   border-radius: 16px;
-  background: #e9f5ff;
-  font-size: 13px;
-  line-height: 1.7;
+  padding: 16px 16px 12px;
+  box-shadow: 0 4px 12px rgba(0, 90, 160, 0.15);
+  border: 2px solid #d0e6ff;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.app-title {
+  margin: 0 0 4px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1772d0;
+  letter-spacing: 0.08em;
+}
+
+.app-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
   color: #555;
 }
 
-/* フッターリンク */
-.footer-link {
-  display: inline-block;
-  margin-top: 24px;
-  font-size: 14px;
-  color: #6b4fdc;
-  text-decoration: underline;
+/* ================================
+   ステージ選択ボタン
+================================ */
+.stage-select-container {
+  margin-top: 10px;
 }
 
-/* スマホ向け微調整 */
-@media (min-width: 640px) {
-  .container {
-    padding-top: 24px;
-  }
-
-  .site-title {
-    font-size: 34px;
-  }
-
-  .btn {
-    min-width: 140px;
-  }
+.stage-select-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #1772d0;
+  margin-bottom: 6px;
 }
-/* =========================
-   カード フリップアニメーション
-   ========================= */
+
+.stage-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.stage-button {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: #f0f7ff;
+  color: #1772d0;
+  box-shadow: 0 2px 4px rgba(0, 60, 120, 0.15);
+  cursor: pointer;
+  min-width: 48px;
+}
+
+.stage-button.active {
+  background: #1772d0;
+  color: #ffffff;
+}
+
+/* ================================
+   単語カード（フリップ対応）
+================================ */
+.word-card-area {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  perspective: 1200px; /* フリップ用 */
+}
+
 .word-card {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  height: 220px;
+  cursor: pointer;
   position: relative;
-  perspective: 1200px;        /* 立体感 */
-  background: transparent;    /* 見た目の背景は face 側でつける */
-  padding: 0;                 /* 余白も face 側へ移動 */
 }
 
-.word-card .card-inner {
-  position: relative;
+.card-inner {
   width: 100%;
   height: 100%;
-  min-height: 260px;
+  position: relative;
+  transition: transform 0.5s;
   transform-style: preserve-3d;
-  transition: transform 0.5s ease;
-}
-
-.word-card .card-face {
-  position: absolute;
-  inset: 0;
-  padding: 16px 18px;
-  background: var(--card-bg);
-  border-radius: 20px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  backface-visibility: hidden;
-}
-
-.word-card .card-front {
-  transform: rotateY(0deg);
-}
-
-.word-card .card-back {
-  transform: rotateY(180deg);
 }
 
 .word-card.is-flipped .card-inner {
   transform: rotateY(180deg);
 }
 
-/* 裏側のテキスト（ヒント）を少し小さく */
-.word-card .card-back .card-note {
-  font-size: 0.85rem;
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 2px solid #d0e6ff;
+  box-shadow: 0 6px 16px rgba(0, 70, 120, 0.18);
+  padding: 12px 14px;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 表 */
+.card-front {
+}
+
+/* 裏 */
+.card-back {
+  transform: rotateY(180deg);
+}
+
+/* カード内パーツ */
+.card-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f0f7ff;
+  color: #1772d0;
+  border: 1px solid #c0ddff;
+}
+
+.card-main {
   text-align: center;
-  opacity: 0.8;
+  padding-top: 4px;
+}
+
+.card-stage-label {
+  font-size: 0.8rem;
+  margin: 0 0 4px;
+  color: #888;
+}
+
+/* 表：英語・カナ */
+.card-english-label,
+.card-kana-label {
+  font-size: 0.9rem;
+  margin: 4px 0 0;
+  color: #1772d0;
+}
+
+.card-english {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.card-kana {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+/* 裏：日本語 */
+.card-japanese-label {
+  font-size: 0.9rem;
+  margin: 0;
+  color: #1772d0;
+}
+
+.card-japanese {
+  margin: 6px 0 0;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+/* カードフッター */
+.card-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.card-note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* 発音ボタン */
+.speak-button {
+  border: none;
+  border-radius: 999px;
+  background: #ffba42;
+  color: #4a2b00;
+  font-size: 0.9rem;
+  padding: 6px 14px;
+  box-shadow: 0 3px 7px rgba(160, 90, 0, 0.3);
+  cursor: pointer;
+}
+
+/* ================================
+   ナビボタン（前へ・つぎへ）
+================================ */
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.nav-button {
+  flex: 0 0 auto;
+  min-width: 96px;
+  border-radius: 999px;
+  border: none;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: #1772d0;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 60, 130, 0.4);
+  cursor: pointer;
+}
+
+.nav-button:disabled {
+  opacity: 0.4;
+  box-shadow: none;
+  cursor: default;
+}
+
+.card-count {
+  font-size: 0.9rem;
+  color: #555;
+  min-width: 70px;
+  text-align: center;
+}
+
+/* ================================
+   スタンプ表示
+================================ */
+.stamp-section {
+  margin-top: 16px;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 2px solid #ffe0a6;
+  padding: 10px 12px;
+  box-shadow: 0 4px 10px rgba(160, 100, 20, 0.15);
+}
+
+.stamp-today-label,
+.stamp-total-label {
+  font-size: 0.9rem;
+  margin: 0 0 4px;
+  color: #8a5a00;
+}
+
+.stamp-today {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  letter-spacing: 0.12em;
+  color: #d88900;
+}
+
+.stamp-total {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #8a5a00;
+}
+
+/* ================================
+   ミニテストボタン
+================================ */
+.test-button-area {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.test-start-button {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: #ff6f61;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(160, 40, 40, 0.4);
+  cursor: pointer;
+}
+
+/* ================================
+   おうちのかたへ
+================================ */
+.info-card {
+  margin-top: 20px;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 2px solid #d0e6ff;
+  padding: 12px 14px;
+  box-shadow: 0 4px 12px rgba(0, 60, 120, 0.12);
+}
+
+.info-title {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+  color: #1772d0;
+}
+
+.info-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.info-list li {
+  margin-bottom: 4px;
+}
+
+/* ================================
+   レスポンシブ調整
+================================ */
+@media (min-width: 520px) {
+  .app-container {
+    padding-top: 24px;
+  }
+
+  .word-card {
+    height: 240px;
+  }
 }
