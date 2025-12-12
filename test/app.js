@@ -12,8 +12,8 @@ alert("app.js 読み込みOK");
 (() => {
   const WORDS_URL = "./words.json";
 
-  // ====== ステージ和名（必要に応じて増やしてOK） ======
-  const STAGES = [
+  // ====== ステージ和名（words.json で stages が来たら上書きする） ======
+  let STAGES = [
     { id: 1, name: "はじまりの森" },
     { id: 2, name: "ことばの川" },
     { id: 3, name: "おんがくの丘" },
@@ -514,6 +514,7 @@ function toggleFlipAndSpeak() {
 
   init();
 })();
+
 
 
 
