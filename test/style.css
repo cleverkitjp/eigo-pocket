@@ -8,161 +8,103 @@
   --radius: 18px;
 
   --accent:#ff7a00;
-  --accent2:#ffb703;
-
-  --btn:#ffffff;
-  --btnInk:#111827;
-  --btnBorder: rgba(17,24,39,.12);
+  --accent2:#3b82f6;
 }
 
 *{ box-sizing:border-box; }
-html,body{ height:100%; }
+
 body{
   margin:0;
-  font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  background: linear-gradient(135deg,var(--bg1),var(--bg2));
   color:var(--ink);
-  background:
-    radial-gradient(900px 600px at 20% 10%, rgba(255,255,255,.55), transparent 60%),
-    radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.45), transparent 60%),
-    linear-gradient(135deg, var(--bg1), var(--bg2));
 }
 
 .wrap{
-  max-width: 540px;
-  margin: 0 auto;
-  padding: 18px 14px 26px;
+  max-width:540px;
+  margin:0 auto;
+  padding:16px;
 }
 
 .card{
-  background: var(--card);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 16px;
-  margin: 12px 0;
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:16px;
+  margin-bottom:14px;
 }
 
-.card--title{ padding: 16px 16px 14px; }
-
-.titleRow{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
+/* タイトル */
 .appTitle{
   margin:0;
-  font-size: 24px;
-  letter-spacing: .02em;
-}
-
-.pill{
-  display:inline-flex;
-  align-items:center;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255,122,0,.14);
-  color: #b45309;
-  font-weight: 700;
-  font-size: 12px;
-  white-space: nowrap;
+  text-align:center;
+  font-size:28px;
+  font-weight:900;
+  color:var(--accent2);
 }
 
 .lead{
-  margin: 10px 0 12px;
-  color: #111827;
-  font-weight: 700;
-  line-height: 1.5;
+  text-align:center;
+  margin:10px 0 14px;
+  font-weight:700;
 }
 
-.stagePanel{
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px dashed rgba(17,24,39,.12);
-}
-
+/* ステージ選択 */
 .stageLabel{
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 8px;
-  font-weight: 700;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:6px;
+  font-weight:700;
 }
 
-.stageButtons{
+.stageScroll{
   display:flex;
-  flex-wrap:wrap;
-  gap:8px;
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:6px;
 }
 
 .stageBtn{
-  width: 44px;
-  height: 40px;
-  border-radius: 12px;
-  border: 1px solid var(--btnBorder);
-  background: var(--btn);
-  color: var(--btnInk);
-  font-weight: 800;
-  box-shadow: 0 3px 10px rgba(0,0,0,.06);
+  min-width:44px;
+  height:40px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  background:#fff;
+  font-weight:800;
 }
 
 .stageBtn.is-active{
-  border-color: rgba(255,122,0,.35);
-  background: rgba(255,122,0,.14);
-  color: #b45309;
+  background:rgba(59,130,246,.15);
+  border-color:#3b82f6;
 }
 
+/* ステージ名 */
 .stageName{
-  margin: 10px 4px 0;
-  font-weight: 900;
-  color: #0f172a;
-  letter-spacing: .02em;
-  text-shadow: 0 2px 0 rgba(255,255,255,.35);
+  font-weight:900;
+  margin:6px 0 10px;
 }
 
-.card--word{ padding: 14px; }
-
+/* 単語カード */
 .cardTop{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:10px;
-  margin-bottom: 10px;
-}
-
-.count{
-  font-weight: 900;
-  color:#0f172a;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(15,23,42,.06);
-  font-size: 12px;
-}
-
-.miniTag{
-  font-size: 12px;
-  color: var(--muted);
-  font-weight: 700;
+  font-size:12px;
+  color:var(--muted);
 }
 
 .flipCard{
   width:100%;
-  border:0;
-  background: transparent;
-  padding:0;
-  cursor:pointer;
+  border:none;
+  background:none;
+  margin-top:10px;
 }
 
 .flipInner{
-  position: relative;
-  width:100%;
-  height: 210px;
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(255,255,255,1), rgba(255,255,255,.98));
-  box-shadow: 0 10px 26px rgba(0,0,0,.10);
-  border: 1px solid rgba(17,24,39,.10);
-  overflow:hidden;
-  /* 見た目だけ：あとでJSで回転させる用 */
-  transform-style: preserve-3d;
+  height:200px;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+  position:relative;
 }
 
 .flipFace{
@@ -170,213 +112,105 @@ body{
   inset:0;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
-  gap:8px;
-  padding: 16px;
-  backface-visibility: hidden;
-}
-
-.flipFront{
-  background:
-    radial-gradient(420px 180px at 50% 15%, rgba(255,122,0,.14), transparent 60%),
-    radial-gradient(420px 180px at 50% 95%, rgba(59,130,246,.10), transparent 60%),
-    white;
-}
-
-.flipBack{
-  transform: rotateY(180deg);
-  background:
-    radial-gradient(420px 180px at 50% 15%, rgba(16,185,129,.12), transparent 60%),
-    radial-gradient(420px 180px at 50% 95%, rgba(255,183,3,.10), transparent 60%),
-    white;
+  align-items:center;
 }
 
 .wordEnglish{
-  font-size: 44px;
-  font-weight: 1000;
-  letter-spacing: .02em;
+  font-size:44px;
+  font-weight:900;
 }
 
 .wordKana{
-  font-size: 18px;
-  font-weight: 900;
-  color: #0f172a;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(15,23,42,.06);
+  margin-top:6px;
+  font-weight:700;
 }
 
 .wordJapanese{
-  font-size: 34px;
-  font-weight: 1000;
-  letter-spacing: .02em;
+  font-size:32px;
+  font-weight:900;
 }
 
-.hint{
-  margin-top: 8px;
-  font-size: 12px;
-  color: var(--muted);
-  font-weight: 800;
-}
-
+/* ナビ */
 .navRow{
   display:flex;
   gap:12px;
-  margin-top: 12px;
+  margin-top:12px;
 }
 
 .navBtn{
   flex:1;
-  height: 52px;
-  border-radius: 16px;
-  border: 1px solid var(--btnBorder);
-  background: #fff;
-  font-weight: 1000;
-  font-size: 16px;
-  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  height:50px;
+  border-radius:14px;
+  border:1px solid #ddd;
+  font-weight:800;
 }
 
 .navBtn.primary{
-  border-color: rgba(255,122,0,.35);
-  background: linear-gradient(180deg, #ff9f3f, #ff7a00);
-  color: white;
-  text-shadow: 0 1px 0 rgba(0,0,0,.15);
+  background:var(--accent);
+  color:#fff;
+  border:none;
 }
 
-.card--stamp{ padding: 16px; }
-
+/* スタンプ */
 .stampHint{
-  margin: 2px 0 12px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: rgba(59,130,246,.10);
-  border: 1px solid rgba(59,130,246,.18);
-  font-weight: 900;
-  color:#0f172a;
+  font-size:14px;
+  color:#374151;
+  margin-bottom:10px;
 }
 
 .stampBlock{
-  padding: 12px;
-  border-radius: 16px;
-  background: rgba(255,122,0,.10);
-  border: 1px solid rgba(255,122,0,.18);
-}
-
-.stampTitle{
-  font-size: 12px;
-  color: #92400e;
-  font-weight: 1000;
-  margin-bottom: 8px;
+  background:rgba(255,122,0,.12);
+  border-radius:14px;
+  padding:12px;
 }
 
 .stars{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  font-size: 20px;
-  line-height: 1;
-}
-
-.star{
-  color: rgba(17,24,39,.22);
-  text-shadow: 0 2px 0 rgba(255,255,255,.35);
-}
-.star.is-on{
-  color: var(--accent2);
-  text-shadow: 0 2px 0 rgba(0,0,0,.10);
+  font-size:20px;
 }
 
 .stampTotal{
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 16px;
-  background: rgba(16,185,129,.10);
-  border: 1px solid rgba(16,185,129,.18);
-}
-
-.stampTotalLabel{
-  font-size: 12px;
-  color: #065f46;
-  font-weight: 1000;
-  margin-bottom: 6px;
+  margin-top:12px;
+  background:rgba(16,185,129,.12);
+  border-radius:14px;
+  padding:12px;
 }
 
 .stampTotalValue{
   display:flex;
+  gap:8px;
   align-items:baseline;
-  gap:10px;
-  flex-wrap:wrap;
 }
 
 .num{
-  font-size: 34px;
-  font-weight: 1100;
-  letter-spacing: .02em;
-}
-.unit{
-  font-weight: 1000;
-  color:#0f172a;
+  font-size:30px;
+  font-weight:900;
 }
 
 .rank{
-  margin-left: 2px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.65);
-  border: 1px solid rgba(17,24,39,.10);
-  font-weight: 1000;
-  color: #0f172a;
-}
-
-.lv{
-  font-weight: 1000;
-  color: rgba(15,23,42,.70);
+  background:#fff;
+  padding:4px 8px;
+  border-radius:999px;
+  font-weight:800;
 }
 
 .miniGuide{
-  margin: 12px 0 10px;
-  color: var(--muted);
-  font-weight: 900;
-  font-size: 13px;
+  margin:10px 0;
+  font-size:13px;
+  color:var(--muted);
 }
 
 .miniBtn{
   width:100%;
-  height: 54px;
-  border-radius: 16px;
-  border: 0;
-  background: linear-gradient(180deg, #ffd166, #ffb703);
-  color: #111827;
-  font-weight: 1100;
-  font-size: 16px;
-  box-shadow: 0 10px 22px rgba(0,0,0,.12);
+  height:52px;
+  border-radius:14px;
+  background:#ffd166;
+  border:none;
+  font-weight:900;
 }
 
-.card--info .infoTitle{
-  font-weight: 1100;
-  margin-bottom: 8px;
-  color:#0f172a;
+/* info */
+.infoTitle{
+  font-weight:900;
+  margin-bottom:6px;
 }
-
-.infoList{
-  margin: 0;
-  padding-left: 18px;
-  color: #111827;
-  font-weight: 800;
-  line-height: 1.65;
-}
-
-.footer{
-  text-align:center;
-  padding: 10px 0 6px;
-  color: rgba(15,23,42,.65);
-}
-
-/* 端末幅が小さいときの微調整 */
-@media (max-width: 360px){
-  .wordEnglish{ font-size: 40px; }
-  .wordJapanese{ font-size: 30px; }
-  .navBtn{ height: 50px; font-size: 15px; }
-  .stageBtn{ width: 42px; height: 38px; }
-     }
