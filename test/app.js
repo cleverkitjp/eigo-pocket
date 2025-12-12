@@ -155,13 +155,11 @@
   }
 
   // ====== 称号×Lv（簡易版）=====
-  // 例：20個でLvアップ、称号10個で循環（エンドレス感）
   const TITLES = ["ひよこ", "見習い", "がんばりや", "たんけん家", "はかせ", "せんせい", "たつじん", "めいじん", "でんせつ", "えいごのたつじん"];
   const STAMPS_PER_LEVEL = 20;
 
   function calcRank(total) {
     const lv = Math.max(1, Math.floor(total / STAMPS_PER_LEVEL) + 1);
-    // 10称号×30レベル…みたいに固定せず「称号は循環」させる
     const title = TITLES[(lv - 1) % TITLES.length];
     return { title, lv };
   }
@@ -204,12 +202,19 @@
     currentStageEl.textContent = `ステージ｜${getStageName(stageId)}`;
   }
 
+  function resetFlipToFront() {
+    // ★方式A：flip-card に is-flipped を付ける
+    flipCardBtn.classList.remove("is-flipped");
+    tapHintEl.textContent = "タップしてカードをめくる";
+  }
+
   function renderCard() {
     if (!stageWords.length) {
       progressEl.textContent = "0/0";
       frontEnglish.textContent = "データなし";
       frontKana.textContent = "";
       backJapanese.textContent = "";
+      resetFlipToFront();
       return;
     }
 
@@ -218,9 +223,8 @@
 
     progressEl.textContent = `${index + 1}/${stageWords.length}`;
 
-    // 裏返し状態は「表」に戻してから描画（重なり事故防止）
-    flipInner.classList.remove("is-flipped");
-    tapHintEl.textContent = "タップしてカードをめくる";
+    // 描画前に表へ戻す（重なり事故防止）
+    resetFlipToFront();
 
     frontEnglish.textContent = w.english || "";
     frontKana.textContent = w.kana || "";
@@ -240,7 +244,6 @@
   }
 
   function renderMiniTestUI() {
-    // 10枚見たら権利（1回）→獲得後にボタン出現
     const seen = getSeenIds();
     const seenCount = Math.min(10, seen.length);
     const remaining = Math.max(0, 10 - seenCount);
@@ -273,7 +276,6 @@
   // ====== Stage Words ======
   function selectStageWords() {
     stageWords = allWords.filter(w => Number(w.stageId) === Number(stageId));
-    // id順が安心（データが整っている前提）
     stageWords.sort((a,b) => (a.id ?? 0) - (b.id ?? 0));
     index = 0;
   }
@@ -291,7 +293,6 @@
       setSeenIds(seen);
     }
 
-    // 10枚に達したら「権利獲得（1回）」へ
     if (seen.length >= 10 && !isEligible()) {
       setEligible(true);
     }
@@ -301,20 +302,18 @@
   function toggleFlipAndSpeak() {
     if (!stageWords.length) return;
 
-    // タップ = 学習としてカウント
     markSeenCurrent();
 
-    // 反転
-    flipInner.classList.toggle("is-flipped");
+    // ★方式A：flip-card に is-flipped を付ける
+    flipCardBtn.classList.toggle("is-flipped");
 
-    // 裏面では「タップして…」を消す
-    if (flipInner.classList.contains("is-flipped")) {
-      tapHintEl.textContent = ""; // 裏面は不要
+    // 裏面ではヒント消す
+    if (flipCardBtn.classList.contains("is-flipped")) {
+      tapHintEl.textContent = "";
     } else {
       tapHintEl.textContent = "タップしてカードをめくる";
     }
 
-    // タップで音声（英語）
     const w = stageWords[index];
     speak(w.english);
 
@@ -325,14 +324,12 @@
   function goNext() {
     if (!stageWords.length) return;
 
-    // 次へ = 学習としてカウント
     markSeenCurrent();
 
     index += 1;
     clampIndex();
     renderCard();
 
-    // 次へで音声（新しい英語）
     const w = stageWords[index];
     speak(w.english);
 
@@ -347,21 +344,18 @@
   }
 
   // ====== Mini Test ======
-  // 権利獲得後に出現 → 開いたら権利消費＆「今日見た10枚」をリセット（次の周回へ）
   let currentQuiz = null;
 
   function openTest() {
     if (!isEligible()) return;
     if (!stageWords.length) return;
 
-    // 権利消費（1回）
     setEligible(false);
-    setSeenIds([]); // 次の10枚カウントを始める
+    setSeenIds([]);
 
-    // 問題生成
     currentQuiz = makeQuiz(stageWords);
-
     renderQuiz(currentQuiz);
+
     testOverlay.classList.remove("hidden");
     renderMiniTestUI();
   }
@@ -373,7 +367,6 @@
   }
 
   function makeQuiz(pool) {
-    // 3問、各問は「にほんご→えいご」を4択
     const qs = [];
     const usedIds = new Set();
 
@@ -391,7 +384,6 @@
         if (!options.includes(d.english)) options.push(d.english);
       }
 
-      // 足りない場合は全体から補完
       while (options.length < 4) {
         const d = pool[Math.floor(Math.random()*pool.length)];
         if (d && d.english && !options.includes(d.english)) options.push(d.english);
@@ -434,7 +426,7 @@
       title.textContent = `Q${idx+1}. 「${q.prompt}」はどれ？`;
       box.appendChild(title);
 
-      q.options.forEach((opt, k) => {
+      q.options.forEach((opt) => {
         const label = document.createElement("label");
         label.className = "opt";
 
@@ -464,7 +456,6 @@
     const allCorrect = (correct === currentQuiz.qs.length && currentQuiz.qs.length === 3);
 
     if (allCorrect) {
-      // ぜんもんせいかいでスタンプ（ただし今日10こまで）
       const today = getTodayStamps();
       if (today < 10) {
         setTodayStamps(today + 1);
@@ -490,7 +481,7 @@
       if (!res.ok) throw new Error("words.json load failed");
       allWords = await res.json();
       if (!Array.isArray(allWords)) allWords = [];
-    } catch (e) {
+    } catch {
       allWords = [];
     }
 
@@ -498,7 +489,6 @@
     renderStageButtons();
     renderAll();
 
-    // Events
     flipCardBtn.addEventListener("click", toggleFlipAndSpeak);
     nextBtn.addEventListener("click", goNext);
     prevBtn.addEventListener("click", goPrev);
@@ -513,4 +503,3 @@
 
   init();
 })();
-
