@@ -304,6 +304,11 @@
 
     markSeenCurrent();
 
+　　function noDataNotice() {
+　　  // うるさくない短い通知
+　  alert("このステージには まだカードがないよ。べつのステージをえらんでね。");
+　　}
+    
     // ★方式A：flip-card に is-flipped を付ける
     flipCardBtn.classList.toggle("is-flipped");
 
@@ -503,3 +508,4 @@
 
   init();
 })();
+
