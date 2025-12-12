@@ -290,3 +290,11 @@ body{
   font-weight:900;
   opacity:.8;
 }
+
+/* === DEBUG: 反転トリガー確認 === */
+.flip-card.is-flipped{
+  outline: 4px solid #ff0000 !important;
+}
+.flip-card.is-flipped .flip-inner{
+  transform: rotateY(180deg) !important;
+}
