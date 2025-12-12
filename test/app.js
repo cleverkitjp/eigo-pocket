@@ -1,3 +1,4 @@
+alert("app.js 読み込みOK");
 /* えいごポケット
   - words.json を読み込み
   - ステージは「和名のみ」
@@ -513,5 +514,6 @@ function toggleFlipAndSpeak() {
 
   init();
 })();
+
 
 
