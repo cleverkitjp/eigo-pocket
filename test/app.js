@@ -1,8 +1,7 @@
-alert("app.js 読み込みOK");
 /* えいごポケット
-  - words.json を読み込み
-  - ステージは「和名のみ」
-  - カードタップで反転（くるっ）
+  - words.json を読み込み（配列形式 / {stages, words} 形式の両対応）
+  - ステージは「和名のみ」（words.json に stages があればそれを優先）
+  - カードタップで反転（くるっ）※ flip-inner に is-flipped を付ける
   - タップ & つぎへ で音声（音声ボタンは無し）
   - 10枚おぼえたらミニテスト権利（権利=1回）
   - ミニテストは権利獲得後に出現（権利が無いと非表示）
@@ -10,6 +9,8 @@ alert("app.js 読み込みOK");
 */
 
 (() => {
+  "use strict";
+
   const WORDS_URL = "./words.json";
 
   // ====== ステージ和名（words.json で stages が来たら上書きする） ======
@@ -65,6 +66,19 @@ alert("app.js 読み込みOK");
   const testClose = document.getElementById("test-close");
   const testSubmit = document.getElementById("test-submit");
 
+  // DOMが足りない場合は落とす（静かに）
+  const required = [
+    stageStrip, currentStageEl,
+    flipCardBtn, flipInner,
+    frontEnglish, frontKana, backJapanese,
+    progressEl, tapHintEl,
+    prevBtn, nextBtn,
+    remainingEl, miniTestArea, miniTestBtn,
+    todayStampsEl, totalStampsEl, rankTitleEl, rankLevelEl,
+    testOverlay, testBody, testClose, testSubmit
+  ];
+  if (required.some(x => !x)) return;
+
   // ====== State ======
   let allWords = [];
   let stageId = loadStageId();
@@ -102,7 +116,7 @@ alert("app.js 読み込みOK");
   }
 
   function getStageName(id) {
-    return (STAGES.find(s => s.id === id) || { name: "-" }).name;
+    return (STAGES.find(s => Number(s.id) === Number(id)) || { name: "-" }).name;
   }
 
   function getTotalStamps() {
@@ -155,7 +169,17 @@ alert("app.js 読み込みOK");
     return "★".repeat(c) + "☆".repeat(max - c);
   }
 
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
   // ====== 称号×Lv（簡易版）=====
+  // 20個でLvアップ、称号は循環（エンドレス感）
   const TITLES = ["ひよこ", "見習い", "がんばりや", "たんけん家", "はかせ", "せんせい", "たつじん", "めいじん", "でんせつ", "えいごのたつじん"];
   const STAMPS_PER_LEVEL = 20;
 
@@ -182,13 +206,20 @@ alert("app.js 読み込みOK");
   // ====== UI Render ======
   function renderStageButtons() {
     stageStrip.innerHTML = "";
+
+    // STAGES が空なら、words の stageId から自動生成（最低限）
+    if (!Array.isArray(STAGES) || STAGES.length === 0) {
+      const ids = [...new Set(allWords.map(w => Number(w.stageId)).filter(n => Number.isFinite(n)))].sort((a,b) => a-b);
+      STAGES = ids.map(id => ({ id, name: `ステージ${id}` }));
+    }
+
     STAGES.forEach(s => {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "stage-btn" + (s.id === stageId ? " active" : "");
+      btn.className = "stage-btn" + (Number(s.id) === Number(stageId) ? " active" : "");
       btn.innerHTML = `<div class="stage-name">${escapeHtml(s.name)}</div>`;
       btn.addEventListener("click", () => {
-        stageId = s.id;
+        stageId = Number(s.id);
         saveStageId(stageId);
         index = 0;
         selectStageWords();
@@ -204,8 +235,8 @@ alert("app.js 読み込みOK");
   }
 
   function resetFlipToFront() {
-    // ★方式A：flip-card に is-flipped を付ける
-    flipCardBtn.classList.remove("is-flipped");
+    // CSSは .flip-inner.is-flipped を回転させるので、flipInner に付ける
+    flipInner.classList.remove("is-flipped");
     tapHintEl.textContent = "タップしてカードをめくる";
   }
 
@@ -245,6 +276,7 @@ alert("app.js 読み込みOK");
   }
 
   function renderMiniTestUI() {
+    // 10枚見たら権利（1回）→獲得後にボタン出現
     const seen = getSeenIds();
     const seenCount = Math.min(10, seen.length);
     const remaining = Math.max(0, 10 - seenCount);
@@ -265,19 +297,10 @@ alert("app.js 読み込みOK");
     renderMiniTestUI();
   }
 
-  function escapeHtml(s) {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
   // ====== Stage Words ======
   function selectStageWords() {
     stageWords = allWords.filter(w => Number(w.stageId) === Number(stageId));
-    stageWords.sort((a,b) => (a.id ?? 0) - (b.id ?? 0));
+    stageWords.sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
     index = 0;
   }
 
@@ -294,53 +317,48 @@ alert("app.js 読み込みOK");
       setSeenIds(seen);
     }
 
+    // 10枚に達したら「権利獲得（1回）」へ
     if (seen.length >= 10 && !isEligible()) {
       setEligible(true);
     }
   }
 
-// ====== Flip ======
-function noDataNotice() {
-  alert("このステージには まだカードがないよ。\nべつのステージをえらんでね。");
-}
+  // ====== Flip ======
+  function toggleFlipAndSpeak() {
+    if (!stageWords.length) return;
 
-function toggleFlipAndSpeak() {
-  // データが無い場合は説明して終了
-  if (!stageWords.length) {
-    noDataNotice();
-    return;
+    // タップ = 学習としてカウント
+    markSeenCurrent();
+
+    // 反転（CSSに合わせて flipInner に is-flipped）
+    flipInner.classList.toggle("is-flipped");
+
+    // 裏面ではヒント消す
+    if (flipInner.classList.contains("is-flipped")) {
+      tapHintEl.textContent = "";
+    } else {
+      tapHintEl.textContent = "タップしてカードをめくる";
+    }
+
+    // タップで音声（英語）
+    const w = stageWords[index];
+    speak(w.english);
+
+    renderMiniTestUI();
   }
-
-  // 学習としてカウント
-  markSeenCurrent();
-
-  // ★ flip-inner を回転させる（CSSと一致）
-  flipInner.classList.toggle("is-flipped");
-
-  // 裏面ではヒントを消す
-  if (flipInner.classList.contains("is-flipped")) {
-    tapHintEl.textContent = "";
-  } else {
-    tapHintEl.textContent = "タップしてカードをめくる";
-  }
-
-  // 英語を読み上げ
-  const w = stageWords[index];
-  speak(w.english);
-
-  renderMiniTestUI();
-}
 
   // ====== Next/Prev ======
   function goNext() {
     if (!stageWords.length) return;
 
+    // 次へ = 学習としてカウント
     markSeenCurrent();
 
     index += 1;
     clampIndex();
     renderCard();
 
+    // 次へで音声（新しい英語）
     const w = stageWords[index];
     speak(w.english);
 
@@ -355,18 +373,21 @@ function toggleFlipAndSpeak() {
   }
 
   // ====== Mini Test ======
+  // 権利獲得後に出現 → 開いたら権利消費＆「今日見た10枚」をリセット（次の周回へ）
   let currentQuiz = null;
 
   function openTest() {
     if (!isEligible()) return;
     if (!stageWords.length) return;
 
+    // 権利消費（1回）
     setEligible(false);
-    setSeenIds([]);
+    setSeenIds([]); // 次の10枚カウントを始める
 
+    // 問題生成
     currentQuiz = makeQuiz(stageWords);
-    renderQuiz(currentQuiz);
 
+    renderQuiz(currentQuiz);
     testOverlay.classList.remove("hidden");
     renderMiniTestUI();
   }
@@ -378,26 +399,30 @@ function toggleFlipAndSpeak() {
   }
 
   function makeQuiz(pool) {
+    // 3問、各問は「にほんご→えいご」を4択
     const qs = [];
     const usedIds = new Set();
 
-    for (let i=0; i<3; i++) {
+    for (let i = 0; i < 3; i++) {
       const q = pickRandom(pool, usedIds);
       if (!q) break;
       usedIds.add(q.id);
 
+      // unitTypeごとに選択肢をそろえる（word/phrase/idiom など）
       const group = (q.unitType || "word");
       const candidates = pool.filter(x => (x.unitType || "word") === group && x.id !== q.id);
 
       const options = [q.english];
+
       while (options.length < 4 && candidates.length > 0) {
-        const d = candidates[Math.floor(Math.random()*candidates.length)];
-        if (!options.includes(d.english)) options.push(d.english);
+        const d = candidates[Math.floor(Math.random() * candidates.length)];
+        if (d?.english && !options.includes(d.english)) options.push(d.english);
       }
 
+      // 足りない場合は全体から補完
       while (options.length < 4) {
-        const d = pool[Math.floor(Math.random()*pool.length)];
-        if (d && d.english && !options.includes(d.english)) options.push(d.english);
+        const d = pool[Math.floor(Math.random() * pool.length)];
+        if (d?.english && !options.includes(d.english)) options.push(d.english);
       }
 
       shuffle(options);
@@ -416,12 +441,12 @@ function toggleFlipAndSpeak() {
   function pickRandom(arr, usedIds) {
     const cand = arr.filter(x => x && x.id != null && !usedIds.has(x.id));
     if (!cand.length) return null;
-    return cand[Math.floor(Math.random()*cand.length)];
+    return cand[Math.floor(Math.random() * cand.length)];
   }
 
   function shuffle(a) {
-    for (let i=a.length-1; i>0; i--) {
-      const j = Math.floor(Math.random()*(i+1));
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
       [a[i], a[j]] = [a[j], a[i]];
     }
   }
@@ -434,7 +459,7 @@ function toggleFlipAndSpeak() {
 
       const title = document.createElement("div");
       title.className = "qtitle";
-      title.textContent = `Q${idx+1}. 「${q.prompt}」はどれ？`;
+      title.textContent = `Q${idx + 1}. 「${q.prompt}」はどれ？`;
       box.appendChild(title);
 
       q.options.forEach((opt) => {
@@ -467,6 +492,7 @@ function toggleFlipAndSpeak() {
     const allCorrect = (correct === currentQuiz.qs.length && currentQuiz.qs.length === 3);
 
     if (allCorrect) {
+      // ぜんもんせいかいでスタンプ（ただし今日10こまで）
       const today = getTodayStamps();
       if (today < 10) {
         setTodayStamps(today + 1);
@@ -483,23 +509,57 @@ function toggleFlipAndSpeak() {
     closeTest();
   }
 
+  // ====== words.json 読み込み（両対応） ======
+  async function loadWordsJson() {
+    const res = await fetch(WORDS_URL, { cache: "no-cache" });
+    if (!res.ok) throw new Error("words.json load failed");
+    const data = await res.json();
+
+    // ✅ 1) 配列形式: [ {...}, {...} ]
+    if (Array.isArray(data)) {
+      return { stages: null, words: data };
+    }
+
+    // ✅ 2) オブジェクト形式: { version, stages:[...], words:[...] }
+    if (data && Array.isArray(data.words)) {
+      return { stages: Array.isArray(data.stages) ? data.stages : null, words: data.words };
+    }
+
+    return { stages: null, words: [] };
+  }
+
   // ====== Init ======
   async function init() {
     ensureDayReset();
 
     try {
-      const res = await fetch(WORDS_URL, { cache: "no-cache" });
-      if (!res.ok) throw new Error("words.json load failed");
-      allWords = await res.json();
-      if (!Array.isArray(allWords)) allWords = [];
+      const pack = await loadWordsJson();
+
+      allWords = Array.isArray(pack.words) ? pack.words : [];
+
+      // words.json の stages があれば優先（和名のみ）
+      if (Array.isArray(pack.stages) && pack.stages.length) {
+        STAGES = pack.stages
+          .map(s => ({ id: Number(s.id), name: String(s.name || "-") }))
+          .filter(s => Number.isFinite(s.id));
+      }
+
     } catch {
       allWords = [];
+    }
+
+    // stageId が stages に存在しないなら、先頭に合わせる
+    const stageIds = STAGES.map(s => Number(s.id)).filter(n => Number.isFinite(n));
+    if (stageIds.length && !stageIds.includes(Number(stageId))) {
+      stageId = stageIds[0];
+      saveStageId(stageId);
     }
 
     selectStageWords();
     renderStageButtons();
     renderAll();
 
+    // Events
     flipCardBtn.addEventListener("click", toggleFlipAndSpeak);
     nextBtn.addEventListener("click", goNext);
     prevBtn.addEventListener("click", goPrev);
@@ -514,7 +574,4 @@ function toggleFlipAndSpeak() {
 
   init();
 })();
-
-
-
-
+```0
