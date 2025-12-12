@@ -1,3 +1,4 @@
+alert("app.js 読めてるよ！");
 /* =========
    えいごポケット：UI優先（ロジックは最小）
    - words.json を読み込み
@@ -321,3 +322,4 @@ miniTestBtn.addEventListener("click", () => {
   }
   applyStage();
 })();
+
