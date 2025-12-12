@@ -11,30 +11,28 @@
 
     <!-- タイトルカード -->
     <section class="card card--title">
-      <div class="titleRow">
-        <h1 class="appTitle">えいごポケット</h1>
-        <span class="pill">カード学習</span>
-      </div>
+      <h1 class="appTitle">えいごポケット</h1>
       <p class="lead">カードをめくって、スタンプを集めよう。</p>
 
+      <!-- ステージ選択（横スライド） -->
       <div class="stagePanel">
         <div class="stageLabel">ステージ</div>
-        <div class="stageButtons">
-          <button class="stageBtn is-active" type="button">1</button>
-          <button class="stageBtn" type="button">2</button>
-          <button class="stageBtn" type="button">3</button>
-          <button class="stageBtn" type="button">4</button>
-          <button class="stageBtn" type="button">5</button>
-          <button class="stageBtn" type="button">6</button>
-          <button class="stageBtn" type="button">7</button>
-          <button class="stageBtn" type="button">8</button>
-          <button class="stageBtn" type="button">9</button>
-          <button class="stageBtn" type="button">10</button>
+        <div class="stageScroll">
+          <button class="stageBtn is-active">1</button>
+          <button class="stageBtn">2</button>
+          <button class="stageBtn">3</button>
+          <button class="stageBtn">4</button>
+          <button class="stageBtn">5</button>
+          <button class="stageBtn">6</button>
+          <button class="stageBtn">7</button>
+          <button class="stageBtn">8</button>
+          <button class="stageBtn">9</button>
+          <button class="stageBtn">10</button>
         </div>
       </div>
     </section>
 
-    <!-- ステージ表示（カード外・タイトルカードと単語カードの間） -->
+    <!-- ステージ名 -->
     <div class="stageName">
       ステージ1 ｜ ことばの森
     </div>
@@ -46,49 +44,34 @@
         <div class="miniTag">タップしてカードをめくる</div>
       </div>
 
-      <!-- ここは「見た目確認用」：後でJSでis-flipped切替 -->
-      <button class="flipCard" type="button" aria-label="カードをめくる">
+      <button class="flipCard" type="button">
         <div class="flipInner">
-          <!-- 表 -->
           <div class="flipFace flipFront">
             <div class="wordEnglish">think</div>
             <div class="wordKana">シンク</div>
-            <div class="hint">（タップ）</div>
           </div>
-
-          <!-- 裏 -->
           <div class="flipFace flipBack">
             <div class="wordJapanese">かんがえる</div>
-            <div class="hint">（タップ）</div>
           </div>
         </div>
       </button>
 
       <div class="navRow">
-        <button class="navBtn" type="button">まえへ</button>
-        <button class="navBtn primary" type="button">つぎへ</button>
+        <button class="navBtn">まえへ</button>
+        <button class="navBtn primary">つぎへ</button>
       </div>
     </section>
 
-    <!-- スタンプ＆ミニテスト -->
+    <!-- スタンプ -->
     <section class="card card--stamp">
       <div class="stampHint">
-        あと <b>5</b> まいおぼえたらミニテストだよ
+        あと 5 まいおぼえたらミニテストだよ
       </div>
 
       <div class="stampBlock">
         <div class="stampTitle">きょうのスタンプ（1日10こまで）</div>
-        <div class="stars" aria-label="今日のスタンプ 3/10">
-          <span class="star is-on">★</span>
-          <span class="star is-on">★</span>
-          <span class="star is-on">★</span>
-          <span class="star">★</span>
-          <span class="star">★</span>
-          <span class="star">★</span>
-          <span class="star">★</span>
-          <span class="star">★</span>
-          <span class="star">★</span>
-          <span class="star">★</span>
+        <div class="stars">
+          ★★★☆☆☆☆☆☆
         </div>
       </div>
 
@@ -102,7 +85,7 @@
       </div>
 
       <div class="miniGuide">ぜんもんせいかいでスタンプがもらえるよ</div>
-      <button class="miniBtn" type="button">ミニテストをする</button>
+      <button class="miniBtn">ミニテストをする</button>
     </section>
 
     <!-- おうちのかたへ -->
@@ -114,9 +97,6 @@
       </ul>
     </section>
 
-    <footer class="footer">
-      <small>© えいごポケット</small>
-    </footer>
   </div>
 </body>
 </html>
