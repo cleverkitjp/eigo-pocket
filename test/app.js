@@ -298,32 +298,37 @@
     }
   }
 
-  // ====== Flip ======
-  function toggleFlipAndSpeak() {
-    if (!stageWords.length) return;
+// ====== Flip ======
+function noDataNotice() {
+  alert("このステージには まだカードがないよ。\nべつのステージをえらんでね。");
+}
 
-    markSeenCurrent();
-
-　　function noDataNotice() {
-　　  // うるさくない短い通知
-　  alert("このステージには まだカードがないよ。べつのステージをえらんでね。");
-　　}
-    
-    // ★方式A：flip-card に is-flipped を付ける
-    flipCardBtn.classList.toggle("is-flipped");
-
-    // 裏面ではヒント消す
-    if (flipCardBtn.classList.contains("is-flipped")) {
-      tapHintEl.textContent = "";
-    } else {
-      tapHintEl.textContent = "タップしてカードをめくる";
-    }
-
-    const w = stageWords[index];
-    speak(w.english);
-
-    renderMiniTestUI();
+function toggleFlipAndSpeak() {
+  // データが無い場合は説明して終了
+  if (!stageWords.length) {
+    noDataNotice();
+    return;
   }
+
+  // 学習としてカウント
+  markSeenCurrent();
+
+  // ★ flip-inner を回転させる（CSSと一致）
+  flipInner.classList.toggle("is-flipped");
+
+  // 裏面ではヒントを消す
+  if (flipInner.classList.contains("is-flipped")) {
+    tapHintEl.textContent = "";
+  } else {
+    tapHintEl.textContent = "タップしてカードをめくる";
+  }
+
+  // 英語を読み上げ
+  const w = stageWords[index];
+  speak(w.english);
+
+  renderMiniTestUI();
+}
 
   // ====== Next/Prev ======
   function goNext() {
@@ -508,4 +513,5 @@
 
   init();
 })();
+
 
