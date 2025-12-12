@@ -2,101 +2,99 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>えいごポケット</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="wrap">
-
+  <main class="wrap">
     <!-- タイトルカード -->
-    <section class="card card--title">
-      <h1 class="appTitle">えいごポケット</h1>
-      <p class="lead">カードをめくって、スタンプを集めよう。</p>
+    <section class="card title-card">
+      <h1 class="title">えいごポケット</h1>
+      <p class="subtitle">カードをめくって、スタンプを集めよう。</p>
 
-      <!-- ステージ選択（横スライド） -->
-      <div class="stagePanel">
-        <div class="stageLabel">ステージ</div>
-        <div class="stageScroll">
-          <button class="stageBtn is-active">1</button>
-          <button class="stageBtn">2</button>
-          <button class="stageBtn">3</button>
-          <button class="stageBtn">4</button>
-          <button class="stageBtn">5</button>
-          <button class="stageBtn">6</button>
-          <button class="stageBtn">7</button>
-          <button class="stageBtn">8</button>
-          <button class="stageBtn">9</button>
-          <button class="stageBtn">10</button>
-        </div>
+      <div class="stage-area">
+        <div class="stage-label">ステージ</div>
+        <div class="stage-strip" id="stageStrip" aria-label="ステージをえらぶ"></div>
       </div>
     </section>
 
-    <!-- ステージ名 -->
-    <div class="stageName">
-      ステージ1 ｜ ことばの森
-    </div>
+    <!-- ステージ見出し（タイトルカードと単語カードの間） -->
+    <div class="stage-head" id="stageHead">ステージ1｜ことばの森</div>
 
     <!-- 単語カード -->
-    <section class="card card--word">
-      <div class="cardTop">
-        <div class="count">3 / 40</div>
-        <div class="miniTag">タップしてカードをめくる</div>
+    <section class="card word-card">
+      <div class="word-top">
+        <div class="progress" id="progressText">0/0</div>
+        <div class="hint" id="tapHint">タップしてカードをめくる</div>
       </div>
 
-      <button class="flipCard" type="button">
-        <div class="flipInner">
-          <div class="flipFace flipFront">
-            <div class="wordEnglish">think</div>
-            <div class="wordKana">シンク</div>
+      <div class="flip-wrap" id="flipWrap" tabindex="0" role="button" aria-label="カードをめくる">
+        <div class="flip" id="flip">
+          <!-- 表：えいご + はつおん -->
+          <div class="face front">
+            <div class="front-center">
+              <div class="english" id="englishText">loading...</div>
+              <div class="kana" id="kanaText"></div>
+            </div>
+            <button class="speak-btn" id="speakBtn" type="button">
+              <span class="icon">🔊</span> はつおんをきく
+            </button>
           </div>
-          <div class="flipFace flipBack">
-            <div class="wordJapanese">かんがえる</div>
+
+          <!-- 裏：にほんご -->
+          <div class="face back">
+            <div class="back-center">
+              <div class="japanese" id="japaneseText"></div>
+            </div>
+            <div class="back-hint">タップしてカードをめくる</div>
           </div>
         </div>
-      </button>
+      </div>
 
-      <div class="navRow">
-        <button class="navBtn">まえへ</button>
-        <button class="navBtn primary">つぎへ</button>
+      <div class="nav">
+        <button class="nav-btn ghost" id="prevBtn" type="button">◀ まえへ</button>
+        <button class="nav-btn primary" id="nextBtn" type="button">つぎへ ▶</button>
       </div>
     </section>
 
-    <!-- スタンプ -->
-    <section class="card card--stamp">
-      <div class="stampHint">
-        あと 5 まいおぼえたらミニテストだよ
+    <!-- ミニテスト案内（ボタンの下＝スタンプカードの上） -->
+    <div class="mini-hint" id="miniHint">あと0まいおぼえたらミニテストだよ</div>
+
+    <!-- スタンプカード -->
+    <section class="card stamp-card">
+      <div class="stamp-block">
+        <div class="stamp-title">きょうのスタンプ（1日10こまで）</div>
+        <div class="stars" id="todayStars">✩✩✩✩✩✩✩✩✩✩</div>
       </div>
 
-      <div class="stampBlock">
-        <div class="stampTitle">きょうのスタンプ（1日10こまで）</div>
-        <div class="stars">
-          ★★★☆☆☆☆☆☆
+      <div class="stamp-block total-block">
+        <div class="stamp-title">あつめたスタンプ</div>
+        <div class="total-row">
+          <div class="total-num"><span id="totalStamps">0</span><span class="unit">こ</span></div>
+          <div class="rank" id="rankText">ひよこ Lv.1</div>
         </div>
       </div>
 
-      <div class="stampTotal">
-        <div class="stampTotalLabel">あつめたスタンプ</div>
-        <div class="stampTotalValue">
-          <span class="num">198</span><span class="unit">こ</span>
-          <span class="rank">ひよこ</span>
-          <span class="lv">Lv.9</span>
-        </div>
-      </div>
+      <div class="mini-note" id="miniNote">ぜんもんせいかいでスタンプがもらえるよ</div>
 
-      <div class="miniGuide">ぜんもんせいかいでスタンプがもらえるよ</div>
-      <button class="miniBtn">ミニテストをする</button>
+      <button class="mini-btn" id="miniTestBtn" type="button">ミニテストをする（3問）</button>
     </section>
 
     <!-- おうちのかたへ -->
-    <section class="card card--info">
-      <div class="infoTitle">おうちのかたへ</div>
-      <ul class="infoList">
+    <section class="card parent-card">
+      <h2 class="section-title">おうちのかたへ</h2>
+      <ul class="bullets">
         <li>このツールは、主に小学生向けに作りました。</li>
         <li>中学校での英語学習にむけて覚えておきたい英単語やフレーズを収録しています。</li>
       </ul>
     </section>
 
-  </div>
+    <footer class="foot">
+      <a class="backlink" href="https://cleverkitjp.github.io/">cleverkitjp トップページへ戻る</a>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
