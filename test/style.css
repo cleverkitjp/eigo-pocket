@@ -1,359 +1,382 @@
-/* ================================
-   全体レイアウト・ベース
-================================ */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+:root{
+  --bg1:#7dd3ff;
+  --bg2:#b7f7d0;
+  --card:#ffffff;
+  --ink:#1f2937;
+  --muted:#6b7280;
+  --shadow: 0 10px 30px rgba(0,0,0,.12);
+  --radius: 18px;
+
+  --accent:#ff7a00;
+  --accent2:#ffb703;
+
+  --btn:#ffffff;
+  --btnInk:#111827;
+  --btnBorder: rgba(17,24,39,.12);
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(900px 600px at 20% 10%, rgba(255,255,255,.55), transparent 60%),
+    radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.45), transparent 60%),
+    linear-gradient(135deg, var(--bg1), var(--bg2));
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
-    "Yu Gothic UI", "游ゴシック体", "Yu Gothic", "メイリオ", sans-serif;
-  background: linear-gradient(180deg, #e4f3ff 0%, #ffffff 40%, #e8f4ff 100%);
-  color: #333;
-}
-
-.app-container {
-  max-width: 480px;
+.wrap{
+  max-width: 540px;
   margin: 0 auto;
-  padding: 16px 12px 32px;
+  padding: 18px 14px 26px;
 }
 
-/* ================================
-   タイトルカード
-================================ */
-.title-card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 16px 16px 12px;
-  box-shadow: 0 4px 12px rgba(0, 90, 160, 0.15);
-  border: 2px solid #d0e6ff;
-  text-align: center;
-  margin-bottom: 16px;
+.card{
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  margin: 12px 0;
 }
 
-.app-title {
-  margin: 0 0 4px;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #1772d0;
-  letter-spacing: 0.08em;
+.card--title{ padding: 16px 16px 14px; }
+
+.titleRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
 }
 
-.app-subtitle {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #555;
+.appTitle{
+  margin:0;
+  font-size: 24px;
+  letter-spacing: .02em;
 }
 
-/* ================================
-   ステージ選択ボタン
-================================ */
-.stage-select-container {
-  margin-top: 10px;
-}
-
-.stage-select-label {
-  display: block;
-  font-size: 0.9rem;
-  color: #1772d0;
-  margin-bottom: 6px;
-}
-
-.stage-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-}
-
-.stage-button {
-  border: none;
+.pill{
+  display:inline-flex;
+  align-items:center;
   padding: 6px 10px;
   border-radius: 999px;
-  font-size: 0.8rem;
-  background: #f0f7ff;
-  color: #1772d0;
-  box-shadow: 0 2px 4px rgba(0, 60, 120, 0.15);
-  cursor: pointer;
-  min-width: 48px;
+  background: rgba(255,122,0,.14);
+  color: #b45309;
+  font-weight: 700;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
-.stage-button.active {
-  background: #1772d0;
-  color: #ffffff;
+.lead{
+  margin: 10px 0 12px;
+  color: #111827;
+  font-weight: 700;
+  line-height: 1.5;
 }
 
-/* ================================
-   単語カード（フリップ対応）
-================================ */
-.word-card-area {
-  margin-top: 16px;
+.stagePanel{
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(17,24,39,.12);
+}
+
+.stageLabel{
+  font-size: 12px;
+  color: var(--muted);
   margin-bottom: 8px;
-  perspective: 1200px; /* フリップ用 */
+  font-weight: 700;
 }
 
-.word-card {
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  height: 220px;
-  cursor: pointer;
-  position: relative;
+.stageButtons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
 }
 
-.card-inner {
-  width: 100%;
-  height: 100%;
+.stageBtn{
+  width: 44px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--btnBorder);
+  background: var(--btn);
+  color: var(--btnInk);
+  font-weight: 800;
+  box-shadow: 0 3px 10px rgba(0,0,0,.06);
+}
+
+.stageBtn.is-active{
+  border-color: rgba(255,122,0,.35);
+  background: rgba(255,122,0,.14);
+  color: #b45309;
+}
+
+.stageName{
+  margin: 10px 4px 0;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: .02em;
+  text-shadow: 0 2px 0 rgba(255,255,255,.35);
+}
+
+.card--word{ padding: 14px; }
+
+.cardTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom: 10px;
+}
+
+.count{
+  font-weight: 900;
+  color:#0f172a;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(15,23,42,.06);
+  font-size: 12px;
+}
+
+.miniTag{
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.flipCard{
+  width:100%;
+  border:0;
+  background: transparent;
+  padding:0;
+  cursor:pointer;
+}
+
+.flipInner{
   position: relative;
-  transition: transform 0.5s;
+  width:100%;
+  height: 210px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,1), rgba(255,255,255,.98));
+  box-shadow: 0 10px 26px rgba(0,0,0,.10);
+  border: 1px solid rgba(17,24,39,.10);
+  overflow:hidden;
+  /* 見た目だけ：あとでJSで回転させる用 */
   transform-style: preserve-3d;
 }
 
-.word-card.is-flipped .card-inner {
-  transform: rotateY(180deg);
-}
-
-.card-face {
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  background: #ffffff;
-  border: 2px solid #d0e6ff;
-  box-shadow: 0 6px 16px rgba(0, 70, 120, 0.18);
-  padding: 12px 14px;
+.flipFace{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding: 16px;
   backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
-/* 表 */
-.card-front {
+.flipFront{
+  background:
+    radial-gradient(420px 180px at 50% 15%, rgba(255,122,0,.14), transparent 60%),
+    radial-gradient(420px 180px at 50% 95%, rgba(59,130,246,.10), transparent 60%),
+    white;
 }
 
-/* 裏 */
-.card-back {
+.flipBack{
   transform: rotateY(180deg);
+  background:
+    radial-gradient(420px 180px at 50% 15%, rgba(16,185,129,.12), transparent 60%),
+    radial-gradient(420px 180px at 50% 95%, rgba(255,183,3,.10), transparent 60%),
+    white;
 }
 
-/* カード内パーツ */
-.card-tag {
-  display: inline-block;
-  font-size: 0.7rem;
-  padding: 2px 8px;
+.wordEnglish{
+  font-size: 44px;
+  font-weight: 1000;
+  letter-spacing: .02em;
+}
+
+.wordKana{
+  font-size: 18px;
+  font-weight: 900;
+  color: #0f172a;
+  padding: 6px 12px;
   border-radius: 999px;
-  background: #f0f7ff;
-  color: #1772d0;
-  border: 1px solid #c0ddff;
+  background: rgba(15,23,42,.06);
 }
 
-.card-main {
-  text-align: center;
-  padding-top: 4px;
+.wordJapanese{
+  font-size: 34px;
+  font-weight: 1000;
+  letter-spacing: .02em;
 }
 
-.card-stage-label {
-  font-size: 0.8rem;
-  margin: 0 0 4px;
-  color: #888;
-}
-
-/* 表：英語・カナ */
-.card-english-label,
-.card-kana-label {
-  font-size: 0.9rem;
-  margin: 4px 0 0;
-  color: #1772d0;
-}
-
-.card-english {
-  margin: 0;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #333;
-}
-
-.card-kana {
-  margin: 0;
-  font-size: 1.1rem;
-  color: #555;
-}
-
-/* 裏：日本語 */
-.card-japanese-label {
-  font-size: 0.9rem;
-  margin: 0;
-  color: #1772d0;
-}
-
-.card-japanese {
-  margin: 6px 0 0;
-  font-size: 1.4rem;
-  color: #333;
-}
-
-/* カードフッター */
-.card-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.card-note {
-  margin: 0;
-  font-size: 0.8rem;
-  color: #888;
-}
-
-/* 発音ボタン */
-.speak-button {
-  border: none;
-  border-radius: 999px;
-  background: #ffba42;
-  color: #4a2b00;
-  font-size: 0.9rem;
-  padding: 6px 14px;
-  box-shadow: 0 3px 7px rgba(160, 90, 0, 0.3);
-  cursor: pointer;
-}
-
-/* ================================
-   ナビボタン（前へ・つぎへ）
-================================ */
-.nav-buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+.hint{
   margin-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 800;
 }
 
-.nav-button {
-  flex: 0 0 auto;
-  min-width: 96px;
-  border-radius: 999px;
-  border: none;
-  padding: 8px 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  background: #1772d0;
-  color: #ffffff;
-  box-shadow: 0 3px 8px rgba(0, 60, 130, 0.4);
-  cursor: pointer;
+.navRow{
+  display:flex;
+  gap:12px;
+  margin-top: 12px;
 }
 
-.nav-button:disabled {
-  opacity: 0.4;
-  box-shadow: none;
-  cursor: default;
+.navBtn{
+  flex:1;
+  height: 52px;
+  border-radius: 16px;
+  border: 1px solid var(--btnBorder);
+  background: #fff;
+  font-weight: 1000;
+  font-size: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
 }
 
-.card-count {
-  font-size: 0.9rem;
-  color: #555;
-  min-width: 70px;
-  text-align: center;
+.navBtn.primary{
+  border-color: rgba(255,122,0,.35);
+  background: linear-gradient(180deg, #ff9f3f, #ff7a00);
+  color: white;
+  text-shadow: 0 1px 0 rgba(0,0,0,.15);
 }
 
-/* ================================
-   スタンプ表示
-================================ */
-.stamp-section {
-  margin-top: 16px;
-  background: #ffffff;
-  border-radius: 14px;
-  border: 2px solid #ffe0a6;
+.card--stamp{ padding: 16px; }
+
+.stampHint{
+  margin: 2px 0 12px;
   padding: 10px 12px;
-  box-shadow: 0 4px 10px rgba(160, 100, 20, 0.15);
-}
-
-.stamp-today-label,
-.stamp-total-label {
-  font-size: 0.9rem;
-  margin: 0 0 4px;
-  color: #8a5a00;
-}
-
-.stamp-today {
-  font-size: 1.1rem;
-  margin-bottom: 8px;
-  letter-spacing: 0.12em;
-  color: #d88900;
-}
-
-.stamp-total {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #8a5a00;
-}
-
-/* ================================
-   ミニテストボタン
-================================ */
-.test-button-area {
-  margin-top: 14px;
-  text-align: center;
-}
-
-.test-start-button {
-  border: none;
-  border-radius: 999px;
-  padding: 10px 18px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  background: #ff6f61;
-  color: #ffffff;
-  box-shadow: 0 3px 10px rgba(160, 40, 40, 0.4);
-  cursor: pointer;
-}
-
-/* ================================
-   おうちのかたへ
-================================ */
-.info-card {
-  margin-top: 20px;
-  background: #ffffff;
   border-radius: 14px;
-  border: 2px solid #d0e6ff;
-  padding: 12px 14px;
-  box-shadow: 0 4px 12px rgba(0, 60, 120, 0.12);
+  background: rgba(59,130,246,.10);
+  border: 1px solid rgba(59,130,246,.18);
+  font-weight: 900;
+  color:#0f172a;
 }
 
-.info-title {
-  margin: 0 0 6px;
-  font-size: 1.1rem;
-  color: #1772d0;
+.stampBlock{
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255,122,0,.10);
+  border: 1px solid rgba(255,122,0,.18);
 }
 
-.info-list {
+.stampTitle{
+  font-size: 12px;
+  color: #92400e;
+  font-weight: 1000;
+  margin-bottom: 8px;
+}
+
+.stars{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.star{
+  color: rgba(17,24,39,.22);
+  text-shadow: 0 2px 0 rgba(255,255,255,.35);
+}
+.star.is-on{
+  color: var(--accent2);
+  text-shadow: 0 2px 0 rgba(0,0,0,.10);
+}
+
+.stampTotal{
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(16,185,129,.10);
+  border: 1px solid rgba(16,185,129,.18);
+}
+
+.stampTotalLabel{
+  font-size: 12px;
+  color: #065f46;
+  font-weight: 1000;
+  margin-bottom: 6px;
+}
+
+.stampTotalValue{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.num{
+  font-size: 34px;
+  font-weight: 1100;
+  letter-spacing: .02em;
+}
+.unit{
+  font-weight: 1000;
+  color:#0f172a;
+}
+
+.rank{
+  margin-left: 2px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.65);
+  border: 1px solid rgba(17,24,39,.10);
+  font-weight: 1000;
+  color: #0f172a;
+}
+
+.lv{
+  font-weight: 1000;
+  color: rgba(15,23,42,.70);
+}
+
+.miniGuide{
+  margin: 12px 0 10px;
+  color: var(--muted);
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.miniBtn{
+  width:100%;
+  height: 54px;
+  border-radius: 16px;
+  border: 0;
+  background: linear-gradient(180deg, #ffd166, #ffb703);
+  color: #111827;
+  font-weight: 1100;
+  font-size: 16px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.12);
+}
+
+.card--info .infoTitle{
+  font-weight: 1100;
+  margin-bottom: 8px;
+  color:#0f172a;
+}
+
+.infoList{
   margin: 0;
-  padding-left: 20px;
-  font-size: 0.9rem;
-  color: #444;
+  padding-left: 18px;
+  color: #111827;
+  font-weight: 800;
+  line-height: 1.65;
 }
 
-.info-list li {
-  margin-bottom: 4px;
+.footer{
+  text-align:center;
+  padding: 10px 0 6px;
+  color: rgba(15,23,42,.65);
 }
 
-/* ================================
-   レスポンシブ調整
-================================ */
-@media (min-width: 520px) {
-  .app-container {
-    padding-top: 24px;
-  }
-
-  .word-card {
-    height: 240px;
-  }
-}
+/* 端末幅が小さいときの微調整 */
+@media (max-width: 360px){
+  .wordEnglish{ font-size: 40px; }
+  .wordJapanese{ font-size: 30px; }
+  .navBtn{ height: 50px; font-size: 15px; }
+  .stageBtn{ width: 42px; height: 38px; }
+     }
