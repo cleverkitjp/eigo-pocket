@@ -2,15 +2,26 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>えいごポケット</title>
-  <link rel="stylesheet" href="style.css?v=21" />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6517NYNFF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F6517NYNFF');
+  </script>
 </head>
+
 <body>
   <div class="page">
     <!-- タイトルカード -->
     <header class="title-card">
-      <h1 class="app-title">えいごポケットtest21</h1>
+      <h1 class="app-title">えいごポケット</h1>
       <p class="app-subtitle">カードをめくって、スタンプを集めよう。</p>
 
       <div class="stage-area">
@@ -29,20 +40,21 @@
         <div id="tap-hint" class="tap-hint">タップしてカードをめくる</div>
       </div>
 
-      <button id="flip-card" class="flip-card" type="button" aria-label="カードをめくる">
+      <!-- ★ 安定化のため button を使わず div + role -->
+      <div id="flip-card" class="flip-card" role="button" tabindex="0" aria-label="カードをめくる">
         <div class="flip-inner" id="flip-inner">
-          <!-- 表：えいご + はつおん -->
+          <!-- 表：えいご + カタカナ -->
           <div class="flip-face flip-front">
             <div id="front-english" class="front-english">loading...</div>
             <div id="front-kana" class="front-kana"></div>
           </div>
 
           <!-- 裏：にほんご -->
-          <div class="flip-face flip-back">
+          <div class="flip-face flip-back" aria-hidden="true">
             <div id="back-japanese" class="back-japanese"></div>
           </div>
         </div>
-      </button>
+      </div>
 
       <div class="nav-row">
         <button id="prev-btn" class="nav-btn nav-prev" type="button">◀ まえへ</button>
@@ -92,7 +104,7 @@
     <div id="shared-footer" class="shared-footer"></div>
   </div>
 
-  <!-- ミニテスト（モーダル） -->
+  <!-- ミニテスト（モーダル：1問ずつ） -->
   <div id="test-overlay" class="test-overlay hidden" role="dialog" aria-modal="true" aria-label="ミニテスト">
     <div class="test-modal">
       <div class="test-head">
@@ -100,17 +112,19 @@
         <button id="test-close" class="test-close" type="button" aria-label="閉じる">✕</button>
       </div>
 
-      <div id="test-body" class="test-body">
-        <!-- JSで生成 -->
-      </div>
+      <div id="test-body" class="test-body"><!-- JSで生成 --></div>
 
       <div class="test-foot">
-        <button id="test-submit" class="test-submit" type="button">答え合わせ</button>
+        <button id="test-submit" class="test-submit" type="button">こたえる</button>
       </div>
     </div>
   </div>
 
-  <script src="app.js?v=20"></script>
+  <!-- トースト -->
+  <div id="toast" class="toast hidden" aria-live="polite"></div>
+
+  <script src="app.js?v=20251213_1"></script>
+
   <script>
     // cleverkitjp 共有footer（全ツール共通）
     (function(){
