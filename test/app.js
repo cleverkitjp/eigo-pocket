@@ -1,62 +1,62 @@
 /* えいごポケット
-  - words.json（{version, stages, words}）を読み込み
-  - ステージは words.json の stages を使用（和名のみ）
-  - カードタップで反転（くるっ）→ flipInner に is-flipped を付与
+  - words.json（{version, stages, words}）に正式対応
+  - ステージは「和名のみ」（words.json の stages を表示）
+  - カードタップで反転（flip-inner に is-flipped）
   - タップ & つぎへ で音声（音声ボタンは無し）
   - 10枚おぼえたらミニテスト権利（権利=1回）
   - ミニテストは権利獲得後に出現（権利が無いと非表示）
-  - ミニテストは「1問ずつ」出題（モーダル内に短く「せいかい！」）
-  - スタンプゲットはトースト（alertは使わない）
+  - ミニテストは 1問ずつ（モーダル内で短く「せいかい！」）
+  - スタンプゲットはトースト（alert不使用）
+  - ミニテスト選択肢は unitType ではなく pos ベース（posGroup に正規化）
 */
 
 (() => {
   const WORDS_URL = "./words.json";
 
   // ====== LocalStorage keys ======
-  const KEY_STAGE = "eigoPocket:selectedStageId";
-  const KEY_TOTAL = "eigoPocket:totalStamps";
-  const KEY_TODAY = "eigoPocket:todayStamps";
-  const KEY_DAY = "eigoPocket:dayKey";
-  const KEY_SEEN = "eigoPocket:seenIds";          // 今日見たカードID配列
-  const KEY_ELIGIBLE = "eigoPocket:testEligible"; // ミニテスト権利（1回）
+  const KEY_STAGE    = "eigoPocket:selectedStageId";
+  const KEY_TOTAL    = "eigoPocket:totalStamps";
+  const KEY_TODAY    = "eigoPocket:todayStamps";
+  const KEY_DAY      = "eigoPocket:dayKey";
+  const KEY_SEEN     = "eigoPocket:seenIds";          // 今日見たカードID配列（ユニーク）
+  const KEY_ELIGIBLE = "eigoPocket:testEligible";     // ミニテスト権利（1回）
 
   // ====== DOM ======
-  const stageStrip = document.getElementById("stage-strip");
-  const currentStageEl = document.getElementById("current-stage");
+  const stageStrip      = document.getElementById("stage-strip");
+  const currentStageEl  = document.getElementById("current-stage");
 
-  const flipCardBtn = document.getElementById("flip-card");
-  const flipInner = document.getElementById("flip-inner");
+  const flipCardBtn     = document.getElementById("flip-card");
+  const flipInner       = document.getElementById("flip-inner");
 
-  const frontEnglish = document.getElementById("front-english");
-  const frontKana = document.getElementById("front-kana");
-  const backJapanese = document.getElementById("back-japanese");
+  const frontEnglish    = document.getElementById("front-english");
+  const frontKana       = document.getElementById("front-kana");
+  const backJapanese    = document.getElementById("back-japanese");
 
-  const progressEl = document.getElementById("progress");
-  const tapHintEl = document.getElementById("tap-hint");
+  const progressEl      = document.getElementById("progress");
+  const tapHintEl       = document.getElementById("tap-hint");
 
-  const prevBtn = document.getElementById("prev-btn");
-  const nextBtn = document.getElementById("next-btn");
+  const prevBtn         = document.getElementById("prev-btn");
+  const nextBtn         = document.getElementById("next-btn");
 
-  const remainingEl = document.getElementById("remaining-to-test");
-  const miniTestArea = document.getElementById("mini-test-area");
-  const miniTestBtn = document.getElementById("mini-test-btn");
+  const remainingEl     = document.getElementById("remaining-to-test");
+  const miniTestArea    = document.getElementById("mini-test-area");
+  const miniTestBtn     = document.getElementById("mini-test-btn");
 
-  const todayStampsEl = document.getElementById("today-stamps");
-  const totalStampsEl = document.getElementById("total-stamps");
-  const rankTitleEl = document.getElementById("rank-title");
-  const rankLevelEl = document.getElementById("rank-level");
+  const todayStampsEl   = document.getElementById("today-stamps");
+  const totalStampsEl   = document.getElementById("total-stamps");
+  const rankTitleEl     = document.getElementById("rank-title");
+  const rankLevelEl     = document.getElementById("rank-level");
 
-  const testOverlay = document.getElementById("test-overlay");
-  const testBody = document.getElementById("test-body");
-  const testClose = document.getElementById("test-close");
-  const testSubmit = document.getElementById("test-submit"); // 既存HTMLにあるが、今回は使わない（互換のため残す）
+  const testOverlay     = document.getElementById("test-overlay");
+  const testBody        = document.getElementById("test-body");
+  const testClose       = document.getElementById("test-close");
 
   // ====== State ======
-  let dataStages = [];      // words.json の stages
-  let allWords = [];        // words.json の words
-  let stageId = loadStageId();
+  let dataStages = [];      // words.json stages
+  let allWords   = [];      // words.json words
+  let stageId    = loadStageId();
   let stageWords = [];
-  let index = 0;
+  let index      = 0;
 
   // ====== Helpers ======
   function todayKey() {
@@ -88,16 +88,10 @@
     localStorage.setItem(KEY_STAGE, String(id));
   }
 
-  function getStageName(id) {
-    const s = dataStages.find(x => Number(x.id) === Number(id));
-    return s?.name ?? "-";
-  }
-
   function getTotalStamps() {
     const n = Number(localStorage.getItem(KEY_TOTAL) || "0");
     return Number.isFinite(n) ? n : 0;
   }
-
   function setTotalStamps(n) {
     localStorage.setItem(KEY_TOTAL, String(Math.max(0, n)));
   }
@@ -106,7 +100,6 @@
     const n = Number(localStorage.getItem(KEY_TODAY) || "0");
     return Number.isFinite(n) ? n : 0;
   }
-
   function setTodayStamps(n) {
     localStorage.setItem(KEY_TODAY, String(Math.max(0, n)));
   }
@@ -119,7 +112,6 @@
       return [];
     }
   }
-
   function setSeenIds(arr) {
     localStorage.setItem(KEY_SEEN, JSON.stringify(arr));
   }
@@ -127,7 +119,6 @@
   function isEligible() {
     return localStorage.getItem(KEY_ELIGIBLE) === "1";
   }
-
   function setEligible(v) {
     localStorage.setItem(KEY_ELIGIBLE, v ? "1" : "0");
   }
@@ -152,6 +143,10 @@
       .replaceAll("'", "&#039;");
   }
 
+  function safeText(x) {
+    return (x == null) ? "" : String(x);
+  }
+
   // ====== 称号×Lv（簡易版）=====
   const TITLES = ["ひよこ", "見習い", "がんばりや", "たんけん家", "はかせ", "せんせい", "たつじん", "めいじん", "でんせつ", "えいごのたつじん"];
   const STAMPS_PER_LEVEL = 20;
@@ -162,39 +157,15 @@
     return { title, lv };
   }
 
-  // ====== Toast（CSSなくても最低限見える。あれば style.css に合わせて後で調整可）=====
-  function toast(msg, ms = 1400) {
-    const el = document.createElement("div");
-    el.textContent = msg;
-    el.style.position = "fixed";
-    el.style.left = "50%";
-    el.style.bottom = "18px";
-    el.style.transform = "translateX(-50%)";
-    el.style.background = "rgba(0,0,0,.78)";
-    el.style.color = "#fff";
-    el.style.padding = "10px 14px";
-    el.style.borderRadius = "999px";
-    el.style.fontWeight = "900";
-    el.style.fontSize = "14px";
-    el.style.zIndex = "9999";
-    el.style.maxWidth = "92vw";
-    el.style.textAlign = "center";
-    el.style.boxShadow = "0 10px 24px rgba(0,0,0,.18)";
-    document.body.appendChild(el);
-    setTimeout(() => {
-      el.style.transition = "opacity .25s ease";
-      el.style.opacity = "0";
-      setTimeout(() => el.remove(), 250);
-    }, ms);
-  }
-
   // ====== Speech ======
   function speak(text) {
-    if (!text) return;
+    const t = safeText(text).trim();
+    if (!t) return;
     if (!("speechSynthesis" in window)) return;
+
     try {
       window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
+      const u = new SpeechSynthesisUtterance(t);
       u.lang = "en-US";
       u.rate = 0.95;
       u.pitch = 1.0;
@@ -202,44 +173,77 @@
     } catch {}
   }
 
-  // ====== Stage/Words ======
-  function normalizeLoadedJson(json) {
-    // 想定：{ version, stages:[...], words:[...] }
-    // 旧形式：[ {...}, {...} ] でも落ちないように受ける
-    if (Array.isArray(json)) {
-      return { stages: [], words: json };
+  // ====== Toast（簡易）=====
+  let toastTimer = null;
+  function showToast(msg) {
+    const text = safeText(msg).trim();
+    if (!text) return;
+
+    let el = document.getElementById("ep-toast");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "ep-toast";
+      el.style.position = "fixed";
+      el.style.left = "50%";
+      el.style.bottom = "18px";
+      el.style.transform = "translateX(-50%)";
+      el.style.padding = "10px 14px";
+      el.style.borderRadius = "999px";
+      el.style.background = "rgba(17,17,17,.92)";
+      el.style.color = "#fff";
+      el.style.fontWeight = "900";
+      el.style.fontSize = "14px";
+      el.style.zIndex = "9999";
+      el.style.boxShadow = "0 10px 18px rgba(0,0,0,.18)";
+      el.style.maxWidth = "92vw";
+      el.style.textAlign = "center";
+      el.style.opacity = "0";
+      el.style.transition = "opacity .18s ease";
+      document.body.appendChild(el);
     }
-    const stages = Array.isArray(json?.stages) ? json.stages : [];
-    const words = Array.isArray(json?.words) ? json.words : [];
-    return { stages, words };
+
+    el.textContent = text;
+    requestAnimationFrame(() => { el.style.opacity = "1"; });
+
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      el.style.opacity = "0";
+    }, 1300);
   }
 
-  function ensureValidStageId() {
-    if (!dataStages.length) return;
-    const exists = dataStages.some(s => Number(s.id) === Number(stageId));
-    if (!exists) stageId = Number(dataStages[0].id);
-    saveStageId(stageId);
+  // ====== words.json からステージ名 ======
+  function getStageName(id) {
+    const s = dataStages.find(x => Number(x.id) === Number(id));
+    return s ? safeText(s.name) : "-";
   }
 
-  function selectStageWords() {
-    stageWords = allWords.filter(w => Number(w.stageId) === Number(stageId));
-    stageWords.sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
-    index = 0;
+  function chooseDefaultStageIfNeeded() {
+    // words.json に stages があるなら、その最小idをデフォルトにする（安全）
+    if (dataStages.length) {
+      const ids = dataStages.map(s => Number(s.id)).filter(n => Number.isFinite(n));
+      if (ids.length) {
+        const minId = Math.min(...ids);
+        if (!Number.isFinite(stageId)) stageId = minId;
+        const exists = dataStages.some(s => Number(s.id) === Number(stageId));
+        if (!exists) stageId = minId;
+      }
+    }
   }
 
   // ====== UI Render ======
   function renderStageButtons() {
     stageStrip.innerHTML = "";
 
-    const list = dataStages.length
-      ? [...dataStages].sort((a, b) => Number(a.id) - Number(b.id))
+    const stagesToUse = dataStages.length
+      ? [...dataStages].sort((a,b) => Number(a.id) - Number(b.id))
       : [{ id: 1, name: "ステージ1" }];
 
-    list.forEach(s => {
+    stagesToUse.forEach(s => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "stage-btn" + (Number(s.id) === Number(stageId) ? " active" : "");
-      btn.innerHTML = `<div class="stage-name">${escapeHtml(s.name ?? `ステージ${s.id}`)}</div>`;
+      btn.innerHTML = `<div class="stage-name">${escapeHtml(safeText(s.name))}</div>`;
+
       btn.addEventListener("click", () => {
         stageId = Number(s.id);
         saveStageId(stageId);
@@ -248,6 +252,7 @@
         renderStageButtons();
         renderAll();
       });
+
       stageStrip.appendChild(btn);
     });
   }
@@ -256,14 +261,19 @@
     currentStageEl.textContent = `ステージ｜${getStageName(stageId)}`;
   }
 
+  function resetFlipToFront() {
+    // flip-inner に is-flipped（CSSの仕様に合わせる）
+    flipInner.classList.remove("is-flipped");
+    tapHintEl.textContent = "タップしてカードをめくる";
+  }
+
   function renderCard() {
     if (!stageWords.length) {
       progressEl.textContent = "0/0";
       frontEnglish.textContent = "データなし";
       frontKana.textContent = "";
       backJapanese.textContent = "";
-      flipInner.classList.remove("is-flipped");
-      tapHintEl.textContent = "タップしてカードをめくる";
+      resetFlipToFront();
       return;
     }
 
@@ -271,14 +281,11 @@
     const w = stageWords[index];
 
     progressEl.textContent = `${index + 1}/${stageWords.length}`;
+    resetFlipToFront();
 
-    // 表へ戻す（重なり事故防止）
-    flipInner.classList.remove("is-flipped");
-    tapHintEl.textContent = "タップしてカードをめくる";
-
-    frontEnglish.textContent = w.english || "";
-    frontKana.textContent = w.kana || "";
-    backJapanese.textContent = w.japanese || "";
+    frontEnglish.textContent  = safeText(w.english);
+    frontKana.textContent     = safeText(w.kana);
+    backJapanese.textContent  = safeText(w.japanese);
   }
 
   function renderStamps() {
@@ -314,11 +321,19 @@
     renderMiniTestUI();
   }
 
+  // ====== Stage Words ======
+  function selectStageWords() {
+    stageWords = allWords.filter(w => Number(w.stageId) === Number(stageId));
+    stageWords.sort((a,b) => (Number(a.id) || 0) - (Number(b.id) || 0));
+    index = 0;
+  }
+
   // ====== 学習カウント（今日の10枚） ======
   function markSeenCurrent() {
     if (!stageWords.length) return;
+
     const w = stageWords[index];
-    if (w == null || w.id == null) return;
+    if (!w || w.id == null) return;
 
     const seen = getSeenIds();
     if (!seen.includes(w.id)) {
@@ -335,17 +350,20 @@
   function toggleFlipAndSpeak() {
     if (!stageWords.length) return;
 
+    // 学習としてカウント
     markSeenCurrent();
 
-    // CSSは .flip-inner.is-flipped を見て回転する
+    // 反転
     flipInner.classList.toggle("is-flipped");
 
+    // 裏面ではヒント消す
     if (flipInner.classList.contains("is-flipped")) {
       tapHintEl.textContent = "";
     } else {
       tapHintEl.textContent = "タップしてカードをめくる";
     }
 
+    // 音声（英語）
     const w = stageWords[index];
     speak(w.english);
 
@@ -362,6 +380,7 @@
     clampIndex();
     renderCard();
 
+    // 次へで音声（新しい英語）
     const w = stageWords[index];
     speak(w.english);
 
@@ -375,268 +394,282 @@
     renderCard();
   }
 
-  // ====== Mini Test（1問ずつ） ======
-  let currentQuiz = null;   // {qs:[...], idx, allCorrect, answered}
-  let answeringLocked = false;
+  // =========================================================
+  //  ミニテスト（posベース + 1問ずつ）
+  // =========================================================
+
+  // pos を「出題グループ」に正規化
+  // 例：
+  //   noun/verb/adj/adv → そのまま
+  //   phraseGreet/phraseOther → phrase
+  //   idiomVerb → verb（※テストとして成立しやすくする）
+  //   idiomOther → idiom
+  function posGroupOf(item) {
+    const pos = safeText(item?.pos).trim();
+    const unitType = safeText(item?.unitType).trim();
+
+    // phrase 系
+    if (pos.startsWith("phrase") || unitType === "phrase") return "phrase";
+
+    // idiom 系（idiomVerb/idiomAdj など）
+    if (pos.startsWith("idiom") || unitType === "idiom") {
+      if (/verb/i.test(pos)) return "verb";
+      if (/adj/i.test(pos))  return "adj";
+      if (/adv/i.test(pos))  return "adv";
+      return "idiom";
+    }
+
+    // 通常
+    if (pos === "noun" || pos === "verb" || pos === "adj" || pos === "adv") return pos;
+
+    // フォールバック（unitTypeがwordならword扱い）
+    if (unitType === "word") return "word";
+
+    return "other";
+  }
+
+  // 問題の「型」：にほんご → えいご（4択）
+  // 選択肢は posGroup が同じものから優先して集める
+  function makeOneQuestion(pool, usedIds) {
+    const candidates = pool.filter(x => x && x.id != null && safeText(x.english).trim());
+    if (!candidates.length) return null;
+
+    // 出題候補（まだ使ってない）
+    const available = candidates.filter(x => !usedIds.has(x.id));
+    if (!available.length) return null;
+
+    const q = available[Math.floor(Math.random() * available.length)];
+    usedIds.add(q.id);
+
+    const group = posGroupOf(q);
+
+    // 同グループからダミー集め
+    const sameGroup = candidates.filter(x => x.id !== q.id && posGroupOf(x) === group);
+
+    const options = [safeText(q.english).trim()];
+    // 同グループ優先で補完
+    while (options.length < 4 && sameGroup.length) {
+      const d = sameGroup[Math.floor(Math.random() * sameGroup.length)];
+      const t = safeText(d.english).trim();
+      if (t && !options.includes(t)) options.push(t);
+    }
+
+    // 足りなければ全体から補完（最終手段）
+    while (options.length < 4) {
+      const d = candidates[Math.floor(Math.random() * candidates.length)];
+      const t = safeText(d.english).trim();
+      if (t && !options.includes(t)) options.push(t);
+    }
+
+    shuffle(options);
+
+    return {
+      id: q.id,
+      prompt: safeText(q.japanese),
+      answer: safeText(q.english).trim(),
+      options,
+      group
+    };
+  }
+
+  function shuffle(a) {
+    for (let i=a.length-1; i>0; i--) {
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+  }
+
+  // セッション状態
+  let quizSession = null;
 
   function openTest() {
     if (!isEligible()) return;
     if (!stageWords.length) return;
 
-    // 権利消費（1回）＆ 次の10枚カウント開始
+    // 権利消費（1回） & 次の10枚へ
     setEligible(false);
     setSeenIds([]);
 
-    currentQuiz = makeQuiz(stageWords);
-    currentQuiz.idx = 0;
-    currentQuiz.allCorrect = true;
-    currentQuiz.answered = 0;
+    quizSession = {
+      total: 3,
+      idx: 0,
+      correct: 0,
+      usedIds: new Set(),
+      current: null
+    };
 
-    renderOneQuestion();
     testOverlay.classList.remove("hidden");
     renderMiniTestUI();
+
+    nextQuestion();
   }
 
   function closeTest() {
     testOverlay.classList.add("hidden");
     testBody.innerHTML = "";
-    currentQuiz = null;
-    answeringLocked = false;
+    quizSession = null;
   }
 
-  function shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-  }
+  function nextQuestion() {
+    if (!quizSession) return;
 
-  function pickRandom(arr, usedIds) {
-    const cand = arr.filter(x => x && x.id != null && !usedIds.has(x.id) && x.english);
-    if (!cand.length) return null;
-    return cand[Math.floor(Math.random() * cand.length)];
-  }
-
-  function makeQuiz(pool) {
-    // 3問、各問「にほんご→えいご」
-    const safePool = pool.filter(x => x && x.id != null && x.english);
-    const qs = [];
-    const usedIds = new Set();
-    if (!safePool.length) return { qs };
-
-    for (let i = 0; i < 3; i++) {
-      const q = pickRandom(safePool, usedIds);
-      if (!q) break;
-      usedIds.add(q.id);
-
-      const group = (q.unitType || "word");
-      const sameGroup = safePool.filter(x => (x.unitType || "word") === group && x.id !== q.id);
-
-      // 無限ループ禁止：Setで最大4つまで集める
-      const set = new Set();
-      set.add(q.english);
-
-      shuffle(sameGroup);
-      for (const d of sameGroup) {
-        if (set.size >= 4) break;
-        if (d.english) set.add(d.english);
-      }
-
-      if (set.size < 4) {
-        const others = safePool.filter(x => x.id !== q.id);
-        shuffle(others);
-        for (const d of others) {
-          if (set.size >= 4) break;
-          if (d.english) set.add(d.english);
-        }
-      }
-
-      const options = Array.from(set);
-      shuffle(options);
-
-      qs.push({
-        id: q.id,
-        prompt: q.japanese || "",
-        answer: q.english,
-        options
-      });
-    }
-
-    return { qs };
-  }
-
-  function renderOneQuestion() {
-    if (!currentQuiz) return;
-    const qs = currentQuiz.qs || [];
-
-    // 0問のとき
-    if (!qs.length) {
-      testBody.innerHTML = `
-        <div class="qbox">
-          <div class="qtitle">データが足りないよ</div>
-          <div style="color:#555;font-weight:700;">このステージのカードが少ないみたい。</div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:10px;">
-          <button type="button" class="test-submit" id="test-end-btn">おわり</button>
-        </div>
-      `;
-      const endBtn = document.getElementById("test-end-btn");
-      endBtn?.addEventListener("click", closeTest);
-      return;
-    }
-
-    // 終了
-    if (currentQuiz.idx >= qs.length) {
+    if (quizSession.idx >= quizSession.total) {
       finishQuiz();
       return;
     }
 
-    const q = qs[currentQuiz.idx];
-    answeringLocked = false;
+    const q = makeOneQuestion(stageWords, quizSession.usedIds);
+    if (!q) {
+      // 問題が作れない場合は終了（データ不足）
+      finishQuiz(true);
+      return;
+    }
 
-    // 既存HTMLに test-submit があるが、今回は使わないので非表示にしておく（残っててもOK）
-    if (testSubmit) testSubmit.style.display = "none";
+    quizSession.current = q;
+    quizSession.idx += 1;
 
-    testBody.innerHTML = `
-      <div class="qbox">
-        <div class="qtitle">Q${currentQuiz.idx + 1}. 「${escapeHtml(q.prompt)}」はどれ？</div>
-        <div id="quiz-feedback" style="min-height:18px;margin:6px 0 4px;font-weight:1000;"></div>
-        <div id="quiz-options"></div>
-      </div>
-      <div style="display:flex;gap:10px;">
-        <button type="button" class="test-submit" id="test-end-btn">おわり</button>
-      </div>
-    `;
+    renderOneQuestion(q, quizSession.idx, quizSession.total);
+  }
 
-    const optWrap = document.getElementById("quiz-options");
-    const fb = document.getElementById("quiz-feedback");
-    const endBtn = document.getElementById("test-end-btn");
+  function renderOneQuestion(q, n, total) {
+    testBody.innerHTML = "";
 
-    endBtn?.addEventListener("click", closeTest);
+    const box = document.createElement("div");
+    box.className = "qbox";
 
+    const title = document.createElement("div");
+    title.className = "qtitle";
+    title.textContent = `Q${n}/${total}. 「${q.prompt}」はどれ？`;
+    box.appendChild(title);
+
+    // 4択はボタン（テンポ重視）
     q.options.forEach((opt) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "opt";
       btn.textContent = opt;
-      btn.addEventListener("click", () => answerQuestion(opt, fb));
-      optWrap.appendChild(btn);
+
+      btn.addEventListener("click", () => {
+        answerQuestion(opt);
+      });
+
+      box.appendChild(btn);
     });
+
+    // 短いフィードバック表示欄
+    const fb = document.createElement("div");
+    fb.id = "quiz-feedback";
+    fb.style.marginTop = "10px";
+    fb.style.fontWeight = "1000";
+    fb.style.color = "#0f3f7d";
+    fb.style.minHeight = "1.2em";
+    box.appendChild(fb);
+
+    testBody.appendChild(box);
   }
 
-  function answerQuestion(selected, feedbackEl) {
-    if (!currentQuiz) return;
-    if (answeringLocked) return;
-    answeringLocked = true;
+  function answerQuestion(selected) {
+    if (!quizSession || !quizSession.current) return;
 
-    const q = currentQuiz.qs[currentQuiz.idx];
-    const ok = (selected === q.answer);
+    const q = quizSession.current;
+    const fb = document.getElementById("quiz-feedback");
 
-    if (!ok) currentQuiz.allCorrect = false;
+    // 連打防止：ボタン無効化
+    const buttons = testBody.querySelectorAll("button.opt");
+    buttons.forEach(b => { b.disabled = true; b.style.opacity = "0.85"; });
 
-    // モーダル内：短く
-    if (feedbackEl) {
-      feedbackEl.textContent = ok ? "せいかい！" : "ざんねん…";
-      feedbackEl.style.color = ok ? "#0f7a2b" : "#b00020";
-    }
+    const isCorrect = (safeText(selected).trim() === q.answer);
+    if (isCorrect) quizSession.correct += 1;
 
-    // 次の問題へ（テンポ優先）
+    if (fb) fb.textContent = isCorrect ? "せいかい！" : "ざんねん…";
+
+    // 少し待って次へ（テンポ）
     setTimeout(() => {
-      currentQuiz.idx += 1;
-      renderOneQuestion();
-    }, 550);
+      nextQuestion();
+    }, 520);
   }
 
-  function finishQuiz() {
-    // 全問正解ならスタンプ（今日10こまで）
-    if (!currentQuiz) return;
+  function finishQuiz(dataShortage = false) {
+    if (!quizSession) return;
 
-    const allCorrect = (currentQuiz.allCorrect === true && (currentQuiz.qs?.length || 0) === 3);
+    const allCorrect = (!dataShortage && quizSession.correct === quizSession.total);
 
+    // 結果表示を一瞬だけ
+    testBody.innerHTML = "";
+    const box = document.createElement("div");
+    box.className = "qbox";
+
+    const title = document.createElement("div");
+    title.className = "qtitle";
+    title.textContent = dataShortage
+      ? "データが足りなくて、テストを作れなかったよ"
+      : `けっか：${quizSession.correct}/${quizSession.total}`;
+    box.appendChild(title);
+
+    const msg = document.createElement("div");
+    msg.style.fontWeight = "900";
+    msg.style.marginTop = "8px";
+    msg.textContent = allCorrect ? "ぜんもんせいかい！" : "またチャレンジしよう！";
+    box.appendChild(msg);
+
+    testBody.appendChild(box);
+
+    // スタンプ付与（オール正解 & 1日10こまで）
     if (allCorrect) {
       const today = getTodayStamps();
       if (today < 10) {
         setTodayStamps(today + 1);
         setTotalStamps(getTotalStamps() + 1);
         renderStamps();
-        toast("スタンプゲット！");
+        showToast("スタンプを1こゲット！");
       } else {
-        toast("せいかい！でも きょうは 10こ いっぱいだよ");
+        showToast("きょうは もう10こ いっぱいだよ");
       }
-    } else {
-      toast("ミニテストおわり！");
     }
 
-    // 終了表示（モーダル内で完結）
-    testBody.innerHTML = `
-      <div class="qbox">
-        <div class="qtitle">ミニテスト おわり</div>
-        <div style="margin-top:8px;font-weight:900;color:#333;">
-          ${allCorrect ? "ぜんもんせいかい！" : "つぎも がんばろう！"}
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;">
-        <button type="button" class="test-submit" id="test-end-btn">おわり</button>
-      </div>
-    `;
-    const endBtn = document.getElementById("test-end-btn");
-    endBtn?.addEventListener("click", closeTest);
-
-    // 状態クリア
-    currentQuiz = null;
+    // 1.0秒後に自動で閉じる（操作不要）
+    setTimeout(() => {
+      closeTest();
+    }, 1000);
   }
 
   // ====== Init ======
   async function init() {
     ensureDayReset();
 
-    // 重要：要素が取れてないと何も動かないので、ここで早期チェック
-    if (!flipCardBtn || !flipInner) {
-      // 画面が崩れている時の保険
-      console.warn("flip elements not found");
-    }
-
+    // load words.json
     try {
       const res = await fetch(WORDS_URL, { cache: "no-cache" });
       if (!res.ok) throw new Error("words.json load failed");
       const json = await res.json();
-      const normalized = normalizeLoadedJson(json);
 
-      dataStages = Array.isArray(normalized.stages) ? normalized.stages : [];
-      allWords = Array.isArray(normalized.words) ? normalized.words : [];
-    } catch (e) {
+      // 正式構造に対応
+      dataStages = Array.isArray(json?.stages) ? json.stages : [];
+      allWords   = Array.isArray(json?.words)  ? json.words  : [];
+
+      // 念のため words が配列でない旧形式（配列直置き）にも保険対応
+      if (!allWords.length && Array.isArray(json)) allWords = json;
+
+      chooseDefaultStageIfNeeded();
+    } catch {
       dataStages = [];
       allWords = [];
     }
 
-    // stages が無い場合は words から推定（stageIdの最大まで）
-    if (!dataStages.length) {
-      const ids = Array.from(new Set(allWords.map(w => Number(w.stageId)).filter(n => Number.isFinite(n))))
-        .sort((a, b) => a - b);
-      dataStages = ids.map(id => ({ id, name: `ステージ${id}` }));
-    }
-
-    ensureValidStageId();
     selectStageWords();
-
     renderStageButtons();
     renderAll();
 
     // Events
-    flipCardBtn?.addEventListener("click", toggleFlipAndSpeak);
-    nextBtn?.addEventListener("click", goNext);
-    prevBtn?.addEventListener("click", goPrev);
+    flipCardBtn.addEventListener("click", toggleFlipAndSpeak);
+    nextBtn.addEventListener("click", goNext);
+    prevBtn.addEventListener("click", goPrev);
 
-    miniTestBtn?.addEventListener("click", openTest);
-    testClose?.addEventListener("click", closeTest);
-    testOverlay?.addEventListener("click", (ev) => {
+    miniTestBtn.addEventListener("click", openTest);
+    testClose.addEventListener("click", closeTest);
+    testOverlay.addEventListener("click", (ev) => {
       if (ev.target === testOverlay) closeTest();
     });
-
-    // 互換：古い「答え合わせ」ボタンが残ってても何もしない
-    if (testSubmit) {
-      testSubmit.addEventListener("click", () => {});
-    }
   }
 
   init();
