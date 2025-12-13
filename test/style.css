@@ -378,3 +378,140 @@ button{
 #today-stamps, #total-stamps, #rank-title, #rank-level{
   font-weight: 1000;
 }
+/* ===== Overlay / quiz ===== */
+#test-overlay.hidden{ display:none; }
+#test-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 16px;
+  z-index: 2000;
+}
+
+#test-body{
+  width: min(640px, 96vw);
+}
+
+.qbox{
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.26);
+  padding: 16px;
+  border: 1px solid rgba(0,0,0,.06);
+}
+
+.qtitle{
+  font-weight: 1000;
+  color: #173a70;
+  line-height: 1.25;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.opt{
+  width: 100%;
+  text-align: left;
+  border-radius: 16px;
+  padding: 14px 14px;
+  margin-top: 10px;
+  font-size: 18px;
+  color: #1b2b3c;
+  border-color: #dbe6f3;
+  background: #fff;
+}
+
+/* radioの見た目を邪魔しない */
+.opt input[type="radio"]{
+  margin-right: 10px;
+  transform: translateY(1px);
+}
+
+/* 結果表示（app.jsで使ってる inline-result） */
+.inline-result{
+  margin-top: 14px;
+  font-weight: 1000;
+  font-size: 22px;
+  text-align: center;
+  color: #173a70;
+}
+
+#test-body.flash{
+  animation: flashPop .18s ease-out;
+}
+@keyframes flashPop{
+  from{ transform: scale(.99); filter: brightness(.98); }
+  to{ transform: scale(1); filter: brightness(1); }
+}
+
+/* close button */
+#test-close{
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  border-radius: 999px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,.4);
+  background: rgba(255,255,255,.85);
+  font-weight: 1000;
+  box-shadow: 0 10px 24px rgba(0,0,0,.18);
+}
+#test-close:active{
+  transform: translateY(2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,.18);
+}
+
+/* submit button（存在する場合） */
+#test-submit{
+  width: min(640px, 96vw);
+  margin: 12px auto 0;
+  display:block;
+  border-radius: 18px;
+  padding: 14px 14px;
+  font-size: 20px;
+  font-weight: 1000;
+  border: 1px solid rgba(31,102,193,.20);
+  background: linear-gradient(180deg, #eef6ff, #ffffff);
+  color: #184b92;
+  box-shadow: 0 10px 22px rgba(20,40,80,.10);
+}
+#test-submit:active{
+  transform: translateY(2px);
+  box-shadow: var(--shadow-press);
+}
+
+/* ===== Toast（存在する場合） ===== */
+#toast{
+  position: fixed;
+  left: 50%;
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  background: rgba(25,35,50,.92);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  box-shadow: 0 12px 26px rgba(0,0,0,.22);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  z-index: 3000;
+}
+#toast.show{
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+/* ===== Responsive tweaks ===== */
+@media (max-width: 420px){
+  .app-title{ font-size: 28px; }
+  .current-stage{ font-size: 24px; }
+  .flip-inner{ height: 230px; }
+}
+
+/* 100vh問題の吸収（iPhone Safariなど） */
+@supports (height: 100svh){
+  body{ min-height: 100svh; }
+}
