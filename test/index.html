@@ -3,44 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>えいごポケット（flip最小安定）</title>
+  <title>えいごポケット</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="page">
 
-<div class="page">
+    <header class="title-card">
+      <h1 class="app-title">えいごポケット</h1>
+      <p class="app-subtitle">カードをめくって おぼえよう</p>
+    </header>
 
-  <h1 class="app-title">えいごポケット</h1>
-
-  <section class="learn-card">
-
-    <div class="learn-top">
-      <div id="progress">1/40</div>
-      <div id="tap-hint">タップしてカードをめくる</div>
-    </div>
-
-    <!-- カード -->
-    <button id="flip-card" class="flip-card" type="button">
-      <div id="flip-inner" class="flip-inner">
-
-        <!-- 表 -->
-        <div class="flip-face flip-front">
-          <div id="front-english" class="front-english">apple</div>
-          <div id="front-kana" class="front-kana">アップル</div>
-        </div>
-
-        <!-- 裏 -->
-        <div class="flip-face flip-back">
-          <div id="back-japanese" class="back-japanese">りんご</div>
-        </div>
-
+    <section class="learn-card">
+      <div class="learn-top">
+        <div id="progress">1/1</div>
+        <div id="tap-hint">タップしてカードをめくる</div>
       </div>
-    </button>
 
-  </section>
+      <!-- ★重要：perspective 用ラッパー -->
+      <div class="flip-wrap">
+        <button id="flip-card" class="flip-card" type="button">
+          <div id="flip-inner" class="flip-inner">
 
-</div>
+            <!-- 表 -->
+            <div class="flip-face flip-front">
+              <div id="front-english" class="front-english">apple</div>
+              <div id="front-kana" class="front-kana">アップル</div>
+            </div>
 
-<script src="app.js"></script>
+            <!-- 裏 -->
+            <div class="flip-face flip-back">
+              <div id="back-japanese" class="back-japanese">りんご</div>
+            </div>
+
+          </div>
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
