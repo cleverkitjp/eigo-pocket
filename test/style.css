@@ -472,3 +472,45 @@ body{
   font-weight: 900;
   opacity:.8;
 }
+
+/* ===== Toast（スタンプ獲得） ===== */
+.toast{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(15,63,125,.92);
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  box-shadow: 0 12px 24px rgba(0,0,0,.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  z-index: 9999;
+  max-width: min(520px, calc(100vw - 24px));
+  text-align: center;
+}
+
+.toast.show{
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ===== ミニテスト：フィードバック＆選択肢の色 ===== */
+.test-feedback{
+  margin-top: 10px;
+  font-weight: 1000;
+  color: #0f3f7d;
+}
+
+.opt.is-correct{
+  border-color: #9fd3b7;
+  background: #eefbf5;
+}
+
+.opt.is-wrong{
+  border-color: #f2b8b8;
+  background: #fff0f0;
+}
