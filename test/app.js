@@ -1,29 +1,37 @@
 /* えいごポケット
-  - words.json（{version, stages, words}）に正式対応
-  - ステージは words.json の stages を使用（和名のみ）
-  - カードタップで反転（flip-inner に is-flipped を付与）
+  - words.json を読み込み（version/stages/words 構造に対応）
+  - ステージは「和名のみ」
+  - カードタップで反転（くるっ）
   - タップ & つぎへ で音声（音声ボタンは無し）
   - 10枚おぼえたらミニテスト権利（権利=1回）
   - ミニテストは権利獲得後に出現（権利が無いと非表示）
-  - ミニテストは 1問ずつ出題（モーダル内）
-  - 選択肢は：
-    1) 同ステージ & 同unitType & 同posGroup
-    2) 全データ(allWords)から 同unitType & 同posGroup
-    3) 全データ(allWords)から 同unitType
-    4) 全データ(allWords)から なんでも
-    5) それでも足りなければ 3択に落とす
+  - 共有footerは index.html 側で読み込み
 */
 
 (() => {
   const WORDS_URL = "./words.json";
+
+  // ====== ステージ（JSON優先、無ければ保険で生成） ======
+  let STAGES = [
+    { id: 1, name: "はじまりの森" },
+    { id: 2, name: "ことばの川" },
+    { id: 3, name: "おんがくの丘" },
+    { id: 4, name: "ひかりの草原" },
+    { id: 5, name: "まなびの洞くつ" },
+    { id: 6, name: "しぜんの谷" },
+    { id: 7, name: "まちの広場" },
+    { id: 8, name: "じかんの森" },
+    { id: 9, name: "いろの庭" },
+    { id: 10, name: "たつじんへの道" },
+  ];
 
   // ====== LocalStorage keys ======
   const KEY_STAGE = "eigoPocket:selectedStageId";
   const KEY_TOTAL = "eigoPocket:totalStamps";
   const KEY_TODAY = "eigoPocket:todayStamps";
   const KEY_DAY = "eigoPocket:dayKey";
-  const KEY_SEEN = "eigoPocket:seenIds";
-  const KEY_ELIGIBLE = "eigoPocket:testEligible";
+  const KEY_SEEN = "eigoPocket:seenIds";          // 今日見たカードID配列
+  const KEY_ELIGIBLE = "eigoPocket:testEligible"; // ミニテスト権利（1回）
 
   // ====== DOM ======
   const stageStrip = document.getElementById("stage-strip");
@@ -54,20 +62,13 @@
   const testOverlay = document.getElementById("test-overlay");
   const testBody = document.getElementById("test-body");
   const testClose = document.getElementById("test-close");
-  const testSubmit = document.getElementById("test-submit"); // 互換のため残す（未使用）
+  const testSubmit = document.getElementById("test-submit");
 
   // ====== State ======
-  let DATA_VERSION = "";
-  let STAGES = [];
   let allWords = [];
-
   let stageId = loadStageId();
   let stageWords = [];
   let index = 0;
-
-  // choice indexes (allWords)
-  let idxUnitPos = new Map();  // key: unitType|posGroup -> words[]
-  let idxUnitOnly = new Map(); // key: unitType -> words[]
 
   // ====== Helpers ======
   function todayKey() {
@@ -100,7 +101,7 @@
   }
 
   function getStageName(id) {
-    return (STAGES.find(s => Number(s.id) === Number(id)) || { name: "-" }).name || "-";
+    return (STAGES.find(s => Number(s.id) === Number(id)) || { name: "-" }).name;
   }
 
   function getTotalStamps() {
@@ -153,50 +154,6 @@
     return "★".repeat(c) + "☆".repeat(max - c);
   }
 
-  function escapeHtml(s) {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  function shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-  }
-
-  function uniqByEnglish(items) {
-    const seen = new Set();
-    const out = [];
-    for (const w of items) {
-      if (!w) continue;
-      const en = String(w.english || "").trim();
-      if (!en) continue;
-      if (seen.has(en)) continue;
-      seen.add(en);
-      out.push(w);
-    }
-    return out;
-  }
-
-  // ====== posGroup ======
-  function posGroupOf(w) {
-    const pos = String((w && w.pos) || "").trim();
-    if (pos.startsWith("phrase")) return "phrase";
-    if (pos.startsWith("idiom")) return "idiom";
-
-    const nounLike = new Set(["noun", "pron", "det", "num"]);
-    if (nounLike.has(pos)) return "noun";
-    if (pos === "verb") return "verb";
-    if (pos === "adj") return "adj";
-    if (pos === "adv") return "adv";
-    return "other";
-  }
-
   // ====== 称号×Lv（簡易版）=====
   const TITLES = ["ひよこ", "見習い", "がんばりや", "たんけん家", "はかせ", "せんせい", "たつじん", "めいじん", "でんせつ", "えいごのたつじん"];
   const STAMPS_PER_LEVEL = 20;
@@ -221,121 +178,6 @@
     } catch {}
   }
 
-  // ====== Toast ======
-  const toastEl = document.createElement("div");
-  toastEl.setAttribute("aria-live", "polite");
-  toastEl.style.position = "fixed";
-  toastEl.style.left = "50%";
-  toastEl.style.bottom = "18px";
-  toastEl.style.transform = "translateX(-50%)";
-  toastEl.style.background = "rgba(0,0,0,.78)";
-  toastEl.style.color = "#fff";
-  toastEl.style.padding = "10px 12px";
-  toastEl.style.borderRadius = "14px";
-  toastEl.style.fontWeight = "900";
-  toastEl.style.fontSize = "14px";
-  toastEl.style.boxShadow = "0 10px 24px rgba(0,0,0,.22)";
-  toastEl.style.opacity = "0";
-  toastEl.style.pointerEvents = "none";
-  toastEl.style.transition = "opacity .18s ease";
-  toastEl.style.zIndex = "9999";
-  document.body.appendChild(toastEl);
-
-  let toastTimer = null;
-  function toast(msg, ms = 1400) {
-    clearTimeout(toastTimer);
-    toastEl.textContent = msg;
-    toastEl.style.opacity = "1";
-    toastTimer = setTimeout(() => {
-      toastEl.style.opacity = "0";
-    }, ms);
-  }
-
-  // ====== Stage + Words ======
-  function selectStageWords() {
-    stageWords = allWords.filter(w => Number(w.stageId) === Number(stageId));
-    stageWords = stageWords.filter(w => w && w.id != null && String(w.english || "").trim());
-    stageWords.sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
-    index = 0;
-  }
-
-  function ensureStageIdValid() {
-    const exists = STAGES.some(s => Number(s.id) === Number(stageId));
-    if (!exists) stageId = Number(STAGES[0]?.id || 1);
-    saveStageId(stageId);
-  }
-
-  // ====== Choice Indexes ======
-  function buildChoiceIndexes(words) {
-    idxUnitPos = new Map();
-    idxUnitOnly = new Map();
-
-    for (const w of words) {
-      if (!w || w.id == null) continue;
-      const en = String(w.english || "").trim();
-      if (!en) continue;
-
-      const unit = String(w.unitType || "word");
-      const pg = posGroupOf(w);
-
-      const k1 = `${unit}|${pg}`;
-      if (!idxUnitPos.has(k1)) idxUnitPos.set(k1, []);
-      idxUnitPos.get(k1).push(w);
-
-      if (!idxUnitOnly.has(unit)) idxUnitOnly.set(unit, []);
-      idxUnitOnly.get(unit).push(w);
-    }
-
-    for (const [k, arr] of idxUnitPos.entries()) idxUnitPos.set(k, uniqByEnglish(arr));
-    for (const [k, arr] of idxUnitOnly.entries()) idxUnitOnly.set(k, uniqByEnglish(arr));
-  }
-
-  function buildOptions(q, stagePool) {
-    const answer = String(q.english || "").trim();
-    const unit = String(q.unitType || "word");
-    const pg = posGroupOf(q);
-
-    const options = [answer];
-
-    const addFrom = (arr) => {
-      if (!Array.isArray(arr) || options.length >= 4) return;
-      const shuffled = arr.slice();
-      shuffle(shuffled);
-      for (const w of shuffled) {
-        if (options.length >= 4) break;
-        if (!w || w.id == null) continue;
-        if (w.id === q.id) continue;
-        const t = String(w.english || "").trim();
-        if (!t) continue;
-        if (!options.includes(t)) options.push(t);
-      }
-    };
-
-    // 1) 同ステージ & 同unitType & 同posGroup
-    addFrom(stagePool.filter(x =>
-      x && x.id != null &&
-      String(x.english || "").trim() &&
-      String(x.unitType || "word") === unit &&
-      posGroupOf(x) === pg &&
-      x.id !== q.id
-    ));
-
-    // 2) 全データから 同unitType & 同posGroup
-    if (options.length < 4) addFrom(idxUnitPos.get(`${unit}|${pg}`) || []);
-
-    // 3) 全データから 同unitType
-    if (options.length < 4) addFrom(idxUnitOnly.get(unit) || []);
-
-    // 4) 全データから なんでも
-    if (options.length < 4) addFrom(allWords);
-
-    // 5) それでも足りなければ 3択に落とす
-    if (options.length < 3) return null;
-
-    shuffle(options);
-    return options;
-  }
-
   // ====== UI Render ======
   function renderStageButtons() {
     stageStrip.innerHTML = "";
@@ -343,7 +185,7 @@
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "stage-btn" + (Number(s.id) === Number(stageId) ? " active" : "");
-      btn.innerHTML = `<div class="stage-name">${escapeHtml(s.name || "")}</div>`;
+      btn.innerHTML = `<div class="stage-name">${escapeHtml(s.name)}</div>`;
       btn.addEventListener("click", () => {
         stageId = Number(s.id);
         saveStageId(stageId);
@@ -360,8 +202,24 @@
     currentStageEl.textContent = `ステージ｜${getStageName(stageId)}`;
   }
 
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  // ====== Flip ======
+  function setFlipped(flag) {
+    // CSS側で is-flipped を #flip-card で見る版 / #flip-inner で見る版の両方に対応
+    flipCardBtn.classList.toggle("is-flipped", !!flag);
+    flipInner.classList.toggle("is-flipped", !!flag);
+  }
+
   function resetFlipToFront() {
-    flipInner.classList.remove("is-flipped");
+    setFlipped(false);
     tapHintEl.textContent = "タップしてカードをめくる";
   }
 
@@ -379,6 +237,8 @@
     const w = stageWords[index];
 
     progressEl.textContent = `${index + 1}/${stageWords.length}`;
+
+    // 描画前に表へ戻す（重なり事故防止）
     resetFlipToFront();
 
     frontEnglish.textContent = w.english || "";
@@ -399,6 +259,7 @@
   }
 
   function renderMiniTestUI() {
+    // 10枚見たら権利（1回）→獲得後にボタン出現
     const seen = getSeenIds();
     const seenCount = Math.min(10, seen.length);
     const remaining = Math.max(0, 10 - seenCount);
@@ -419,6 +280,13 @@
     renderMiniTestUI();
   }
 
+  // ====== Stage Words ======
+  function selectStageWords() {
+    stageWords = allWords.filter(w => Number(w.stageId) === Number(stageId));
+    stageWords.sort((a,b) => (a.id ?? 0) - (b.id ?? 0));
+    index = 0;
+  }
+
   // ====== 学習カウント（今日の10枚） ======
   function markSeenCurrent() {
     if (!stageWords.length) return;
@@ -432,21 +300,23 @@
       setSeenIds(seen);
     }
 
+    // 10枚に達したら「権利獲得（1回）」へ
     if (seen.length >= 10 && !isEligible()) {
       setEligible(true);
     }
   }
 
-  // ====== Flip ======
-  function toggleFlipAndSpeak() {
+ function toggleFlipAndSpeak() {
     if (!stageWords.length) return;
 
     markSeenCurrent();
 
-    // flip-inner に is-flipped
-    flipInner.classList.toggle("is-flipped");
+    // CSS側の当たり判定が「#flip-card」でも「#flip-inner」でも動くように両方切り替え
+    const flipped = flipCardBtn.classList.contains("is-flipped") || flipInner.classList.contains("is-flipped");
+    setFlipped(!flipped);
 
-    if (flipInner.classList.contains("is-flipped")) {
+    // 裏面ではヒント消す
+    if (!flipped) {
       tapHintEl.textContent = "";
     } else {
       tapHintEl.textContent = "タップしてカードをめくる";
@@ -457,17 +327,18 @@
 
     renderMiniTestUI();
   }
-
-  // ====== Next/Prev ======
+// ====== Next/Prev ======
   function goNext() {
     if (!stageWords.length) return;
 
+    // 次へ = 学習としてカウント
     markSeenCurrent();
 
     index += 1;
     clampIndex();
     renderCard();
 
+    // 次へで音声（新しい英語）
     const w = stageWords[index];
     speak(w.english);
 
@@ -481,19 +352,20 @@
     renderCard();
   }
 
-  // ====== Mini Test (1問ずつ) ======
-  const QUIZ_LEN = 3;
-  let quiz = null; // { qs, idx, correct, locked, finalStampMsg }
+  // ====== Mini Test ======
+  // 1問ずつ出題：currentQuiz.index を進める
+  let currentQuiz = null;
 
   function openTest() {
     if (!isEligible()) return;
     if (!stageWords.length) return;
 
+    // 権利消費（1回）
     setEligible(false);
-    setSeenIds([]);
+    setSeenIds([]); // 次の10枚カウントを始める
 
-    quiz = makeQuiz(stageWords);
-    renderQuizView();
+    currentQuiz = makeQuiz(stageWords);
+    renderQuizOne(currentQuiz);
 
     testOverlay.classList.remove("hidden");
     renderMiniTestUI();
@@ -502,196 +374,229 @@
   function closeTest() {
     testOverlay.classList.add("hidden");
     testBody.innerHTML = "";
-    quiz = null;
+    currentQuiz = null;
+  }
+
+  function posGroupOf(w) {
+    const p = (w?.pos || "").toLowerCase();
+    if (!p) return "other";
+    if (p.includes("noun")) return "noun";
+    if (p.includes("verb")) return "verb";
+    if (p.includes("adj")) return "adj";
+    if (p.includes("adv")) return "adv";
+    if (p.includes("prep")) return "prep";
+    return "other";
   }
 
   function makeQuiz(stagePool) {
+    // 3問、各問は「にほんご→えいご」を4択（候補ルール強化）
     const qs = [];
     const usedIds = new Set();
 
-    let guard = 0;
-    while (qs.length < QUIZ_LEN && guard < 80) {
-      guard++;
-
+    // 出題はステージ内から
+    for (let i=0; i<3; i++) {
       const q = pickRandom(stagePool, usedIds);
       if (!q) break;
       usedIds.add(q.id);
 
-      const options = buildOptions(q, stagePool);
-      if (!options) continue;
+      const unit = (q.unitType || "word");
+      const pg = posGroupOf(q);
+
+      // 候補生成：優先順に足していく（ステージ内→全体）
+      let cand = [];
+
+      // 1) ステージ内 同unitType 同posGroup
+      cand = cand.concat(stagePool.filter(x => x && x.id !== q.id && (x.unitType || "word") === unit && posGroupOf(x) === pg));
+
+      // 2) 不足時：全体 同unitType 同posGroup
+      if (cand.length < 3) {
+        cand = cand.concat(allWords.filter(x => x && x.id !== q.id && (x.unitType || "word") === unit && posGroupOf(x) === pg));
+      }
+
+      // 3) それでも不足：全体 同unitType
+      if (cand.length < 3) {
+        cand = cand.concat(allWords.filter(x => x && x.id !== q.id && (x.unitType || "word") === unit));
+      }
+
+      // 4) それでも不足：全体
+      if (cand.length < 3) {
+        cand = cand.concat(allWords.filter(x => x && x.id !== q.id));
+      }
+
+      // 重複排除（englishキーで）
+      const uniq = [];
+      const seenE = new Set();
+      for (const x of cand) {
+        const e = x?.english;
+        if (!e || seenE.has(e)) continue;
+        seenE.add(e);
+        uniq.push(x);
+      }
+
+      const options = [q.english];
+      while (options.length < 4 && uniq.length > 0) {
+        const d = uniq[Math.floor(Math.random() * uniq.length)];
+        if (d && d.english && !options.includes(d.english)) options.push(d.english);
+      }
+
+      // 4択に足りない場合は、そのままでもUIは崩さない（表示側は options を使う）
+      shuffle(options);
 
       qs.push({
         id: q.id,
-        prompt: String(q.japanese || ""),
-        answer: String(q.english || "").trim(),
-        options,
+        prompt: q.japanese,
+        answer: q.english,
+        options
       });
     }
 
-    return { qs, idx: 0, correct: 0, locked: false, finalStampMsg: "" };
+    return { qs, index: 0, correct: 0 };
   }
 
   function pickRandom(arr, usedIds) {
-    const cand = arr.filter(x => x && x.id != null && !usedIds.has(x.id) && String(x.english || "").trim());
+    const cand = arr.filter(x => x && x.id != null && !usedIds.has(x.id));
     if (!cand.length) return null;
-    return cand[Math.floor(Math.random() * cand.length)];
+    return cand[Math.floor(Math.random()*cand.length)];
   }
 
-  function renderQuizView() {
-    if (!quiz) return;
+  function shuffle(a) {
+    for (let i=a.length-1; i>0; i--) {
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+  }
 
-    if (testSubmit) testSubmit.style.display = "none";
+  function renderQuizOne(quiz) {
     testBody.innerHTML = "";
-
-    if (!quiz.qs.length) {
-      const p = document.createElement("div");
-      p.className = "qbox";
-      p.innerHTML = `<div class="qtitle">ごめんね… このステージは問題を作れなかったよ</div>
-                     <div style="font-weight:800;color:#555;line-height:1.6">ステージの単語数が少ないか、データの内容が原因かも。</div>`;
-      testBody.appendChild(p);
-      return;
-    }
-
-    if (quiz.idx >= quiz.qs.length) {
-      const done = document.createElement("div");
-      done.className = "qbox";
-
-      const allCorrect = (quiz.correct === QUIZ_LEN && quiz.qs.length === QUIZ_LEN);
-
-      const title = document.createElement("div");
-      title.className = "qtitle";
-      title.textContent = `おわり！ ${quiz.correct}/${QUIZ_LEN} せいかい`;
-      done.appendChild(title);
-
-      const msg = document.createElement("div");
-      msg.style.fontWeight = "900";
-      msg.style.color = "#333";
-      msg.style.lineHeight = "1.6";
-
-      if (allCorrect) {
-        const today = getTodayStamps();
-        if (today < 10) {
-          setTodayStamps(today + 1);
-          setTotalStamps(getTotalStamps() + 1);
-          renderStamps();
-          msg.textContent = "ぜんもんせいかい！ スタンプを 1こ ゲット！";
-          toast("スタンプを 1こ ゲット！");
-        } else {
-          msg.textContent = "ぜんもんせいかい！でも きょうは もう10こ いっぱいだよ";
-          toast("きょうは もう10こ いっぱいだよ");
-        }
-      } else {
-        msg.textContent = "つぎは ぜんもんせいかい を ねらおう！";
-      }
-      done.appendChild(msg);
-
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "mini-test-btn";
-      btn.textContent = "おわる";
-      btn.style.marginTop = "12px";
-      btn.addEventListener("click", closeTest);
-      done.appendChild(btn);
-
-      testBody.appendChild(done);
-      return;
-    }
-
-    const q = quiz.qs[quiz.idx];
+    const idx = quiz.index;
+    const q = quiz.qs[idx];
+    if (!q) return;
 
     const box = document.createElement("div");
     box.className = "qbox";
 
-    const head = document.createElement("div");
-    head.className = "qtitle";
-    head.textContent = `Q${quiz.idx + 1}/${QUIZ_LEN}. 「${q.prompt}」はどれ？`;
-    box.appendChild(head);
-
-    const feedback = document.createElement("div");
-    feedback.style.margin = "8px 0 6px";
-    feedback.style.fontWeight = "1000";
-    feedback.style.height = "22px";
-    feedback.style.color = "#0f3f7d";
-    feedback.textContent = "";
-    box.appendChild(feedback);
+    const title = document.createElement("div");
+    title.className = "qtitle";
+    title.textContent = `Q${idx+1}. 「${q.prompt}」はどれ？`;
+    box.appendChild(title);
 
     q.options.forEach((opt) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "opt";
-      b.textContent = opt;
-      b.addEventListener("click", () => onChoose(opt, feedback));
-      box.appendChild(b);
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "opt";
+      btn.textContent = opt;
+
+      btn.addEventListener("click", () => {
+        // 判定
+        const ok = (opt === q.answer);
+        if (ok) quiz.correct += 1;
+
+        // 短い表示（モーダル内）
+        showInlineResult(ok ? "せいかい！" : "ざんねん！");
+
+        // 次へ
+        setTimeout(() => {
+          quiz.index += 1;
+          if (quiz.index >= quiz.qs.length) {
+            finishQuiz(quiz);
+          } else {
+            renderQuizOne(quiz);
+          }
+        }, 520); // テンポ用
+      });
+
+      box.appendChild(btn);
     });
 
     testBody.appendChild(box);
   }
 
-  function onChoose(chosen, feedbackEl) {
-    if (!quiz || quiz.locked) return;
-    quiz.locked = true;
-
-    const q = quiz.qs[quiz.idx];
-    const ok = (String(chosen) === String(q.answer));
-
-    if (ok) {
-      quiz.correct += 1;
-      feedbackEl.textContent = "せいかい！";
-      feedbackEl.style.color = "#0f3f7d";
-    } else {
-      feedbackEl.textContent = "ちがうよ";
-      feedbackEl.style.color = "#7a2a2a";
-    }
-
-    setTimeout(() => {
-      quiz.idx += 1;
-      quiz.locked = false;
-      renderQuizView();
-    }, 900);
+  function showInlineResult(text) {
+    const badge = document.createElement("div");
+    badge.className = "quiz-inline-result";
+    badge.textContent = text;
+    testBody.appendChild(badge);
   }
 
- // ====== Init ======
+  function finishQuiz(quiz) {
+    const allCorrect = (quiz.correct === 3 && quiz.qs.length === 3);
+
+    if (allCorrect) {
+      const today = getTodayStamps();
+      if (today < 10) {
+        setTodayStamps(today + 1);
+        setTotalStamps(getTotalStamps() + 1);
+        renderStamps();
+        toast("スタンプ+1  ゲット！");
+      } else {
+        toast("きょうは もう10こ いっぱいだよ");
+      }
+    } else {
+      toast(`${quiz.correct}/3 せいかい`);
+    }
+
+    closeTest();
+  }
+
+  function toast(msg) {
+    const t = document.createElement("div");
+    t.className = "toast";
+    t.textContent = msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(() => t.classList.add("show"));
+    setTimeout(() => {
+      t.classList.remove("show");
+      setTimeout(() => t.remove(), 220);
+    }, 1200);
+  }
+
+  // ====== Data Load (words.json 構造に対応) ======
+  function normalizeWordsJson(json) {
+    // json が配列なら旧形式（words配列）として扱う
+    if (Array.isArray(json)) {
+      return { stages: null, words: json };
+    }
+    // v1形式: {version, stages, words}
+    const stages = Array.isArray(json?.stages) ? json.stages : null;
+    const words = Array.isArray(json?.words) ? json.words : [];
+    return { stages, words };
+  }
+
+  // ====== Init ======
   async function init() {
     ensureDayReset();
 
     try {
       const res = await fetch(WORDS_URL, { cache: "no-cache" });
       if (!res.ok) throw new Error("words.json load failed");
+      const raw = await res.json();
 
-      const data = await res.json();
+      const norm = normalizeWordsJson(raw);
+      allWords = Array.isArray(norm.words) ? norm.words : [];
 
-      // words.json 正式構造へ対応
-      DATA_VERSION = String(data?.version || "");
-      STAGES = Array.isArray(data?.stages) ? data.stages : [];
-      allWords = Array.isArray(data?.words) ? data.words : [];
+      // stagesがあれば優先的に反映（和名のみ）
+      if (Array.isArray(norm.stages) && norm.stages.length) {
+        STAGES = norm.stages.map(s => ({ id: Number(s.id), name: String(s.name || `ステージ${s.id}`) }));
+      }
 
       // stagesが無い場合の保険（最低限動かす）
       if (!STAGES.length) {
-        // words側から stageId を拾って簡易生成
-        const ids = Array.from(
-          new Set(allWords.map(w => Number(w.stageId)).filter(n => Number.isFinite(n)))
-        ).sort((a, b) => a - b);
-
+        const ids = Array.from(new Set(allWords.map(w => Number(w.stageId)).filter(n => Number.isFinite(n))))
+          .sort((a,b) => a-b);
         STAGES = ids.map(id => ({ id, name: `ステージ${id}` }));
       }
 
-      if (!Array.isArray(allWords)) allWords = [];
-
     } catch (e) {
-      STAGES = [{ id: 1, name: "ステージ1" }];
       allWords = [];
     }
 
-    // stageIdの整合性
-    ensureStageIdValid();
+    // stageId が存在しない時は 1 に戻す
+    if (!STAGES.some(s => Number(s.id) === Number(stageId))) {
+      stageId = Number(STAGES[0]?.id || 1);
+      saveStageId(stageId);
+    }
 
-    // choice indexes
-    buildChoiceIndexes(allWords);
-
-    // stage words
     selectStageWords();
-
-    // render
     renderStageButtons();
     renderAll();
 
@@ -706,8 +611,10 @@
       if (ev.target === testOverlay) closeTest();
     });
 
-    // 旧「答え合わせ」ボタンは使わない
-    if (testSubmit) testSubmit.addEventListener("click", () => {});
+    // 互換：submitボタンがあっても落ちないように（今は使わない）
+    if (testSubmit) {
+      testSubmit.addEventListener("click", () => {});
+    }
   }
 
   init();
