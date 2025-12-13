@@ -614,3 +614,36 @@ button:focus{ outline: none; }
   .current-stage{ font-size: 26px; }
   .flip-inner{ height: 230px; }
 }
+
+/* ===== Fix 1: カタカナ読みを控えめに ===== */
+.front-kana{
+  margin-top: 12px;
+  font-size: clamp(13px, 3.6vw, 16px);
+  font-weight: 800;
+  color: #7a8696;              /* グレー寄り */
+  opacity: .95;
+  letter-spacing: .02em;
+}
+
+/* ===== Fix 2: 反転が裏返し英語になる問題（is-flippedの付与先ズレ吸収） ===== */
+/* JSが flip-inner に付けてもOK、flip-card に付けてもOK、どっちでも回るようにする */
+.flip-card.is-flipped .flip-inner{
+  transform: rotateY(180deg);
+}
+
+/* 透け防止を強める（iPhone Safari対策） */
+.flip-inner{
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.flip-face{
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+/* 念のため表・裏のZ順と面を固定 */
+.flip-front{ transform: rotateY(0deg) translateZ(0.1px); }
+.flip-back{  transform: rotateY(180deg) translateZ(0.1px); }
