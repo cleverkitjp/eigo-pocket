@@ -211,40 +211,44 @@
       .replaceAll("'", "&#039;");
   }
 
-  // ====== Flip ======
-  function setFlipped(flag) {
-    // CSS側で is-flipped を #flip-card で見る版 / #flip-inner で見る版の両方に対応
-    flipCardBtn.classList.toggle("is-flipped", !!flag);
-    flipInner.classList.toggle("is-flipped", !!flag);
-  }
 
-  function resetFlipToFront() {
-    setFlipped(false);
-    tapHintEl.textContent = "タップしてカードをめくる";
-  }
+ // ====== Flip ======
+function setFlipped(flag) {
+  // ✅ 回転は #flip-inner のみ（鏡文字/二重回転を防ぐ）
+  flipInner.classList.toggle("is-flipped", !!flag);
 
-  function renderCard() {
-    if (!stageWords.length) {
-      progressEl.textContent = "0/0";
-      frontEnglish.textContent = "データなし";
-      frontKana.textContent = "";
-      backJapanese.textContent = "";
-      resetFlipToFront();
-      return;
-    }
+  // 念のため：昔の実装で flip-card に付いたまま残る事故を消す
+  flipCardBtn.classList.remove("is-flipped");
+}
 
-    clampIndex();
-    const w = stageWords[index];
+function resetFlipToFront() {
+  setFlipped(false);
+  tapHintEl.textContent = "タップしてカードをめくる";
+}
 
-    progressEl.textContent = `${index + 1}/${stageWords.length}`;
-
-    // 描画前に表へ戻す（重なり事故防止）
+function renderCard() {
+  if (!stageWords.length) {
+    progressEl.textContent = "0/0";
+    frontEnglish.textContent = "データなし";
+    frontKana.textContent = "";
+    backJapanese.textContent = "";
     resetFlipToFront();
-
-    frontEnglish.textContent = w.english || "";
-    frontKana.textContent = w.kana || "";
-    backJapanese.textContent = w.japanese || "";
+    return;
   }
+
+  clampIndex();
+  const w = stageWords[index];
+
+  progressEl.textContent = `${index + 1}/${stageWords.length}`;
+
+  // 描画前に表へ戻す（重なり事故防止）
+  resetFlipToFront();
+
+  frontEnglish.textContent = w.english || "";
+  frontKana.textContent = w.kana || "";
+  backJapanese.textContent = w.japanese || "";
+} 
+
 
   function renderStamps() {
     const today = getTodayStamps();
@@ -619,3 +623,4 @@
 
   init();
 })();
+
