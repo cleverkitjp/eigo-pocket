@@ -31,6 +31,7 @@ body{
   max-width: 760px;
   margin: 0 auto;
   padding: 18px 14px 34px;
+  padding-bottom: calc(34px + env(safe-area-inset-bottom));
 }
 
 /* ===== Title card ===== */
@@ -59,16 +60,15 @@ body{
   font-weight: 800;
 }
 
-.stage-area{
-  margin-top: 10px;
-}
+.stage-area{ margin-top: 10px; }
+
 .stage-label{
   color: var(--muted);
   font-weight: 900;
   margin: 2px 4px 10px;
 }
 
-/* ===== ステージ：横スクロールUX（gridではなく） ===== */
+/* ===== ステージ：横スクロール ===== */
 .stage-strip{
   display:flex;
   gap:10px;
@@ -166,11 +166,11 @@ button{
   margin-bottom: 10px;
 }
 
-/* 進捗をバッジ風に（目立たせる） */
+/* 進捗：バッジ風 */
 .progress{
   font-weight: 1000;
   color: #2b3a49;
-  background: rgba(255,255,255,.9);
+  background: rgba(255,255,255,.92);
   border: 1px solid #e3ecf6;
   padding: 6px 10px;
   border-radius: 999px;
@@ -189,6 +189,8 @@ button{
   padding: 0;
   background: transparent;
   cursor: pointer;
+  /* iOS 3Dの安定化 */
+  transform: translateZ(0);
 }
 
 .flip-inner{
@@ -203,8 +205,15 @@ button{
   -webkit-transform-style: preserve-3d;
   transition: transform .5s cubic-bezier(.2,.9,.2,1);
   overflow: hidden;
+  transform: rotateY(0deg);
 }
 
+/* ★重要：JSは flip-card に is-flipped を付けるので、こちらが本命 */
+.flip-card.is-flipped .flip-inner{
+  transform: rotateY(180deg);
+}
+
+/* 保険：もし将来 inner に付けた場合でも動く */
 .flip-inner.is-flipped{
   transform: rotateY(180deg);
 }
@@ -217,18 +226,20 @@ button{
   justify-content:center;
   align-items:center;
   padding: 20px 16px;
+
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 }
 
-/* 表：明示的に0deg（iOSの裏写り保険） */
 .flip-front{
-  transform: rotateY(0deg);
+  transform: rotateY(0deg) translateZ(0);
 }
 
-/* 裏：日本語専用面。表の英語が裏返って見えるのを防ぐ */
 .flip-back{
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) translateZ(0);
   background: #fafafa;
 }
 
@@ -247,7 +258,7 @@ button{
   hyphens: auto;
 }
 
-/* ★変更：カタカナ読みは控えめ（グレー・小さめ・補助情報） */
+/* ★カタカナ読み：小さくグレー */
 .front-kana{
   margin-top: 10px;
   font-weight: 700;
@@ -339,22 +350,11 @@ button{
 .mini-test-btn:active{
   box-shadow: 0 6px 14px rgba(120,80,10,.18);
 }
+
 /* ===== Stamp card (existing IDs) ===== */
 #today-stamps, #total-stamps, #rank-title, #rank-level{
   font-weight: 1000;
-}
-
-/* （スタンプ・ごほうび領域を淡い暖色にするなら、このID/クラスが該当する要素に当てる）
-   ※HTML側に stamp-card 等がある前提が不明なので、破壊しない控えめ指定にしています。
-*/
-.reward-zone{
-  background: rgba(255, 217, 120, .25);
-  border: 1px solid rgba(255, 196, 79, .35);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-
-/* ===== Overlay / quiz ===== */
+}/* ===== Overlay / quiz ===== */
 #test-overlay.hidden{ display:none; }
 
 #test-overlay{
@@ -388,7 +388,6 @@ button{
   margin-bottom: 10px;
 }
 
-/* options buttons inside modal */
 .opt{
   width: 100%;
   text-align: left;
@@ -401,7 +400,6 @@ button{
   background: #fff;
 }
 
-/* close button (if exists) */
 #test-close{
   position: fixed;
   top: 14px;
@@ -426,21 +424,14 @@ button{
   .flip-inner{ height: 230px; }
 }
 
-/* ===== iPhone Safari: safe-area / 100vh問題の吸収（CSSのみ） ===== */
+/* ===== iPhone Safari: 100vh問題の吸収 ===== */
 @supports (height: 100svh){
-  body{
-    min-height: 100svh;
-  }
+  body{ min-height: 100svh; }
 }
 
-/* iOSのノッチ余白（あれば） */
-.page{
-  padding-bottom: calc(34px + env(safe-area-inset-bottom));
-}
-
-/* iOS Safari 3D反転の保険（該当ブラウザのみ） */
+/* iOS 3Dの追加保険（該当ブラウザのみ） */
 @supports (-webkit-touch-callout: none) {
-  .flip-face{
+  .flip-inner, .flip-face{
     -webkit-transform-style: preserve-3d;
   }
 }
