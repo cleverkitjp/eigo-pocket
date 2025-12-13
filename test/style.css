@@ -435,3 +435,28 @@ button{
     -webkit-transform-style: preserve-3d;
   }
 }
+
+/* ===== Flip 強制修正（is-flipped がどこに付いてもOK版） ===== */
+
+/* 回転対象は必ず .flip-inner に統一 */
+.flip-inner{
+  transform: rotateY(0deg);
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+/* is-flipped が button側についても inner側についても回転する */
+#flip-card.is-flipped .flip-inner,
+#flip-inner.is-flipped{
+  transform: rotateY(180deg) !important;
+}
+
+/* 面は両方とも背面非表示（iOS対策強め） */
+.flip-face{
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 表・裏の向き固定（保険） */
+.flip-front{ transform: rotateY(0deg) translateZ(0); }
+.flip-back{  transform: rotateY(180deg) translateZ(0); }
