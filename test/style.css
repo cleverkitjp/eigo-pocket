@@ -530,3 +530,6 @@ button{
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
 }
+
+.flip-card { perspective: 1000px; -webkit-perspective: 1000px; }
+.flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
