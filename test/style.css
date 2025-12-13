@@ -1,95 +1,127 @@
-/* ===== base ===== */
-* { box-sizing: border-box; }
+:root{
+  --bg:#eaf6ff;
+  --card:#fff;
+  --ink:#203246;
+  --muted:#6b7a8a;
+  --radius:18px;
+  --shadow:0 10px 22px rgba(0,0,0,.12);
+}
 
-body {
-  margin: 0;
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+
+body{
   font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif;
-  background: #eef7ff;
-  color: #222;
+  background: var(--bg);
+  color:var(--ink);
 }
 
-.page {
-  max-width: 420px;
-  margin: 0 auto;
-  padding: 16px;
+.page{
+  max-width:420px;
+  margin:0 auto;
+  padding:16px;
 }
 
-.app-title {
-  text-align: center;
-  margin: 8px 0 16px;
+/* title */
+.title-card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:var(--shadow);
+  text-align:center;
 }
 
-/* ===== card ===== */
-.learn-card {
-  background: #fff;
-  border-radius: 20px;
-  padding: 14px;
-  box-shadow: 0 10px 24px rgba(0,0,0,.12);
+.app-title{
+  margin:0;
+  font-size:28px;
+  font-weight:900;
+  color:#2e78d6;
 }
 
-.learn-top {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  font-weight: 600;
+.app-subtitle{
+  margin-top:6px;
+  font-weight:700;
+  color:#444;
 }
 
-/* ===== flip ===== */
-.flip-card {
-  width: 100%;
-  border: none;
-  background: transparent;
-  padding: 0;
-  perspective: 1200px; /* ← 親に perspective */
+/* learn */
+.learn-card{
+  margin-top:16px;
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:var(--shadow);
 }
 
-.flip-inner {
-  position: relative;
-  width: 100%;
-  height: 220px;
-  border-radius: 16px;
-  background: #fff;
-  transform-style: preserve-3d;
-  transition: transform .5s cubic-bezier(.2,.9,.2,1);
-  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+.learn-top{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  font-weight:700;
+  color:var(--muted);
 }
 
-.flip-inner.is-flipped {
-  transform: rotateY(180deg);
+/* ===== 核心：安定するフリップ構造 ===== */
+
+/* perspective は button の外 */
+.flip-wrap{
+  perspective:1200px;
 }
 
-.flip-face {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+.flip-card{
+  width:100%;
+  border:none;
+  background:none;
+  padding:0;
 }
 
-/* 表 */
-.flip-front { }
+/* 回転体 */
+.flip-inner{
+  position:relative;
+  width:100%;
+  height:220px;
+  border-radius:14px;
+  background:#fff;
+  transform-style:preserve-3d;
+  transition:transform .5s ease;
+}
 
-/* 裏 */
-.flip-back {
-  transform: rotateY(180deg);
+/* JS はここだけを見る */
+.flip-inner.is-flipped{
+  transform:rotateY(180deg);
+}
+
+/* 面 */
+.flip-face{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+/* 裏面 */
+.flip-back{
+  transform:rotateY(180deg);
 }
 
 /* text */
-.front-english {
-  font-size: 42px;
-  font-weight: 700;
+.front-english{
+  font-size:42px;
+  font-weight:900;
 }
 
-.front-kana {
-  margin-top: 10px;
-  font-size: 16px;
-  color: #888;
+.front-kana{
+  margin-top:8px;
+  font-size:18px;
+  color:#888;
+  font-weight:700;
 }
 
-.back-japanese {
-  font-size: 36px;
-  font-weight: 700;
+.back-japanese{
+  font-size:40px;
+  font-weight:900;
 }
