@@ -493,3 +493,40 @@ button{
   .qtitle{ font-size: 21px; }
   .opt{ font-size: 17px; }
 }
+
+
+/* === Flipの保険：is-flipped が flip-card/flip-inner どちらに付いても回す === */
+.flip-card { perspective: 1200px; -webkit-perspective: 1200px; }
+
+.flip-inner{
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+/* JSが #flip-card に is-flipped を付ける場合 */
+#flip-card.is-flipped .flip-inner{
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
+
+/* JSが #flip-inner に is-flipped を付ける場合 */
+#flip-inner.is-flipped{
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
+
+/* 面の定義を明確化（Safari対策込み） */
+.flip-face{
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flip-front{
+  transform: rotateY(0deg);
+  -webkit-transform: rotateY(0deg);
+}
+
+.flip-back{
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
