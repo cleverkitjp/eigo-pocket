@@ -1,52 +1,106 @@
-/* ===== えいごポケット style.css ===== */
+/* ===== えいごポケット style.css（CSSのみ改善版・構造は崩さない） ===== */
 
 :root{
-  --bg1:#bfeff0;
+  /* ---- Colors ---- */
+  --bg1:#bfefff;
+  --bg2:#b9f4d6;
+
   --card:#ffffff;
   --ink:#203246;
   --muted:#6b7a8a;
+
   --blue:#1f66c1;
+  --blueSoft:#e8f3ff;
+
   --orange:#ff8a00;
   --orange-dark:#e37500;
+  --orangeSoft:#ffe7c6;
+
+  --mintSoft:#e7f7f0;
+  --beigeSoft:#fff0d9;
+
   --line:#e8edf3;
 
-  --shadow: 0 10px 22px rgba(20,40,80,.12);
-  --shadow-press: 0 4px 10px rgba(20,40,80,.18);
-  --radius: 22px;
-  --radius-sm: 16px;
+  /* ---- Radius / Shadow ---- */
+  --radius:22px;
+  --radius-sm:16px;
+  --radius-xs:14px;
+
+  --shadow: 0 12px 28px rgba(0,0,0,.12);
+  --shadow2: 0 10px 22px rgba(0,0,0,.10);
+  --shadow-press: 0 4px 10px rgba(0,0,0,.18);
+
+  /* ---- Typography ---- */
+  --fs-base: 16px;
+  --lh-base: 1.55;
+  --fw-regular: 700;
+  --fw-strong: 900;
+  --fw-heavy: 1000;
+
+  /* ---- iPhone safe area ---- */
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
 }
 
+/* ===== 1) タイポグラフィ統一 + iPhone Safari対策 ===== */
 *{ box-sizing:border-box; }
 html,body{ margin:0; padding:0; }
+html{
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 body{
   font-family: system-ui, -apple-system, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-  color:var(--ink);
-  background: linear-gradient(180deg, var(--bg1), #d9f6e6 55%, #e7fbff);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  color: var(--ink);
+  background: linear-gradient(180deg, var(--bg1), var(--bg2));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
+/* safe-area + 100vh問題吸収（iPhone Safari） */
 .page{
-  max-width: 760px;
+  max-width: 520px;
   margin: 0 auto;
-  padding: 18px 14px 34px;
+  padding: calc(14px + var(--safe-top)) 14px calc(28px + var(--safe-bottom));
+  min-height: 100svh;
+}
+
+/* ===== Buttons base ===== */
+button{
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+button:focus{ outline: none; }
+
+/* ===== 2) カードUI統一 ===== */
+.title-card,
+.learn-card,
+.stamp-card,
+.info-card,
+#mini-test-area{
+  background: rgba(255,255,255,.88);
+  border: 1px solid rgba(255,255,255,.70);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow2);
+  backdrop-filter: blur(6px);
 }
 
 /* ===== Title card ===== */
 .title-card{
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(255,255,255,.65);
-  border-radius: var(--radius);
   padding: 18px 16px 16px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
 }
 
 .app-title{
   margin: 4px 0 6px;
-  font-size: 34px;        /* ←少し小さめ */
+  text-align:center;
+  font-size: 34px;           /* 小さめに統一 */
   letter-spacing: .04em;
-  text-align: center;
   color: #2e78d6;
-  font-weight: 1000;
+  font-weight: var(--fw-heavy);
 }
 
 .app-subtitle{
@@ -56,113 +110,138 @@ body{
   font-weight: 800;
 }
 
-.stage-area{
-  margin-top: 10px;
-}
+.stage-area{ margin-top: 10px; }
 .stage-label{
   color: var(--muted);
-  font-weight: 900;
+  font-weight: var(--fw-strong);
   margin: 2px 4px 10px;
 }
 
+/* ===== 4) ステージタブ：横スクロール UX + 選択状態強化 ===== */
 .stage-strip{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding: 2px 2px 10px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
 }
-
-/* ===== Buttons / pressed feel ===== */
-button{
-  font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.stage-btn,
-.nav-btn,
-.mini-test-btn,
-.opt{
-  border: 1px solid #d6e2f1;
-  background: #ffffff;
+.stage-strip::-webkit-scrollbar{ height: 6px; }
+.stage-strip::-webkit-scrollbar-thumb{
+  background: rgba(31,102,193,.20);
   border-radius: 999px;
-  padding: 12px 12px;
-  font-weight: 1000;
-  color: #2b5ea7;
-  box-shadow: 0 8px 18px rgba(20,40,80,.10);
-  transform: translateY(0);
-  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease, background .12s ease;
 }
 
 .stage-btn{
+  flex: 0 0 auto;
+  min-width: 150px;
+  min-height: 48px;
+
+  border: 1px solid #d6e2f1;
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 12px 14px;
+
+  font-weight: var(--fw-heavy);
+  color: #2b5ea7;
+
+  box-shadow: 0 8px 18px rgba(20,40,80,.10);
+  transform: translateY(0);
+  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease, background .12s ease, border-color .12s ease;
+
   display:flex;
   align-items:center;
-  justify-content:center; /* ←中央寄せ */
+  justify-content:center;
   text-align:center;
-  min-height: 46px;
+  scroll-snap-align: start;
+
+  position: relative;
 }
 
-.stage-btn .stage-name{
+.stage-name{
   font-size: 16px;
   line-height: 1.1;
 }
 
-.stage-btn:active,
-.nav-btn:active,
-.mini-test-btn:active,
-.opt:active{
-  transform: translateY(2px) scale(.99); /* ←押した感 */
-  box-shadow: var(--shadow-press);
-  filter: brightness(.98);
+/* アクティブを「面＋縁＋下線インジケータ」で強く */
+.stage-btn.active{
+  background: linear-gradient(180deg, var(--blueSoft), #ffffff);
+  border-color: rgba(31,102,193,.45);
+  color:#184b92;
+}
+.stage-btn.active::after{
+  content:"";
+  position:absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 7px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(31,102,193,.55);
+  box-shadow: 0 2px 8px rgba(31,102,193,.20);
 }
 
-.stage-btn:focus-visible,
-.nav-btn:focus-visible,
-.mini-test-btn:focus-visible,
-.opt:focus-visible{
+.stage-btn:focus-visible{
   outline: 3px solid rgba(31,102,193,.25);
   outline-offset: 2px;
 }
 
-.stage-btn.active{
-  border-color: rgba(31,102,193,.35);
-  background: linear-gradient(180deg, #eef6ff, #ffffff);
-  color: #184b92;
+/* ===== 押した感（主要ボタン共通） ===== */
+.stage-btn:active,
+.nav-btn:active,
+.mini-test-btn:active,
+.opt:active,
+#test-close:active,
+#test-submit:active{
+  transform: translateY(2px) scale(.99);
+  box-shadow: var(--shadow-press);
+  filter: brightness(.98);
 }
 
 /* ===== Current stage label ===== */
 .current-stage{
   margin: 14px 2px 10px;
-  font-weight: 1000;
+  font-weight: var(--fw-heavy);
   color: #1c4f9a;
-  font-size: 30px;
+  font-size: 28px;
   letter-spacing: .02em;
 }
 
 /* ===== Learn card ===== */
 .learn-card{
   margin-top: 10px;
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(255,255,255,.65);
-  border-radius: var(--radius);
   padding: 14px 14px 16px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
 }
 
+/* ===== 6) 進捗表示をバッジ化 ===== */
 .learn-top{
   display:flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items:center;
   gap: 10px;
   margin-bottom: 10px;
 }
 
 .progress{
-  font-weight: 1000;
-  color: #6a7b8a;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f3f8ff;
+  border: 1px solid #dbe8fb;
+  color:#1c4f9a;
+  font-weight: var(--fw-heavy);
+  font-size: 14px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.7);
 }
+
 .tap-hint{
-  font-weight: 900;
-  color: #6a7b8a;
+  font-weight: var(--fw-strong);
+  color: var(--muted);
+  font-size: 14px;
 }
 
 /* ===== Flip card ===== */
@@ -184,7 +263,7 @@ button{
   box-shadow: 0 8px 18px rgba(20,40,80,.10);
   transform-style: preserve-3d;
   transition: transform .5s cubic-bezier(.2,.9,.2,1);
-  overflow: hidden; /* ←はみ出し対策の第一段 */
+  overflow: hidden; /* はみ出し対策 */
 }
 
 .flip-inner.is-flipped{
@@ -203,23 +282,17 @@ button{
   -webkit-backface-visibility: hidden;
 }
 
-/* 表 */
-.flip-front{ }
+.flip-back{ transform: rotateY(180deg); }
 
-/* 裏 */
-.flip-back{
-  transform: rotateY(180deg);
-}
-
+/* ===== 5) 英単語表示の崩れ対策（長文・長単語対応） ===== */
 .front-english{
-  font-weight: 1100;
-  font-size: 46px;
+  font-weight: var(--fw-heavy);
+  font-size: clamp(32px, 7.5vw, 52px);
   letter-spacing: .02em;
   text-align:center;
   color:#111;
   line-height: 1.05;
 
-  /* ←はみ出し対策（超重要） */
   width: 100%;
   max-width: 100%;
   overflow-wrap: anywhere;
@@ -229,12 +302,11 @@ button{
 
 .front-kana{
   margin-top: 14px;
-  font-weight: 1000;
-  font-size: 22px;
+  font-weight: var(--fw-heavy);
+  font-size: clamp(16px, 4.4vw, 22px);
   color: #2e78d6;
   text-align:center;
 
-  /* ←はみ出し対策 */
   width: 100%;
   max-width: 100%;
   overflow-wrap: anywhere;
@@ -242,37 +314,41 @@ button{
 }
 
 .back-japanese{
-  font-weight: 1100;
-  font-size: 42px;
+  font-weight: var(--fw-heavy);
+  font-size: clamp(26px, 7vw, 44px);
   text-align:center;
   color:#111;
   line-height: 1.1;
 
-  /* ←はみ出し対策 */
   width: 100%;
   max-width: 100%;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 
+/* ===== Nav row ===== */
 .nav-row{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  display:flex;
+  gap:12px;
   margin-top: 12px;
 }
 
 .nav-btn{
-  padding: 14px 14px;
+  flex:1;
+  border: 1px solid #d6e2f1;
   border-radius: 18px;
+  padding: 14px 14px;
   font-size: 18px;
-  font-weight: 1000;
+  font-weight: var(--fw-heavy);
+  box-shadow: 0 10px 18px rgba(0,0,0,.10);
+  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
 }
 
 .nav-prev{
   background: linear-gradient(180deg, #f3f3f3, #ffffff);
   color:#333;
 }
+
 .nav-next{
   border-color: rgba(255,138,0,.35);
   background: linear-gradient(180deg, var(--orange), var(--orange-dark));
@@ -283,45 +359,143 @@ button{
   box-shadow: 0 6px 14px rgba(255,138,0,.28);
 }
 
-/* ===== Mini test area ===== */
+/* ===== Utility ===== */
 .hidden{ display:none !important; }
-
-#mini-test-area{
+/* ===== 7) スタンプ・ごほうび領域（達成感ゾーン） ===== */
+.stamp-card{
   margin-top: 14px;
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(255,255,255,.65);
-  border-radius: var(--radius);
   padding: 14px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
+  /* “達成感ゾーン”は淡い暖色ベース */
+  background: linear-gradient(180deg, #fff7ea, #ffffff);
+  border: 1px solid rgba(255,180,90,.35);
+  box-shadow: var(--shadow2);
 }
 
+.remaining-to-test,
 #remaining-to-test{
-  font-weight: 1000;
   color:#1c4f9a;
-  margin: 0 0 10px;
+  font-weight: var(--fw-strong);
+  margin: 2px 2px 10px;
+}
+
+/* ミニテスト案内ブロック */
+.mini-test-area,
+#mini-test-area{
+  margin: 6px 0 10px;
+  padding: 12px;
+  border-radius: 18px;
+  background: #fff3dc;
+  box-shadow: inset 0 0 0 1px rgba(255,180,90,.45);
+}
+
+.mini-test-msg{
+  color:#7a4a00;
+  font-weight: var(--fw-heavy);
+  margin-bottom: 10px;
 }
 
 .mini-test-btn{
   width: 100%;
+  border: 1px solid rgba(0,0,0,.06);
   border-radius: 18px;
   padding: 16px 14px;
   font-size: 22px;
+  font-weight: var(--fw-heavy);
   color:#1a1a1a;
   background: linear-gradient(180deg, #ffd978, #ffc44f);
-  border-color: rgba(0,0,0,.06);
   box-shadow: 0 12px 22px rgba(120,80,10,.15);
+  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
 }
 .mini-test-btn:active{
   box-shadow: 0 6px 14px rgba(120,80,10,.18);
 }
 
-/* ===== Stamp card (existing IDs) ===== */
-#today-stamps, #total-stamps, #rank-title, #rank-level{
-  font-weight: 1000;
+/* スタンプの箱（元の構造を復活） */
+.stamp-box{
+  border-radius: 18px;
+  padding: 12px 12px;
+  margin-top: 10px;
 }
 
-/* ===== Overlay / quiz ===== */
+.stamp-today{
+  background: var(--beigeSoft);
+  box-shadow: inset 0 0 0 1px #f5d7aa;
+}
+
+.stamp-total{
+  background: var(--mintSoft);
+  box-shadow: inset 0 0 0 1px #bfe8d6;
+}
+
+.stamp-title{
+  font-weight: var(--fw-heavy);
+  margin-bottom: 6px;
+}
+
+.stamp-stars{
+  letter-spacing: .15em;
+  font-size: 22px;
+  font-weight: var(--fw-heavy);
+}
+
+.stamp-total-row{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.stamp-total-num{
+  font-size: 36px;
+  font-weight: var(--fw-heavy);
+  color:#111;
+}
+
+.stamp-unit{
+  font-size: 18px;
+  font-weight: var(--fw-heavy);
+  margin-left: 6px;
+}
+
+.stamp-badges{
+  display:flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content:flex-end;
+}
+
+.badge{
+  background:#e9f7ff;
+  color:#0f3f7d;
+  font-weight: var(--fw-heavy);
+  border-radius: 999px;
+  padding: 6px 10px;
+  box-shadow: inset 0 0 0 1px #bfe0ff;
+}
+.badge-level{
+  background:#eefbf5;
+  box-shadow: inset 0 0 0 1px #bfe8d6;
+}
+
+/* ===== おうちのかたへ（もし存在する場合） ===== */
+.info-card{
+  margin-top: 14px;
+  padding: 16px 14px;
+}
+.info-title{
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: var(--fw-heavy);
+  color:#0f3f7d;
+}
+.info-list{
+  margin: 0;
+  padding-left: 18px;
+  color:#334455;
+  font-weight: 800;
+}
+
+/* ===== テストモーダル（1問ずつのUIを想定、既存classに合わせる） ===== */
 #test-overlay.hidden{ display:none; }
 #test-overlay{
   position: fixed;
@@ -334,7 +508,43 @@ button{
   z-index: 2000;
 }
 
+.test-modal{
+  width: 100%;
+  max-width: 520px;
+  background:#fff;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+
+.test-head{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 14px 14px;
+  background: #f3f8ff;
+}
+
+.test-title{
+  font-weight: var(--fw-heavy);
+  color:#173a70;
+}
+
+#test-close,
+.test-close{
+  border: 1px solid rgba(255,255,255,.4);
+  background: rgba(255,255,255,.85);
+  font-size: 16px;
+  font-weight: var(--fw-heavy);
+  border-radius: 999px;
+  padding: 10px 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.18);
+  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
+}
+
+.test-body,
 #test-body{
+  padding: 14px;
   width: min(640px, 96vw);
 }
 
@@ -347,134 +557,60 @@ button{
 }
 
 .qtitle{
-  font-weight: 1100;
+  font-weight: var(--fw-heavy);
   color: #173a70;
   line-height: 1.25;
-  font-size: 22px; /* ←問題文を大きめに */
+  font-size: 22px; /* 視認性UP */
   margin-bottom: 10px;
 }
 
-/* options buttons inside modal */
 .opt{
-  width: 100%;
-  text-align: left;
+  display:block;
+  width:100%;
+  text-align:left;
+  border: 1px solid #dbe6f3;
+  background:#fff;
   border-radius: 16px;
   padding: 14px 14px;
   margin-top: 10px;
-  font-size: 18px; /* ←選択肢も少し大きく */
-  color: #1b2b3c;
-  border-color: #dbe6f3;
-  background: #fff;
+  font-weight: var(--fw-heavy);
+  font-size: 18px;
+  color:#1b2b3c;
+  box-shadow: 0 8px 18px rgba(20,40,80,.10);
+  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
+}
+.opt input{ margin-right: 10px; }
+
+.test-foot{
+  padding: 14px;
+  border-top: 1px solid #edf2f8;
 }
 
-/* close button (if exists) */
-#test-close{
-  position: fixed;
-  top: 14px;
-  right: 14px;
-  border-radius: 999px;
-  padding: 10px 12px;
-  border: 1px solid rgba(255,255,255,.4);
-  background: rgba(255,255,255,.85);
-  font-weight: 1000;
-  box-shadow: 0 10px 24px rgba(0,0,0,.18);
+#test-submit,
+.test-submit{
+  width:100%;
+  border:0;
+  border-radius: 16px;
+  padding: 14px;
+  font-weight: var(--fw-heavy);
+  background: linear-gradient(180deg, var(--orange), var(--orange-dark));
+  color:#fff;
+  box-shadow: 0 10px 18px rgba(255,138,0,.26);
+  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
 }
-#test-close:active{
-  transform: translateY(2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,.18);
+
+/* ===== フッター（fallback） ===== */
+.footer-fallback{
+  margin-top: 16px;
+  text-align:center;
+  color:#0f3f7d;
+  font-weight: var(--fw-heavy);
+  opacity:.8;
 }
 
 /* ===== Responsive tweaks ===== */
 @media (max-width: 420px){
   .app-title{ font-size: 30px; }
   .current-stage{ font-size: 26px; }
-  .front-english{ font-size: 42px; }
-  .back-japanese{ font-size: 38px; }
   .flip-inner{ height: 230px; }
-}
-
-/* =========================
-   hotfix: 既存デザインを維持しつつ改善だけ適用
-   （横スライド/スタンプカード崩れの復旧＋押した感＋はみ出し対策＋問題文字サイズ）
-========================= */
-
-/* 1) ステージ選択：横スライドに戻す */
-.stage-strip{
-  display:flex !important;
-  gap:10px;
-  overflow-x:auto;
-  padding: 2px 2px 10px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-}
-
-.stage-btn{
-  flex: 0 0 auto !important;
-  min-width: 140px;
-  border-radius: 999px;              /* もう少し丸く */
-  text-align: center;                /* 文字中央 */
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding: 12px 14px;
-}
-
-/* 2) 押した感：主要ボタンにactive表現 */
-.stage-btn,
-.nav-btn,
-.mini-test-btn,
-.opt,
-.test-close,
-.test-submit{
-  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
-}
-
-.stage-btn:active,
-.nav-btn:active,
-.mini-test-btn:active,
-.opt:active,
-.test-close:active,
-.test-submit:active{
-  transform: translateY(2px) scale(.99);
-  filter: brightness(.98);
-  box-shadow: 0 6px 12px rgba(0,0,0,.14);
-}
-
-/* 3) カードはみ出し対策：英語・かな・日本語をカード内に収める */
-.flip-inner{
-  overflow: hidden; /* これが効く */
-}
-
-.front-english,
-.front-kana,
-.back-japanese{
-  width: 100%;
-  max-width: 100%;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-/* 超長文（フレーズ）が辛い時の保険：英語だけ少し縮める */
-.front-english{
-  font-size: clamp(34px, 7.5vw, 52px);
-  line-height: 1.05;
-}
-
-/* 4) 問題文（ミニテスト）視認性UP：大きく */
-.qtitle{
-  font-size: 22px;
-  line-height: 1.25;
-}
-
-.opt{
-  font-size: 18px;
-}
-
-/* 5) スタンプ/レベルがカード外に飛び出していたら、元のカード構造を維持 */
-.stamp-card{
-  margin-top: 14px;
-  background: var(--card);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow2);
-  padding: 14px;
 }
