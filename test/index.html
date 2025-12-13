@@ -2,55 +2,83 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>えいごポケット</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="page">
-
+    <!-- タイトルカード -->
     <header class="title-card">
       <h1 class="app-title">えいごポケット</h1>
-      <p class="app-subtitle">カードをタップしておぼえよう</p>
+      <p class="app-subtitle">カードをめくって、スタンプを集めよう。</p>
 
       <div class="stage-area">
         <div class="stage-label">ステージ</div>
-        <div id="stage-strip" class="stage-strip"></div>
+        <div id="stage-strip" class="stage-strip" aria-label="ステージをえらぶ"></div>
       </div>
     </header>
 
+    <!-- 現在ステージ表示 -->
     <div id="current-stage" class="current-stage">ステージ｜-</div>
 
+    <!-- 単語カード -->
     <section class="learn-card">
       <div class="learn-top">
         <div id="progress" class="progress">0/0</div>
         <div id="tap-hint" class="tap-hint">タップしてカードをめくる</div>
       </div>
 
-      <!-- ★ 回転しないカード -->
-      <button id="flip-card" class="flip-card" type="button">
-        <div class="card-face front">
-          <div id="front-english" class="front-english"></div>
-          <div id="front-kana" class="front-kana"></div>
-        </div>
-        <div class="card-face back">
-          <div id="back-japanese" class="back-japanese"></div>
+      <button id="flip-card" class="flip-card" type="button" aria-label="カードをめくる">
+        <div class="flip-inner" id="flip-inner">
+          <!-- 表：えいご + はつおん -->
+          <div class="flip-face flip-front">
+            <div id="front-english" class="front-english">loading...</div>
+            <div id="front-kana" class="front-kana"></div>
+          </div>
+
+          <!-- 裏：にほんご -->
+          <div class="flip-face flip-back">
+            <div id="back-japanese" class="back-japanese"></div>
+          </div>
         </div>
       </button>
 
       <div class="nav-row">
-        <button id="prev-btn" class="nav-btn nav-prev">◀ まえへ</button>
-        <button id="next-btn" class="nav-btn nav-next">つぎへ ▶</button>
+        <button id="prev-btn" class="nav-btn nav-prev" type="button">◀ まえへ</button>
+        <button id="next-btn" class="nav-btn nav-next" type="button">つぎへ ▶</button>
       </div>
     </section>
 
-    <section class="stamp-card">
-      <div id="remaining-to-test"></div>
-      <button id="mini-test-btn" class="mini-test-btn hidden">ミニテスト</button>
+    <!-- ミニテスト -->
+    <section id="mini-test-area" class="mini-test-area">
+      <div id="remaining-to-test" class="remaining-to-test">ミニテストできるよ！</div>
+      <button id="mini-test-btn" class="mini-test-btn" type="button">ミニテストをする（3問）</button>
     </section>
 
+    <!-- スタンプ/ランク（カード内に収める） -->
+    <section class="reward-card">
+      <div class="reward-title">きょうのスタンプ（1日10こまで）</div>
+      <div id="today-stamps" class="reward-stars">☆☆☆☆☆☆☆☆☆☆</div>
+
+      <div class="reward-title">あつめたスタンプ</div>
+      <div id="total-stamps" class="reward-total">0こ</div>
+
+      <div class="reward-rank">
+        <div id="rank-title" class="rank-title">-</div>
+        <div id="rank-level" class="rank-level">Lv.-</div>
+      </div>
+    </section>
   </div>
 
-  <script src="app.js"></script>
+  <!-- テスト overlay -->
+  <div id="test-overlay" class="hidden" aria-hidden="true">
+    <button id="test-close" type="button" aria-label="閉じる">×</button>
+    <div id="test-body"></div>
+    <button id="test-submit" class="hidden" type="button">OK</button>
+  </div>
+
+  <script src="app.js" defer></script>
 </body>
 </html>
