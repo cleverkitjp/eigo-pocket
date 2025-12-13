@@ -338,7 +338,7 @@ button{
 
 .mini-test-btn:active{
   box-shadow: 0 6px 14px rgba(120,80,10,.18);
-  }
+}
 /* ===== Stamp card (existing IDs) ===== */
 #today-stamps, #total-stamps, #rank-title, #rank-level{
   font-weight: 1000;
