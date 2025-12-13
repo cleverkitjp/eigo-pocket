@@ -1,452 +1,95 @@
-/* ===== えいごポケット style.css（整合・安定版）===== */
+/* ===== base ===== */
+* { box-sizing: border-box; }
 
-:root{
-  --bg1:#bfeff0;
-  --card:#ffffff;
-  --ink:#203246;
-  --muted:#6b7a8a;
-  --blue:#1f66c1;
-  --orange:#ff8a00;
-  --orange-dark:#e37500;
-  --line:#e8edf3;
-
-  --shadow: 0 10px 22px rgba(20,40,80,.12);
-  --shadow-press: 0 4px 10px rgba(20,40,80,.18);
-  --radius: 22px;
-  --radius-sm: 16px;
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif;
+  background: #eef7ff;
+  color: #222;
 }
 
-*{ box-sizing:border-box; }
-html,body{ margin:0; padding:0; }
-
-body{
-  font-family: system-ui, -apple-system, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-  color:var(--ink);
-  background: linear-gradient(180deg, var(--bg1), #d9f6e6 55%, #e7fbff);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-.page{
-  max-width: 760px;
+.page {
+  max-width: 420px;
   margin: 0 auto;
-  padding: calc(18px + env(safe-area-inset-top)) 14px calc(34px + env(safe-area-inset-bottom));
+  padding: 16px;
 }
 
-/* ===== Title card ===== */
-.title-card{
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(255,255,255,.65);
-  border-radius: var(--radius);
-  padding: 18px 16px 16px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
-}
-
-.app-title{
-  margin: 4px 0 6px;
-  font-size: 32px;
-  letter-spacing: .04em;
+.app-title {
   text-align: center;
-  color: #2e78d6;
-  font-weight: 1000;
+  margin: 8px 0 16px;
 }
 
-.app-subtitle{
-  margin: 0 0 14px;
-  text-align:center;
-  color:#334455;
-  font-weight: 800;
-  line-height: 1.35;
+/* ===== card ===== */
+.learn-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 14px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.12);
 }
 
-/* ===== Stage ===== */
-.stage-area{ margin-top: 10px; }
-
-.stage-label{
-  color: var(--muted);
-  font-weight: 900;
-  margin: 2px 4px 10px;
-}
-
-.stage-strip{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  padding: 2px 2px 10px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-}
-
-button{
-  font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.stage-btn,
-.nav-btn,
-.mini-test-btn,
-.opt{
-  border: 1px solid #d6e2f1;
-  background: #ffffff;
-  border-radius: 999px;
-  padding: 12px 14px;
-  font-weight: 1000;
-  color: #2b5ea7;
-  box-shadow: 0 8px 18px rgba(20,40,80,.10);
-  transform: translateY(0);
-  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease, background .12s ease;
-}
-
-.stage-btn{
-  flex: 0 0 auto;
-  min-width: 140px;
-  min-height: 46px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-}
-
-.stage-btn .stage-name{
-  font-size: 16px;
-  line-height: 1.1;
-}
-
-.stage-btn:active,
-.nav-btn:active,
-.mini-test-btn:active,
-.opt:active{
-  transform: translateY(2px) scale(.99);
-  box-shadow: var(--shadow-press);
-  filter: brightness(.98);
-}
-
-.stage-btn:focus-visible,
-.nav-btn:focus-visible,
-.mini-test-btn:focus-visible,
-.opt:focus-visible{
-  outline: 3px solid rgba(31,102,193,.25);
-  outline-offset: 2px;
-}
-
-.stage-btn.active{
-  border-color: rgba(31,102,193,.35);
-  background: linear-gradient(180deg, #eef6ff, #ffffff);
-  color: #184b92;
-}
-
-/* ===== Current stage label ===== */
-.current-stage{
-  margin: 14px 2px 10px;
-  font-weight: 1000;
-  color: #1c4f9a;
-  font-size: 28px;
-  letter-spacing: .02em;
-}
-
-/* ===== Learn card ===== */
-.learn-card{
-  margin-top: 10px;
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(255,255,255,.65);
-  border-radius: var(--radius);
-  padding: 14px 14px 16px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
-}
-
-.learn-top{
-  display:flex;
+.learn-top {
+  display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 10px;
   margin-bottom: 10px;
+  font-weight: 600;
 }
 
-.progress{
-  font-weight: 1000;
-  color: #6a7b8a;
-  background: #f2f6ff;
-  border: 1px solid #e1e9f7;
-  padding: 6px 10px;
-  border-radius: 999px;
-}
-
-.tap-hint{
-  font-weight: 900;
-  color: #6a7b8a;
-}
-
-/* ===== Flip card（鏡文字対策：perspective + 正しい回転対象 + backface） ===== */
-.flip-card{
+/* ===== flip ===== */
+.flip-card {
   width: 100%;
-  border: 0;
-  padding: 0;
+  border: none;
   background: transparent;
-  cursor: pointer;
-
-  /* ★Android Chromeで重要 */
-  perspective: 1200px;
-  -webkit-perspective: 1200px;
+  padding: 0;
+  perspective: 1200px; /* ← 親に perspective */
 }
 
-.flip-inner{
+.flip-inner {
   position: relative;
   width: 100%;
-  height: 240px;
-  border-radius: var(--radius-sm);
-  background: #ffffff;
-  border: 1px solid var(--line);
-  box-shadow: 0 8px 18px rgba(20,40,80,.10);
-
+  height: 220px;
+  border-radius: 16px;
+  background: #fff;
   transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-
   transition: transform .5s cubic-bezier(.2,.9,.2,1);
-  overflow: hidden;
-  will-change: transform;
+  box-shadow: 0 8px 18px rgba(0,0,0,.12);
 }
 
-/* ★どっちに is-flipped が付いても回るようにする */
-.flip-inner.is-flipped,
-.flip-card.is-flipped .flip-inner{
+.flip-inner.is-flipped {
   transform: rotateY(180deg);
 }
 
-.flip-face{
-  position:absolute;
-  inset:0;
-  display:flex;
+.flip-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
   flex-direction: column;
-  justify-content:center;
-  align-items:center;
-  padding: 18px 16px;
-
+  align-items: center;
+  justify-content: center;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
 }
 
 /* 表 */
-.flip-front{
-  transform: rotateY(0deg) translateZ(1px);
+.flip-front { }
+
+/* 裏 */
+.flip-back {
+  transform: rotateY(180deg);
 }
 
-/* 裏（ここが肝：180度回しておく） */
-.flip-back{
-  transform: rotateY(180deg) translateZ(1px);
+/* text */
+.front-english {
+  font-size: 42px;
+  font-weight: 700;
 }
 
-/* 英語（長文でも崩れない） */
-.front-english{
-  font-weight: 1100;
-  font-size: clamp(34px, 7.5vw, 52px);
-  letter-spacing: .02em;
-  text-align:center;
-  color:#111;
-  line-height: 1.05;
-  width: 100%;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-  hyphens: auto;
-}
-
-/* ★カタカナ：小さめ・グレーで控えめに */
-.front-kana{
-  margin-top: 12px;
-  font-weight: 900;
-  font-size: 16px;
-  color: #7a8796;
-  text-align:center;
-  width: 100%;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-.back-japanese{
-  font-weight: 1100;
-  font-size: clamp(30px, 7vw, 46px);
-  text-align:center;
-  color:#111;
-  line-height: 1.1;
-  width: 100%;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-.nav-row{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.nav-btn{
-  padding: 14px 14px;
-  border-radius: 18px;
-  font-size: 18px;
-  font-weight: 1000;
-}
-
-.nav-prev{
-  background: linear-gradient(180deg, #f3f3f3, #ffffff);
-  color:#333;
-}
-
-.nav-next{
-  border-color: rgba(255,138,0,.35);
-  background: linear-gradient(180deg, var(--orange), var(--orange-dark));
-  color:#fff;
-  box-shadow: 0 10px 22px rgba(255,138,0,.26);
-}
-
-.nav-next:active{
-  box-shadow: 0 6px 14px rgba(255,138,0,.28);
-}
-
-/* ===== Mini test area ===== */
-.hidden{ display:none !important; }
-
-.mini-test-area{
-  margin-top: 14px;
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(255,255,255,.65);
-  border-radius: var(--radius);
-  padding: 14px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
-}
-
-.remaining-to-test{
-  font-weight: 1000;
-  color:#1c4f9a;
-  margin: 0 0 10px;
-}
-
-.mini-test-btn{
-  width: 100%;
-  border-radius: 18px;
-  padding: 16px 14px;
-  font-size: 20px;
-  color:#1a1a1a;
-  background: linear-gradient(180deg, #ffd978, #ffc44f);
-  border-color: rgba(0,0,0,.06);
-  box-shadow: 0 12px 22px rgba(120,80,10,.15);
-}
-.mini-test-btn:active{
-  box-shadow: 0 6px 14px rgba(120,80,10,.18);
-}
-
-/* ===== Reward（達成感ゾーン） ===== */
-.reward-card{
-  margin-top: 14px;
-  background: rgba(255, 244, 222, .75);
-  border: 1px solid rgba(255, 213, 160, .55);
-  border-radius: var(--radius);
-  padding: 14px;
-  box-shadow: var(--shadow);
-}
-
-.reward-title{
-  font-weight: 1000;
-  color:#3a3a3a;
-  margin: 4px 0 6px;
-}
-
-.reward-stars{
-  font-weight: 1000;
-  letter-spacing: .08em;
-  margin-bottom: 10px;
-}
-
-.reward-total{
-  font-weight: 1000;
-  margin-bottom: 10px;
-}
-
-.reward-rank{
-  display:flex;
-  gap:10px;
-  align-items: baseline;
-}
-
-.rank-title{
-  font-weight: 1000;
-}
-
-.rank-level{
-  font-weight: 1000;
-  color:#1c4f9a;
-}
-
-/* ===== Overlay / quiz ===== */
-#test-overlay{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.45);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding: 16px;
-  z-index: 2000;
-}
-
-#test-body{
-  width: min(640px, 96vw);
-}
-
-.qbox{
-  background: #fff;
-  border-radius: 22px;
-  box-shadow: 0 18px 40px rgba(0,0,0,.26);
-  padding: 16px;
-  border: 1px solid rgba(0,0,0,.06);
-}
-
-.qtitle{
-  font-weight: 1100;
-  color: #173a70;
-  line-height: 1.25;
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-
-.opt{
-  width: 100%;
-  text-align: left;
-  border-radius: 16px;
-  padding: 14px 14px;
+.front-kana {
   margin-top: 10px;
-  font-size: 18px;
-  color: #1b2b3c;
-  border-color: #dbe6f3;
-  background: #fff;
+  font-size: 16px;
+  color: #888;
 }
 
-#test-close{
-  position: fixed;
-  top: calc(14px + env(safe-area-inset-top));
-  right: 14px;
-  border-radius: 999px;
-  padding: 10px 12px;
-  border: 1px solid rgba(255,255,255,.4);
-  background: rgba(255,255,255,.85);
-  font-weight: 1000;
-  box-shadow: 0 10px 24px rgba(0,0,0,.18);
-}
-#test-close:active{
-  transform: translateY(2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,.18);
-}
-
-@media (max-width: 420px){
-  .app-title{ font-size: 30px; }
-  .current-stage{ font-size: 26px; }
-  .flip-inner{ height: 230px; }
+.back-japanese {
+  font-size: 36px;
+  font-weight: 700;
 }
