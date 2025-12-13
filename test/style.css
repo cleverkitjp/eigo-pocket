@@ -1,4 +1,4 @@
-/* ===== えいごポケット style.css（FIXED / FULL） ===== */
+/* ===== えいごポケット style.css（整合版） ===== */
 
 :root{
   --bg1:#bfeff0;
@@ -10,27 +10,27 @@
   --muted:#6b7a8a;
 
   --blue:#1f66c1;
-  --blue2:#2e78d6;
+  --blueSoft:#eef6ff;
 
   --orange:#ff8a00;
-  --orange-dark:#e37500;
+  --orangeDark:#e37500;
+  --warmSoft:#fff1dc;
 
   --line:#e8edf3;
 
   --shadow: 0 10px 22px rgba(20,40,80,.12);
-  --shadow2: 0 8px 18px rgba(20,40,80,.10);
-  --shadow-press: 0 4px 10px rgba(20,40,80,.18);
+  --shadow2: 0 10px 22px rgba(20,40,80,.10);
+  --shadowPress: 0 4px 10px rgba(20,40,80,.18);
 
   --radius: 22px;
-  --radius-sm: 16px;
+  --radiusSm: 16px;
+
+  --safeTop: env(safe-area-inset-top, 0px);
+  --safeBottom: env(safe-area-inset-bottom, 0px);
 }
 
 *{ box-sizing:border-box; }
 html,body{ margin:0; padding:0; }
-html{
-  -webkit-text-size-adjust: 100%;
-  text-rendering: optimizeLegibility;
-}
 body{
   font-family: system-ui, -apple-system, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
   color:var(--ink);
@@ -39,41 +39,30 @@ body{
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* iPhone Safari: safe area + 100vh問題の吸収 */
 .page{
   max-width: 520px;
   margin: 0 auto;
-  padding: 18px 14px calc(34px + env(safe-area-inset-bottom));
-  padding-left: calc(14px + env(safe-area-inset-left));
-  padding-right: calc(14px + env(safe-area-inset-right));
-}
-
-/* ===== Card UI 統一 ===== */
-.title-card,
-.learn-card,
-.stamp-card,
-.info-card,
-#mini-test-area{
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(255,255,255,.65);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
+  padding: calc(14px + var(--safeTop)) 14px calc(24px + var(--safeBottom));
 }
 
 /* ===== Title card ===== */
 .title-card{
+  background: rgba(255,255,255,.88);
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: var(--radius);
   padding: 18px 16px 16px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
 }
 
 .app-title{
   margin: 4px 0 6px;
-  font-size: 32px;         /* 少し小さく */
-  letter-spacing: .04em;
-  text-align: center;
-  color: var(--blue2);
+  font-size: 32px; /* 少し小さく */
+  letter-spacing: .03em;
+  text-align:center;
+  color: #2e78d6;
   font-weight: 900;
-  line-height: 1.12;
+  line-height: 1.05;
 }
 
 .app-subtitle{
@@ -81,17 +70,17 @@ body{
   text-align:center;
   color:#334455;
   font-weight: 800;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 .stage-area{ margin-top: 10px; }
 .stage-label{
   color: var(--muted);
-  font-weight: 900;
+  font-weight: 800;
   margin: 2px 4px 10px;
 }
 
-/* ===== Stage strip（横スライド維持） ===== */
+/* ===== Stage strip (horizontal) ===== */
 .stage-strip{
   display:flex;
   gap:10px;
@@ -106,42 +95,43 @@ button{
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Stage buttons */
 .stage-btn{
   flex: 0 0 auto;
-  min-width: 140px;
+  min-width: 160px;
   border: 1px solid #d6e2f1;
-  background: #ffffff;
+  background:#fff;
   border-radius: 999px;
   padding: 12px 14px;
   font-weight: 900;
-  color: #2b5ea7;
+  color:#2b5ea7;
   box-shadow: 0 8px 18px rgba(20,40,80,.10);
-
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
-
   transform: translateY(0);
   transition: transform .08s ease, box-shadow .08s ease, filter .08s ease, background .12s ease;
 }
 
-.stage-name{
+.stage-btn .stage-name{
   font-size: 15px;
   line-height: 1.15;
+  letter-spacing: .01em;
 }
 
 .stage-btn.active{
-  border-color: rgba(31,102,193,.35);
-  background: linear-gradient(180deg, #eef6ff, #ffffff);
-  color: #184b92;
+  border-color: rgba(31,102,193,.38);
+  background: linear-gradient(180deg, var(--blueSoft), #ffffff);
+  color:#184b92;
 }
 
 .stage-btn:active{
   transform: translateY(2px) scale(.99);
-  box-shadow: var(--shadow-press);
+  box-shadow: var(--shadowPress);
   filter: brightness(.98);
 }
+
 .stage-btn:focus-visible{
   outline: 3px solid rgba(31,102,193,.25);
   outline-offset: 2px;
@@ -151,83 +141,85 @@ button{
 .current-stage{
   margin: 14px 2px 10px;
   font-weight: 900;
-  color: #1c4f9a;
-  font-size: 26px;
+  color:#1c4f9a;
+  font-size: 24px;
   letter-spacing: .02em;
 }
 
 /* ===== Learn card ===== */
 .learn-card{
   margin-top: 10px;
+  background: rgba(255,255,255,.88);
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: var(--radius);
   padding: 14px 14px 16px;
+  box-shadow: var(--shadow2);
+  backdrop-filter: blur(6px);
 }
 
 .learn-top{
   display:flex;
   justify-content: space-between;
-  align-items: center;
+  align-items:center;
   gap: 10px;
   margin-bottom: 10px;
 }
 
-/* 進捗をバッジ化 */
+/* Progress badge */
 .progress{
   font-weight: 900;
-  color: #1c4f9a;
+  color:#4f6276;
   font-size: 13px;
+  background: #f1f6ff;
+  border: 1px solid #dbe9ff;
   padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(31,102,193,.08);
-  border: 1px solid rgba(31,102,193,.12);
-  line-height: 1;
 }
 
 .tap-hint{
   font-weight: 800;
-  color: #6a7b8a;
+  color:#6a7b8a;
   font-size: 13px;
-  line-height: 1.2;
 }
 
-/* ===== Flip card ===== */
+/* ===== Flip card wrapper (div role=button) ===== */
 .flip-card{
-  width: 100%;
-  border: 0;
-  padding: 0;
+  width:100%;
+  border:0;
+  padding:0;
   background: transparent;
   cursor: pointer;
+  border-radius: var(--radiusSm);
+  outline: none;
 }
 
-/* 3Dの安定化：perspectiveは親側に */
-.flip-card{
-  perspective: 1200px;
-  -webkit-perspective: 1200px;
+.flip-card:focus-visible{
+  outline: 3px solid rgba(31,102,193,.20);
+  outline-offset: 3px;
 }
 
+/* The rotating element */
 .flip-inner{
   position: relative;
   width: 100%;
   height: 240px;
-  border-radius: var(--radius-sm);
-  background: #ffffff;
+  border-radius: var(--radiusSm);
+  background:#fff;
   border: 1px solid var(--line);
-  box-shadow: var(--shadow2);
-
+  box-shadow: 0 8px 18px rgba(20,40,80,.10);
   transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.2,.9,.2,1);
+  overflow: hidden;
 
-  transition: transform .52s cubic-bezier(.2,.9,.2,1);
+  /* Android Chrome 安定化 */
   will-change: transform;
-
-  overflow: hidden; /* はみ出し防止 */
+  -webkit-transform-style: preserve-3d;
 }
 
-/* JSが #flip-inner に is-flipped を付ける前提 */
 .flip-inner.is-flipped{
   transform: rotateY(180deg);
 }
 
-/* 面 */
 .flip-face{
   position:absolute;
   inset:0;
@@ -239,64 +231,58 @@ button{
 
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-
-  /* Android/Chromeの鏡文字バグ対策（効くことが多い） */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 }
 
+/* Front */
 .flip-front{
-  transform: rotateY(0deg) translateZ(0);
-  -webkit-transform: rotateY(0deg) translateZ(0);
+  transform: rotateY(0deg) translateZ(0.01px);
 }
 
+/* Back */
 .flip-back{
-  transform: rotateY(180deg) translateZ(0);
-  -webkit-transform: rotateY(180deg) translateZ(0);
+  transform: rotateY(180deg) translateZ(0.01px);
 }
 
-/* 英語（長文は可変・折返し） */
 .front-english{
   font-weight: 900;
-  font-size: clamp(30px, 7.5vw, 48px);
+  font-size: clamp(34px, 8vw, 52px);
   letter-spacing: .02em;
   text-align:center;
   color:#111;
-  line-height: 1.06;
+  line-height: 1.05;
 
-  width: 100%;
-  max-width: 100%;
-  overflow-wrap: anywhere;
+  width:100%;
+  max-width:100%;
+  overflow-wrap:anywhere;
   word-break: break-word;
   hyphens: auto;
 }
 
-/* カタカナ：小さく・グレー */
 .front-kana{
   margin-top: 12px;
   font-weight: 800;
-  font-size: 14px;
-  color: #7b8796;
+  font-size: 14px;           /* 小さく */
+  color: #8a95a3;            /* グレー */
   text-align:center;
-  letter-spacing: .02em;
 
-  width: 100%;
-  max-width: 100%;
-  overflow-wrap: anywhere;
+  width:100%;
+  max-width:100%;
+  overflow-wrap:anywhere;
   word-break: break-word;
 }
 
-/* 日本語 */
 .back-japanese{
   font-weight: 900;
-  font-size: clamp(24px, 6.8vw, 42px);
+  font-size: clamp(26px, 7vw, 44px);
   text-align:center;
   color:#111;
   line-height: 1.12;
 
-  width: 100%;
-  max-width: 100%;
-  overflow-wrap: anywhere;
+  width:100%;
+  max-width:100%;
+  overflow-wrap:anywhere;
   word-break: break-word;
 }
 
@@ -310,18 +296,19 @@ button{
 
 .nav-btn{
   border: 1px solid #d6e2f1;
+  background:#fff;
   border-radius: 18px;
   padding: 14px 14px;
-  font-size: 18px;
   font-weight: 900;
-  box-shadow: 0 10px 18px rgba(0,0,0,.10);
+  font-size: 18px;
+  box-shadow: 0 10px 18px rgba(20,40,80,.10);
   transform: translateY(0);
-  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease, background .12s ease;
+  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
 }
 
 .nav-btn:active{
   transform: translateY(2px) scale(.99);
-  box-shadow: var(--shadow-press);
+  box-shadow: var(--shadowPress);
   filter: brightness(.98);
 }
 
@@ -332,52 +319,54 @@ button{
 
 .nav-next{
   border-color: rgba(255,138,0,.35);
-  background: linear-gradient(180deg, var(--orange), var(--orange-dark));
+  background: linear-gradient(180deg, var(--orange), var(--orangeDark));
   color:#fff;
   box-shadow: 0 10px 22px rgba(255,138,0,.26);
 }
+
 .nav-next:active{
   box-shadow: 0 6px 14px rgba(255,138,0,.28);
 }
 
-/* ===== Utility ===== */
-.hidden{ display:none !important; }
-
-/* ===== Mini test / Stamp card ===== */
+/* ===== Stamp card (achievement zone) ===== */
 .stamp-card{
   margin-top: 14px;
+  background: rgba(255,255,255,.92);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow2);
   padding: 14px;
+  border: 1px solid rgba(255,255,255,.7);
 }
 
-/* 達成感ゾーン（淡い暖色） */
-.stamp-card{
-  background: linear-gradient(180deg, rgba(255,244,224,.92), rgba(255,255,255,.86));
-  border: 1px solid rgba(255,215,160,.55);
-}
-
-#remaining-to-test{
-  font-weight: 900;
+.remaining-to-test{
   color:#1c4f9a;
-  margin: 0 0 10px;
-  line-height: 1.35;
+  font-weight: 800;
+  margin: 2px 2px 10px;
 }
 
-#mini-test-area{
-  margin-top: 10px;
-  padding: 14px;
+.mini-test-area{
+  margin: 6px 0 10px;
+  padding: 12px;
+  border-radius: 18px;
+  background: var(--warmSoft); /* 淡い暖色で分離 */
+  box-shadow: inset 0 0 0 1px #ffe1b8;
+}
+
+.mini-test-msg{
+  color:#7a4a00;
+  font-weight: 900;
+  margin-bottom: 10px;
 }
 
 .mini-test-btn{
-  width: 100%;
+  width:100%;
   border: 1px solid rgba(0,0,0,.06);
   border-radius: 18px;
-  padding: 16px 14px;
-  font-size: 20px;
+  padding: 16px 12px;
+  font-size: 18px;
   font-weight: 900;
-  color:#1a1a1a;
   background: linear-gradient(180deg, #ffd978, #ffc44f);
   box-shadow: 0 12px 22px rgba(120,80,10,.15);
-
   transform: translateY(0);
   transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
 }
@@ -387,13 +376,20 @@ button{
   filter: brightness(.98);
 }
 
-/* スタンプ行（既存ID） */
-.stamp-box{ 
+.stamp-box{
   border-radius: 18px;
   padding: 12px 12px;
   margin-top: 10px;
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(255,255,255,.65);
+}
+
+.stamp-today{
+  background: #fff3df;
+  box-shadow: inset 0 0 0 1px #f5d7aa;
+}
+
+.stamp-total{
+  background: #e7f7f0;
+  box-shadow: inset 0 0 0 1px #bfe8d6;
 }
 
 .stamp-title{
@@ -401,10 +397,9 @@ button{
   margin-bottom: 6px;
 }
 
-#today-stamps{
+.stamp-stars{
   letter-spacing: .15em;
   font-size: 22px;
-  font-weight: 900;
 }
 
 .stamp-total-row{
@@ -418,8 +413,9 @@ button{
   font-size: 34px;
   font-weight: 900;
 }
+
 .stamp-unit{
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 900;
   margin-left: 6px;
 }
@@ -448,7 +444,11 @@ button{
 /* ===== Info card ===== */
 .info-card{
   margin-top: 14px;
+  background: rgba(255,255,255,.92);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow2);
   padding: 16px 14px;
+  border: 1px solid rgba(255,255,255,.7);
 }
 
 .info-title{
@@ -461,14 +461,15 @@ button{
 .info-list{
   margin: 0;
   padding-left: 18px;
-  color:#333;
+  color:#334455;
   font-weight: 700;
-  line-height: 1.7;
+  line-height: 1.55;
 }
 
-/* ===== Overlay / Quiz ===== */
-#test-overlay.hidden{ display:none; }
-#test-overlay{
+.hidden{ display:none !important; }
+
+/* ===== Test modal ===== */
+.test-overlay{
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,.45);
@@ -479,77 +480,140 @@ button{
   z-index: 2000;
 }
 
-#test-body{
-  width: min(640px, 96vw);
+.test-modal{
+  width: 100%;
+  max-width: 520px;
+  background:#fff;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+
+.test-head{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 14px 14px;
+  background: #f3f8ff;
+}
+
+.test-title{
+  font-weight: 900;
+}
+
+.test-close{
+  border:1px solid rgba(0,0,0,.06);
+  background: #fff;
+  font-size: 18px;
+  font-weight: 900;
+  border-radius: 999px;
+  padding: 8px 10px;
+  box-shadow: 0 10px 18px rgba(0,0,0,.10);
+  transform: translateY(0);
+  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
+}
+.test-close:active{
+  transform: translateY(2px) scale(.99);
+  box-shadow: var(--shadowPress);
+  filter: brightness(.98);
+}
+
+.test-body{
+  padding: 14px;
 }
 
 .qbox{
-  background: #fff;
-  border-radius: 22px;
-  box-shadow: 0 18px 40px rgba(0,0,0,.26);
-  padding: 16px;
-  border: 1px solid rgba(0,0,0,.06);
+  border: 1px solid #e6eef8;
+  border-radius: 14px;
+  padding: 12px;
 }
 
 .qtitle{
   font-weight: 900;
-  color: #173a70;
-  line-height: 1.25;
-  font-size: 22px;
   margin-bottom: 10px;
+  font-size: 22px;
+  line-height: 1.25;
+  color:#173a70;
 }
 
-/* 選択肢 */
 .opt{
-  width: 100%;
-  text-align: left;
-  border-radius: 16px;
-  padding: 14px 14px;
-  margin-top: 10px;
-
-  font-size: 18px;
+  display:block;
+  width:100%;
+  text-align:left;
+  border: 1px solid #dbe8fb;
+  background:#fff;
+  border-radius: 14px;
+  padding: 14px 12px;
+  margin: 10px 0 0;
   font-weight: 900;
-
-  color: #1b2b3c;
-  border: 1px solid #dbe6f3;
-  background: #fff;
-
-  box-shadow: 0 8px 18px rgba(20,40,80,.10);
+  font-size: 18px;
+  box-shadow: 0 8px 18px rgba(20,40,80,.08);
   transform: translateY(0);
-  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
+  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease, background .12s ease;
 }
-
 .opt:active{
   transform: translateY(2px) scale(.99);
-  box-shadow: var(--shadow-press);
+  box-shadow: var(--shadowPress);
   filter: brightness(.98);
 }
+.opt input{ margin-right: 10px; }
 
-/* closeボタン（存在する場合） */
-#test-close{
-  position: fixed;
-  top: calc(14px + env(safe-area-inset-top));
-  right: calc(14px + env(safe-area-inset-right));
-  border-radius: 999px;
-  padding: 10px 12px;
-  border: 1px solid rgba(255,255,255,.4);
-  background: rgba(255,255,255,.85);
+.test-foot{
+  padding: 14px;
+  border-top: 1px solid #edf2f8;
+}
+
+.test-submit{
+  width:100%;
+  border:0;
+  border-radius: 16px;
+  padding: 14px;
   font-weight: 900;
-  box-shadow: 0 10px 24px rgba(0,0,0,.18);
-
+  font-size: 18px;
+  background: var(--orange);
+  color:#fff;
+  box-shadow: 0 10px 18px rgba(0,0,0,.12);
   transform: translateY(0);
   transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
 }
-
-#test-close:active{
+.test-submit:active{
   transform: translateY(2px) scale(.99);
-  box-shadow: var(--shadow-press);
+  box-shadow: 0 6px 14px rgba(0,0,0,.14);
   filter: brightness(.98);
 }
 
-/* ===== Small devices ===== */
+/* ===== Toast ===== */
+.toast{
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + var(--safeBottom));
+  transform: translateX(-50%);
+  background: rgba(20,30,45,.92);
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 14px;
+  box-shadow: 0 12px 24px rgba(0,0,0,.22);
+  z-index: 3000;
+  max-width: calc(100vw - 24px);
+  text-align:center;
+}
+
+/* ===== Footer fallback ===== */
+.footer-fallback{
+  margin-top: 16px;
+  text-align:center;
+  color:#0f3f7d;
+  font-weight: 900;
+  opacity:.8;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 420px){
   .app-title{ font-size: 30px; }
-  .current-stage{ font-size: 24px; }
+  .current-stage{ font-size: 22px; }
   .flip-inner{ height: 230px; }
+  .qtitle{ font-size: 20px; }
+  .opt{ font-size: 17px; }
 }
