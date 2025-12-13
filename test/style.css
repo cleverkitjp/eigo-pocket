@@ -460,3 +460,6 @@ button{
 /* 表・裏の向き固定（保険） */
 .flip-front{ transform: rotateY(0deg) translateZ(0); }
 .flip-back{  transform: rotateY(180deg) translateZ(0); }
+
+/* ==== CSS末尾読み込みテスト（消さないと目立つ） ==== */
+body { outline: 6px solid magenta !important; }
