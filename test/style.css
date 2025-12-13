@@ -1,52 +1,43 @@
-/* ===== えいごポケット style.css（構文チェック済み） ===== */
+/* ===== えいごポケット style.css ===== */
 
 :root{
   --bg1:#bfeff0;
-  --bg2:#d9f6e6;
-  --bg3:#e7fbff;
-
   --card:#ffffff;
   --ink:#203246;
   --muted:#6b7a8a;
-
   --blue:#1f66c1;
-  --blue-dark:#184b92;
-
   --orange:#ff8a00;
   --orange-dark:#e37500;
-
   --line:#e8edf3;
 
   --shadow: 0 10px 22px rgba(20,40,80,.12);
-  --shadow-soft: 0 8px 18px rgba(20,40,80,.10);
   --shadow-press: 0 4px 10px rgba(20,40,80,.18);
 
   --radius: 22px;
   --radius-sm: 16px;
 
-  --tap: .08s;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
 }
 
 *{ box-sizing:border-box; }
 html,body{ margin:0; padding:0; }
-
 body{
   font-family: system-ui, -apple-system, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: geometricPrecision;
-
+  text-rendering: optimizeLegibility;
   color:var(--ink);
-  background: linear-gradient(180deg, var(--bg1), var(--bg2) 55%, var(--bg3));
-
-  /* iPhone Safari safe-area */
-  padding-bottom: env(safe-area-inset-bottom);
+  background: linear-gradient(180deg, var(--bg1), #d9f6e6 55%, #e7fbff);
 }
 
+/* iPhone Safari 100vh 対策 */
 .page{
   max-width: 760px;
   margin: 0 auto;
-  padding: 18px 14px 34px;
+  padding: calc(18px + var(--safe-top)) calc(14px + var(--safe-right)) calc(34px + var(--safe-bottom)) calc(14px + var(--safe-left));
+  min-height: 100svh;
 }
 
 /* ===== Title card ===== */
@@ -61,30 +52,45 @@ body{
 
 .app-title{
   margin: 4px 0 6px;
-  font-size: 32px;
+  font-size: 30px;        /* 少し小さめ */
   letter-spacing: .04em;
   text-align: center;
   color: #2e78d6;
   font-weight: 1000;
+  line-height: 1.1;
 }
 
 .app-subtitle{
   margin: 0 0 14px;
   text-align:center;
   color:#334455;
-  font-weight: 900;
+  font-weight: 800;
   line-height: 1.35;
 }
 
 .stage-area{ margin-top: 10px; }
-
 .stage-label{
   color: var(--muted);
   font-weight: 900;
   margin: 2px 4px 10px;
 }
 
-/* ===== Buttons base ===== */
+/* ===== Stage tabs: 横スクロール ===== */
+.stage-strip{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding: 2px 2px 10px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.stage-strip::-webkit-scrollbar{ height: 8px; }
+.stage-strip::-webkit-scrollbar-thumb{
+  background: rgba(32,50,70,.18);
+  border-radius: 999px;
+}
+
+/* ===== Buttons / pressed feel ===== */
 button{
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
@@ -97,12 +103,27 @@ button{
   border: 1px solid #d6e2f1;
   background: #ffffff;
   border-radius: 999px;
-  padding: 12px 12px;
+  padding: 12px 14px;
   font-weight: 900;
   color: #2b5ea7;
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 8px 18px rgba(20,40,80,.10);
   transform: translateY(0);
-  transition: transform var(--tap) ease, box-shadow var(--tap) ease, filter var(--tap) ease, background .12s ease;
+  transition: transform .08s ease, box-shadow .08s ease, filter .08s ease, background .12s ease;
+}
+
+.stage-btn{
+  flex: 0 0 auto;
+  min-width: 140px;
+  min-height: 46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.stage-btn .stage-name{
+  font-size: 16px;
+  line-height: 1.15;
 }
 
 .stage-btn:active,
@@ -122,36 +143,10 @@ button{
   outline-offset: 2px;
 }
 
-/* ===== Stage strip（横スクロール） ===== */
-.stage-strip{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  padding: 2px 2px 10px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-}
-
-.stage-btn{
-  flex: 0 0 auto;
-  min-width: 140px;
-  min-height: 46px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding: 12px 14px;
-}
-
-.stage-btn .stage-name{
-  font-size: 16px;
-  line-height: 1.15;
-}
-
 .stage-btn.active{
-  border-color: rgba(31,102,193,.35);
+  border-color: rgba(31,102,193,.45);
   background: linear-gradient(180deg, #eef6ff, #ffffff);
-  color: var(--blue-dark);
+  color: #184b92;
   box-shadow: 0 10px 22px rgba(31,102,193,.14);
 }
 
@@ -159,8 +154,8 @@ button{
 .current-stage{
   margin: 14px 2px 10px;
   font-weight: 1000;
-  color: var(--blue-dark);
-  font-size: 28px;
+  color: #1c4f9a;
+  font-size: 22px;
   letter-spacing: .02em;
 }
 
@@ -183,25 +178,21 @@ button{
   margin-bottom: 10px;
 }
 
-/* 進捗：バッジ風 */
+/* 進捗バッジ化（22/40を目立たせる） */
 .progress{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
+  font-weight: 1000;
+  color: #173a70;
+  background: rgba(31,102,193,.10);
+  border: 1px solid rgba(31,102,193,.18);
   padding: 6px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(32,50,70,.10);
-  background: rgba(255,255,255,.9);
-  box-shadow: 0 8px 18px rgba(20,40,80,.08);
-  font-weight: 1000;
-  color: #415466;
-  min-width: 64px;
+  min-width: 74px;
+  text-align:center;
 }
-
 .tap-hint{
   font-weight: 900;
   color: #6a7b8a;
-  white-space: nowrap;
+  line-height: 1.2;
 }
 
 /* ===== Flip card ===== */
@@ -212,9 +203,9 @@ button{
   background: transparent;
   cursor: pointer;
 
-  /* iPhone Safari 3D安定化 */
-  perspective: 1200px;
-  -webkit-perspective: 1200px;
+  /* ★鏡文字対策の要：perspectiveは回転する要素の親に */
+  perspective: 900px;
+  -webkit-perspective: 900px;
 }
 
 .flip-inner{
@@ -224,19 +215,20 @@ button{
   border-radius: var(--radius-sm);
   background: #ffffff;
   border: 1px solid var(--line);
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 8px 18px rgba(20,40,80,.10);
+
+  /* ★3Dを維持 */
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
 
   transition: transform .55s cubic-bezier(.2,.9,.2,1);
-  overflow: hidden;
   will-change: transform;
-  transform: translateZ(0); /* Safari対策 */
+  overflow: hidden; /* はみ出し防止 */
 }
 
-/* ★ JSは flip-card に is-flipped を付ける想定 */
-#flip-card.is-flipped .flip-inner{
-  transform: rotateY(180deg) translateZ(0);
+/* ★回転はflip-innerだけ（ここが統一ポイント） */
+.flip-inner.is-flipped{
+  transform: rotateY(180deg);
 }
 
 .flip-face{
@@ -248,27 +240,36 @@ button{
   align-items:center;
   padding: 18px 16px;
 
+  /* ★鏡文字/裏面見え対策（Safari含む） */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transform: translateZ(0); /* Safari対策 */
+
+  transform: translateZ(0.1px);
+  -webkit-transform: translateZ(0.1px);
+}
+.flip-face *{
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* 表 */
-.flip-front{}
+.flip-front{
+  transform: rotateY(0deg) translateZ(0.1px);
+}
 
 /* 裏 */
 .flip-back{
-  transform: rotateY(180deg) translateZ(0);
+  transform: rotateY(180deg) translateZ(0.1px);
 }
 
-/* 英語（長文崩れ対策：可変） */
+/* 英語（長いフレーズでも崩れない） */
 .front-english{
   font-weight: 1000;
-  font-size: clamp(32px, 7.2vw, 52px);
+  font-size: clamp(34px, 7.5vw, 52px);
   letter-spacing: .02em;
   text-align:center;
   color:#111;
-  line-height: 1.08;
+  line-height: 1.05;
 
   width: 100%;
   max-width: 100%;
@@ -277,28 +278,28 @@ button{
   hyphens: auto;
 }
 
-/* カタカナ：目立たせすぎない（小さく・グレー） */
+/* ★カタカナは“目立たせない” */
 .front-kana{
-  margin-top: 12px;
-  font-weight: 900;
-  font-size: 16px;
-  color: #8b98a6;
+  margin-top: 10px;
+  font-weight: 800;
+  font-size: 14px;        /* 小さく */
+  color: #8b97a6;         /* グレー */
   text-align:center;
+  line-height: 1.25;
 
   width: 100%;
   max-width: 100%;
   overflow-wrap: anywhere;
   word-break: break-word;
-  line-height: 1.25;
 }
 
 /* 日本語 */
 .back-japanese{
   font-weight: 1000;
-  font-size: clamp(28px, 6.8vw, 44px);
+  font-size: clamp(28px, 7vw, 44px);
   text-align:center;
   color:#111;
-  line-height: 1.15;
+  line-height: 1.12;
 
   width: 100%;
   max-width: 100%;
@@ -331,7 +332,6 @@ button{
   color:#fff;
   box-shadow: 0 10px 22px rgba(255,138,0,.26);
 }
-
 .nav-next:active{
   box-shadow: 0 6px 14px rgba(255,138,0,.28);
 }
@@ -351,9 +351,8 @@ button{
 
 #remaining-to-test{
   font-weight: 1000;
-  color: var(--blue-dark);
+  color:#1c4f9a;
   margin: 0 0 10px;
-  line-height: 1.35;
 }
 
 .mini-test-btn{
@@ -370,37 +369,29 @@ button{
   box-shadow: 0 6px 14px rgba(120,80,10,.18);
 }
 
-/* ===== “達成感ゾーン” (スタンプ/ごほうび) =====
-   HTML側のクラスが不明なので、存在しそうな容器に広めに当てます
-*/
-:where(.stamp-card,.reward-card,.stats-card,.stamps-card,#stamp-card,#reward-card){
+/* ===== Stamp / reward zone =====
+   「達成感ゾーン」だけ淡い暖色で分離（見た目だけ） */
+
+.stamp-card,
+.reward-card,
+#stamp-card,
+#reward-card{
   margin-top: 14px;
+  background: linear-gradient(180deg, rgba(255,138,0,.10), rgba(255,255,255,.86));
+  border: 1px solid rgba(255,138,0,.18);
   border-radius: var(--radius);
-  border: 1px solid rgba(255,180,90,.25);
-  background: linear-gradient(180deg, rgba(255,235,205,.88), rgba(255,255,255,.86));
-  box-shadow: var(--shadow);
   padding: 14px;
+  box-shadow: var(--shadow);
   backdrop-filter: blur(6px);
 }
 
-/* 既存IDs（テキスト群） */
-#today-stamps,
-#total-stamps,
-#rank-title,
-#rank-level{
+/* 既存IDがこれらの場合の保険（崩さない） */
+#today-stamps, #total-stamps, #rank-title, #rank-level{
   font-weight: 1000;
-}
-
-/* スタンプ行の視認性ちょいUP */
-#today-stamps{
-  font-size: 20px;
-  letter-spacing: .12em;
-  line-height: 1.2;
 }
 
 /* ===== Overlay / quiz ===== */
 #test-overlay.hidden{ display:none; }
-
 #test-overlay{
   position: fixed;
   inset: 0;
@@ -410,8 +401,6 @@ button{
   justify-content:center;
   padding: 16px;
   z-index: 2000;
-
-  padding-bottom: calc(16px + env(safe-area-inset-bottom));
 }
 
 #test-body{
@@ -426,16 +415,14 @@ button{
   border: 1px solid rgba(0,0,0,.06);
 }
 
-/* 問題文：少し大きく、読みやすく */
 .qtitle{
-  font-weight: 1000;
+  font-weight: 1100;
   color: #173a70;
-  line-height: 1.28;
+  line-height: 1.25;
   font-size: 22px;
   margin-bottom: 10px;
 }
 
-/* options */
 .opt{
   width: 100%;
   text-align: left;
@@ -448,24 +435,11 @@ button{
   background: #fff;
 }
 
-/* ラジオボタンを見せたくない場合（HTMLが input + text の場合に効く） */
-.opt input{
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* 選択状態（JSが .selected を付けている場合に効く） */
-.opt.selected{
-  border-color: rgba(31,102,193,.35);
-  background: linear-gradient(180deg, #eef6ff, #ffffff);
-}
-
-/* close button（idが test-close 前提） */
+/* close button */
 #test-close{
   position: fixed;
-  top: calc(14px + env(safe-area-inset-top));
-  right: 14px;
+  top: calc(14px + var(--safe-top));
+  right: calc(14px + var(--safe-right));
   border-radius: 999px;
   padding: 10px 12px;
   border: 1px solid rgba(255,255,255,.4);
@@ -478,58 +452,17 @@ button{
   box-shadow: 0 6px 14px rgba(0,0,0,.18);
 }
 
-/* ===== iPhone 100vh問題の吸収 ===== */
-@supports (height: 100svh){
-  .page{ min-height: 100svh; }
-}
-
-/* ===== Responsive tweaks ===== */
+/* ===== Small screens ===== */
 @media (max-width: 420px){
-  .app-title{ font-size: 30px; }
-  .current-stage{ font-size: 26px; }
-
+  .app-title{ font-size: 28px; }
+  .current-stage{ font-size: 20px; }
   .flip-inner{ height: 230px; }
-
-  .qtitle{ font-size: 21px; }
-  .opt{ font-size: 17px; }
+  .nav-btn{ font-size: 17px; }
+  .mini-test-btn{ font-size: 19px; }
 }
 
-
-/* === Flipの保険：is-flipped が flip-card/flip-inner どちらに付いても回す === */
-.flip-card { perspective: 1200px; -webkit-perspective: 1200px; }
-
-.flip-inner{
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
+/* ===== Reduce motion (アクセシビリティ) ===== */
+@media (prefers-reduced-motion: reduce){
+  .flip-inner{ transition: none; }
+  .stage-btn, .nav-btn, .mini-test-btn, .opt{ transition: none; }
 }
-
-/* JSが #flip-card に is-flipped を付ける場合 */
-#flip-card.is-flipped .flip-inner{
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-}
-
-/* JSが #flip-inner に is-flipped を付ける場合 */
-#flip-inner.is-flipped{
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-}
-
-/* 面の定義を明確化（Safari対策込み） */
-.flip-face{
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.flip-front{
-  transform: rotateY(0deg);
-  -webkit-transform: rotateY(0deg);
-}
-
-.flip-back{
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-}
-
-.flip-card { perspective: 1000px; -webkit-perspective: 1000px; }
-.flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
