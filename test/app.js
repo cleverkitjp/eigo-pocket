@@ -9,18 +9,10 @@
 */
 
 (() => {
-  // ===============================
-  // 設定
-  // ===============================
   const WORDS_URL = "./words.json";
-
-  // スタンプ制限（1日10こ）
   const MAX_STAMPS_PER_DAY = 10;
 
-  // ===============================
-  // ステージ（この版は startId/endId 前提）
-  // ※ words.jsonの stages を使う版にしている場合は、ここは読み替え
-  // ===============================
+  // この版は startId/endId のステージ定義（あなたの「動いていた版」に合わせる）
   const STAGES = [
     { id: 1, name: "ことばの入り口", startId: 1, endId: 40 },
     { id: 2, name: "ひらめきの小道", startId: 41, endId: 80 },
@@ -34,20 +26,16 @@
     { id: 10, name: "ことばの神殿", startId: 361, endId: 400 },
   ];
 
-  // ===============================
   // LocalStorage keys
-  // ===============================
   const KEY_STAGE = "eigoPocket:selectedStageId";
   const KEY_TOTAL = "eigoPocket:totalStamps";
   const KEY_TODAY = "eigoPocket:todayStamps";
   const KEY_DAY = "eigoPocket:dayKey";
-  const KEY_SEEN = "eigoPocket:seenIds";              // 今日見たカードID配列
-  const KEY_ELIGIBLE = "eigoPocket:testEligible";     // ミニテスト権利（1回）
-  const KEY_AVAILABLE_BLOCK = "eigoPocket:availableBlockKey"; // 権利を獲得したブロック
+  const KEY_SEEN = "eigoPocket:seenIds";
+  const KEY_ELIGIBLE = "eigoPocket:testEligible";
+  const KEY_AVAILABLE_BLOCK = "eigoPocket:availableBlockKey";
 
-  // ===============================
   // DOM
-  // ===============================
   const stageStrip = document.getElementById("stage-strip");
   const currentStageEl = document.getElementById("current-stage");
 
@@ -78,24 +66,18 @@
   const testClose = document.getElementById("test-close");
   const testSubmit = document.getElementById("test-submit");
 
-  // トースト（存在しない場合は何もしない）
   const toastEl = document.getElementById("toast");
 
-  // ===============================
   // State
-  // ===============================
-  let WORDS = [];              // words.json を読み込んだ配列（wordsだけ）
+  let WORDS = [];
   let stageId = loadStageId();
-  let activeWords = [];        // 現在ステージの単語
+  let activeWords = [];
   let index = 0;
 
-  // ミニテスト状態
-  let currentTest = null;      // {questions, currentQuestionIndex, correctCount, done}
+  let currentTest = null;
   let selectedChoice = null;
 
-  // ===============================
   // Helpers
-  // ===============================
   function todayKey() {
     const d = new Date();
     const y = d.getFullYear();
@@ -134,7 +116,6 @@
     const n = Number(localStorage.getItem(KEY_TOTAL) || "0");
     return Number.isFinite(n) ? n : 0;
   }
-
   function setTotalStamps(n) {
     localStorage.setItem(KEY_TOTAL, String(Math.max(0, n)));
   }
@@ -143,7 +124,6 @@
     const n = Number(localStorage.getItem(KEY_TODAY) || "0");
     return Number.isFinite(n) ? n : 0;
   }
-
   function setTodayStamps(n) {
     localStorage.setItem(KEY_TODAY, String(Math.max(0, n)));
   }
@@ -156,7 +136,6 @@
       return [];
     }
   }
-
   function setSeenIds(arr) {
     localStorage.setItem(KEY_SEEN, JSON.stringify(arr));
   }
@@ -164,7 +143,6 @@
   function isEligible() {
     return localStorage.getItem(KEY_ELIGIBLE) === "1";
   }
-
   function setEligible(v) {
     localStorage.setItem(KEY_ELIGIBLE, v ? "1" : "0");
   }
@@ -172,7 +150,6 @@
   function getAvailableBlockKey() {
     return localStorage.getItem(KEY_AVAILABLE_BLOCK);
   }
-
   function setAvailableBlockKey(v) {
     if (v == null) localStorage.removeItem(KEY_AVAILABLE_BLOCK);
     else localStorage.setItem(KEY_AVAILABLE_BLOCK, String(v));
@@ -189,7 +166,6 @@
     return "★".repeat(c) + "☆".repeat(max - c);
   }
 
-  // ====== 称号×Lv（簡易版）=====
   const TITLES = ["ひよこ", "見習い", "がんばりや", "たんけん家", "はかせ", "せんせい", "たつじん", "めいじん", "でんせつ", "えいごのたつじん"];
   const STAMPS_PER_LEVEL = 20;
 
@@ -199,7 +175,6 @@
     return { title, lv };
   }
 
-  // ====== Speech ======
   function speak(text) {
     if (!text) return;
     if (!("speechSynthesis" in window)) return;
@@ -213,21 +188,25 @@
     } catch {}
   }
 
-  // ====== Toast ======
   let toastTimer = null;
   function toast(msg) {
     if (!toastEl) return;
     toastEl.textContent = msg;
     toastEl.classList.add("show");
     if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => {
-      toastEl.classList.remove("show");
-    }, 1400);
+    toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1400);
   }
 
-  // ===============================
-  // UI Render
-  // ===============================
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  // UI
   function renderStageButtons() {
     stageStrip.innerHTML = "";
     STAGES.forEach(s => {
@@ -251,7 +230,7 @@
     currentStageEl.textContent = `ステージ｜${getStageName(stageId)}`;
   }
 
-  // ====== Flip（#flip-card / #flip-inner どちらにも対応）=====
+  // Flip（#flip-card / #flip-inner どちらのCSSにも対応）
   function setFlipped(flag) {
     flipCardBtn.classList.toggle("is-flipped", !!flag);
     flipInner.classList.toggle("is-flipped", !!flag);
@@ -317,32 +296,16 @@
     renderMiniTestUI();
   }
 
-  function escapeHtml(s) {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  // ===============================
   // Data selection
-  // ===============================
   function selectActiveWords() {
     const stage = STAGES.find(s => s.id === stageId);
-    if (!stage) {
-      activeWords = [];
-      return;
-    }
+    if (!stage) { activeWords = []; return; }
     activeWords = WORDS
       .filter(w => w && Number(w.id) >= stage.startId && Number(w.id) <= stage.endId)
       .sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
   }
 
-  // ===============================
   // 学習カウント（今日の10枚）
-  // ===============================
   function markSeenCurrent() {
     if (!activeWords.length) return;
 
@@ -360,30 +323,22 @@
       const stage = STAGES.find(s => s.id === stageId);
       if (stage) {
         const blockKey = Math.floor((Number(w.id) - stage.startId) / 30);
-        setAvailableBlockKey(blockKey reportedSafeInt(blockKey));
+        setAvailableBlockKey(String(blockKey)); // ★修正：ここが壊れていた
       }
       setEligible(true);
     }
   }
 
-  function reportedSafeInt(n) {
-    const x = Number(n);
-    if (!Number.isFinite(x)) return 0;
-    return Math.max(0, Math.floor(x));
-  }
-
-  // ===============================
-  // Flip
-  // ===============================
+  // Flip action
   function toggleFlipAndSpeak() {
     if (!activeWords.length) return;
 
     markSeenCurrent();
 
-    const nowFlipped = !(flipCardBtn.classList.contains("is-flipped") || flipInner.classList.contains("is-flipped"));
-    setFlipped(nowFlipped);
+    const flippedNow = !(flipCardBtn.classList.contains("is-flipped") || flipInner.classList.contains("is-flipped"));
+    setFlipped(flippedNow);
 
-    tapHintEl.textContent = nowFlipped ? "" : "タップしてカードをめくる";
+    tapHintEl.textContent = flippedNow ? "" : "タップしてカードをめくる";
 
     const w = activeWords[index];
     speak(w.english);
@@ -391,9 +346,7 @@
     renderMiniTestUI();
   }
 
-  // ===============================
   // Next/Prev
-  // ===============================
   function goNext() {
     if (!activeWords.length) return;
 
@@ -415,9 +368,9 @@
     clampIndex();
     renderCard();
   }
- 
+
  // ===============================
-  // Mini Test
+  // Mini Test（フリーズしない choices 生成）
   // ===============================
   function openTest() {
     if (!isEligible()) return;
@@ -428,18 +381,13 @@
     currentTest = createTestForBlock(blockKey);
     if (!currentTest) return;
 
-    // 権利消費
     setEligible(false);
     setSeenIds([]);
 
-    // 表示
     selectedChoice = null;
     testOverlay.classList.remove("hidden");
     renderMiniTestUI();
     renderTestQuestion();
-
-    // 最初の1問の英語を読んでも良い（好みで）
-    // speak(currentTest.questions?.[0]?.english);
   }
 
   function closeTest() {
@@ -449,35 +397,29 @@
     selectedChoice = null;
   }
 
-  // ★★★ フリーズ対策：無限ループしない choices 生成に刷新 ★★★
   function createTestForBlock(blockKey) {
     const stage = STAGES.find(s => s.id === stageId);
     if (!stage) return null;
 
-    // 現在ステージの全単語
     const stagePool = WORDS.filter(w => w.id >= stage.startId && w.id <= stage.endId);
 
-    // ブロック（30語ごと）を切り出し
     const blockIndex = Math.max(0, Number(blockKey) || 0);
     const start = stage.startId + blockIndex * 30;
     const end = Math.min(stage.endId, start + 29);
 
     const blockPool = WORDS.filter(w => w.id >= start && w.id <= end);
 
-    // 問題数：3問（不足時はあるだけ）
     const questionCount = Math.min(3, blockPool.length);
     const picked = pickUniqueRandom(blockPool, w => w.id, questionCount);
 
     const questions = picked.map(word => {
       const correct = (word.japanese || "").trim();
-
       const choices = buildChoicesSafe({
         correct,
         stagePool,
         allPool: WORDS,
         maxChoices: 4,
       });
-
       return {
         id: word.id,
         english: word.english,
@@ -491,7 +433,6 @@
       questions,
       currentQuestionIndex: 0,
       correctCount: 0,
-      done: false,
     };
   }
 
@@ -526,16 +467,14 @@
       return true;
     }
 
-    // 1) 正解
+    // 正解
     pushChoice(correct);
 
-    // 2) ステージ内から
+    // ステージ内 → 全体 の順に足す（無限ループしない）
     addFromPool(stagePool);
-
-    // 3) 全データから
     if (choices.length < maxChoices) addFromPool(allPool);
 
-    // 4) 足りない時の保険（※ここで止まらない）
+    // どうしても足りない場合の保険
     while (choices.length < maxChoices) {
       pushChoice("（まだないよ）");
     }
@@ -578,7 +517,6 @@
 
   function renderTestQuestion() {
     if (!currentTest) return;
-
     const q = currentTest.questions[currentTest.currentQuestionIndex];
     if (!q) return;
 
@@ -600,10 +538,7 @@
       input.type = "radio";
       input.name = "test-choice";
       input.value = opt;
-
-      input.addEventListener("change", () => {
-        selectedChoice = opt;
-      });
+      input.addEventListener("change", () => { selectedChoice = opt; });
 
       label.appendChild(input);
       label.appendChild(document.createTextNode(opt));
@@ -612,7 +547,6 @@
 
     testBody.appendChild(box);
 
-    // ボタン文言（最終問だけ「おわり」に）
     if (testSubmit) {
       const last = (currentTest.currentQuestionIndex === currentTest.questions.length - 1);
       testSubmit.textContent = last ? "おわり" : "つぎへ";
@@ -632,18 +566,17 @@
 
     const isCorrect = (selectedChoice === q.answer);
 
-    // ここはモーダル内で短く
+    // モーダル内短表示
     testBody.classList.add("flash");
     setTimeout(() => testBody.classList.remove("flash"), 180);
 
-    if (isCorrect) {
-      currentTest.correctCount += 1;
-      showInlineResult("せいかい！");
-    } else {
-      showInlineResult("ざんねん…");
-    }
+    const badge = document.createElement("div");
+    badge.className = "inline-result";
+    badge.textContent = isCorrect ? "せいかい！" : "ざんねん…";
+    testBody.appendChild(badge);
 
-    // 少し見せてから次へ
+    if (isCorrect) currentTest.correctCount += 1;
+
     setTimeout(() => {
       currentTest.currentQuestionIndex += 1;
       selectedChoice = null;
@@ -654,13 +587,6 @@
         renderTestQuestion();
       }
     }, 650);
-  }
-
-  function showInlineResult(textConsideredSafe) {
-    const badge = document.createElement("div");
-    badge.className = "inline-result";
-    badge.textContent = textConsideredSafe;
-    testBody.appendChild(badge);
   }
 
   function finishTest() {
@@ -685,31 +611,23 @@
     closeTest();
   }
 
-  // ===============================
   // Load JSON
-  // ===============================
   async function loadWords() {
     try {
       const res = await fetch(WORDS_URL, { cache: "no-cache" });
       if (!res.ok) throw new Error("words.json load failed");
       const data = await res.json();
 
-      // words.json が {words:[...]} or [...] の両対応
-      if (Array.isArray(data)) {
-        WORDS = data;
-      } else if (data && Array.isArray(data.words)) {
-        WORDS = data.words;
-      } else {
-        WORDS = [];
-      }
+      // {words:[...]} or [...] 両対応
+      if (Array.isArray(data)) WORDS = data;
+      else if (data && Array.isArray(data.words)) WORDS = data.words;
+      else WORDS = [];
     } catch {
       WORDS = [];
     }
   }
 
-  // ===============================
   // Init
-  // ===============================
   async function init() {
     ensureDayReset();
 
