@@ -197,8 +197,8 @@ button{
   box-shadow: 0 8px 18px rgba(20,40,80,.10);
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
-  transform: rotateY(0deg);
-  -webkit-transform: rotateY(0deg);
+transform: rotateY(0deg) translateZ(0);
+-webkit-transform: rotateY(0deg) translateZ(0);
   will-change: transform;
   transition: transform .5s cubic-bezier(.2,.9,.2,1);
   -webkit-transition: transform .5s cubic-bezier(.2,.9,.2,1);
@@ -208,11 +208,11 @@ button{
 .flip-inner.is-flipped{
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
-}
+.card.is-flipped .flip-inner{
 
-.flip-card.is-flipped .flip-inner{
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg) translateZ(0);
+
+  -webkit-transform: rotateY(180deg) translateZ(0);
 }
 
 .flip-face{
@@ -225,8 +225,8 @@ button{
   padding: 18px 16px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transform: rotateY(0deg);
-  -webkit-transform: rotateY(0deg);
+transform: rotateY(0deg) translateZ(0);
+-webkit-transform: rotateY(0deg) translateZ(0);
 }
 
 /* 表 */
