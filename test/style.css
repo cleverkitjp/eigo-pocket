@@ -256,6 +256,17 @@ button{
   visibility: visible;
 }
 
+/* 直接クラスで切り替えて backface が出ない端末でも確実に表示する */
+.flip-face.face-visible{
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.flip-face:not(.face-visible){
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
 .front-english{
   /* 小学生でも読みやすい “丸み寄り” のフォントスタック（外部フォントなし） */
   font-family: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Yu Gothic", sans-serif;
