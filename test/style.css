@@ -197,21 +197,17 @@ button{
   box-shadow: 0 8px 18px rgba(20,40,80,.10);
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
-transform: rotateY(0deg) translateZ(0);
--webkit-transform: rotateY(0deg) translateZ(0);
+  transform: rotateY(0deg) translateZ(0);
+  -webkit-transform: rotateY(0deg) translateZ(0);
   will-change: transform;
   transition: transform .5s cubic-bezier(.2,.9,.2,1);
   -webkit-transition: transform .5s cubic-bezier(.2,.9,.2,1);
   overflow: hidden; /* はみ出し対策 */
 }
 
-.flip-inner.is-flipped{
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-.card.is-flipped .flip-inner{
-
+.flip-inner.is-flipped,
+.flip-card.is-flipped .flip-inner{
   transform: rotateY(180deg) translateZ(0);
-
   -webkit-transform: rotateY(180deg) translateZ(0);
 }
 
@@ -225,8 +221,9 @@ transform: rotateY(0deg) translateZ(0);
   padding: 18px 16px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-transform: rotateY(0deg) translateZ(0);
--webkit-transform: rotateY(0deg) translateZ(0);
+  transform: rotateY(0deg) translateZ(0);
+  -webkit-transform: rotateY(0deg) translateZ(0);
+  transition: opacity .3s ease, visibility .3s ease;
 }
 
 /* 表 */
@@ -234,6 +231,8 @@ transform: rotateY(0deg) translateZ(0);
   transform: rotateY(0deg);
   -webkit-transform: rotateY(0deg);
   -webkit-backface-visibility: hidden;  /* ←追加 */
+  opacity: 1;
+  visibility: visible;
 }
 
 /* 裏 */
@@ -241,6 +240,20 @@ transform: rotateY(0deg) translateZ(0);
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   -webkit-backface-visibility: hidden;  /* ←この行を追加 */
+  opacity: 0;
+  visibility: hidden;
+}
+
+.flip-card.is-flipped .flip-front,
+.flip-inner.is-flipped .flip-front{
+  opacity: 0;
+  visibility: hidden;
+}
+
+.flip-card.is-flipped .flip-back,
+.flip-inner.is-flipped .flip-back{
+  opacity: 1;
+  visibility: visible;
 }
 
 .front-english{
