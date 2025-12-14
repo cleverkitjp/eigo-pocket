@@ -183,6 +183,10 @@ button{
   padding: 0;
   background: transparent;
   cursor: pointer;
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 }
 
 .flip-inner{
@@ -194,12 +198,17 @@ button{
   border: 1px solid var(--line);
   box-shadow: 0 8px 18px rgba(20,40,80,.10);
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
   transition: transform .5s cubic-bezier(.2,.9,.2,1);
+  -webkit-transition: transform .5s cubic-bezier(.2,.9,.2,1);
   overflow: hidden; /* はみ出し対策 */
 }
 
 .flip-inner.is-flipped{
   transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
 }
 
 .flip-face{
@@ -212,16 +221,21 @@ button{
   padding: 18px 16px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 }
 
 /* 表 */
-.flip-front{ 
+.flip-front{
+  transform: rotateY(0deg) translateZ(1px);
+  -webkit-transform: rotateY(0deg) translateZ(1px);
   -webkit-backface-visibility: hidden;  /* ←追加 */
 }
 
 /* 裏 */
 .flip-back{
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) translateZ(1px);
+  -webkit-transform: rotateY(180deg) translateZ(1px);
   -webkit-backface-visibility: hidden;  /* ←この行を追加 */
 }
 
