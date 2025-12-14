@@ -219,8 +219,10 @@ button{
   justify-content:center;
   align-items:center;
   padding: 18px 16px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  /* iOS Safari では backface-visibility: hidden が有効だと、裏面を180deg回転させても
+     描画自体が抑制されるケースがあるため、可視状態にして opacity/visibility で制御する */
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
   transform: rotateY(0deg) translateZ(0);
   -webkit-transform: rotateY(0deg) translateZ(0);
   transition: opacity .3s ease, visibility .3s ease;
@@ -239,7 +241,9 @@ button{
 .flip-back{
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
-  -webkit-backface-visibility: hidden;  /* ←この行を追加 */
+  /* 180deg 付与でカード本体の回転と合成し、裏面テキストを正面向きにする。 */
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
   opacity: 0;
   visibility: hidden;
 }
@@ -252,9 +256,9 @@ button{
 
 .flip-card.is-flipped .flip-back,
 .flip-inner.is-flipped .flip-back{
-  /* Safari などで裏面が真っ白になるのを防ぐため、回転を 0deg に戻して正面を向かせる */
-  transform: rotateY(0deg);
-  -webkit-transform: rotateY(0deg);
+  /* Safari などで裏面が真っ白になるのを防ぐため、全体の 180deg 回転と組み合わせて正面を向かせる */
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
   opacity: 1;
   visibility: visible;
 }
