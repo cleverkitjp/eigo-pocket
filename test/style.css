@@ -482,53 +482,118 @@ button{
   z-index: 2000;
 }
 
-#test-body{
-  width: min(640px, 96vw);
+.test-modal{
+  width: min(760px, 96vw);
+  max-height: min(86vh, 720px);
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 26px 60px rgba(0,0,0,.28);
+  overflow: hidden;
+  display:flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.test-head{
+  padding: 16px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 10px;
+  background: linear-gradient(180deg, #f6f8ff, #eef4ff);
+  border-bottom: 1px solid rgba(0,0,0,.04);
+}
+.test-title{
+  margin: 0;
+  font-size: 20px;
+  font-weight: 1000;
+  color: #143b78;
+}
+
+.test-body{
+  padding: 16px 18px 6px;
+  overflow-y: auto;
+  flex: 1 1 auto;
 }
 
 .qbox{
   background: #fff;
-  border-radius: 22px;
-  box-shadow: 0 18px 40px rgba(0,0,0,.26);
-  padding: 16px;
-  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 18px;
+  box-shadow: 0 14px 30px rgba(0,0,0,.14);
+  padding: 16px 14px 14px;
+  border: 1px solid rgba(0,0,0,.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .qtitle{
   font-weight: 1100;
   color: #173a70;
-  line-height: 1.25;
-  font-size: 22px; /* 問題文を大きめに */
-  margin-bottom: 10px;
+  line-height: 1.35;
+  font-size: 21px; /* 問題文を大きめに */
+  margin: 0;
 }
 
 /* options buttons inside modal */
 .opt{
   width: 100%;
   text-align: left;
-  border-radius: 16px;
-  padding: 14px 14px;
-  margin-top: 10px;
+  border-radius: 14px;
+  padding: 12px 12px;
   font-size: 18px;
   color: #1b2b3c;
-  border-color: #dbe6f3;
+  border: 1px solid #dbe6f3;
   background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(20,40,80,.10);
+}
+.opt input{
+  width: 18px;
+  height: 18px;
+  accent-color: var(--blue);
+  flex: 0 0 auto;
+}
+
+.test-foot{
+  padding: 12px 16px 16px;
+  border-top: 1px solid rgba(0,0,0,.04);
+  background: linear-gradient(180deg, #f9fbff, #f0f4ff);
+}
+
+#test-submit{
+  width: 100%;
+  border-radius: 16px;
+  padding: 14px 12px;
+  font-size: 18px;
+  font-weight: 1000;
+  color: #1b2b3c;
+  border: 1px solid rgba(0,0,0,.06);
+  background: linear-gradient(180deg, #ffd978, #ffc44f);
+  box-shadow: 0 12px 22px rgba(120,80,10,.15);
+}
+#test-submit:active{
+  transform: translateY(1px);
+  box-shadow: 0 6px 14px rgba(120,80,10,.18);
 }
 
 /* close button (if exists) */
 #test-close{
-  position: fixed;
-  top: 14px;
-  right: 14px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
   border-radius: 999px;
-  padding: 10px 12px;
+  padding: 8px 10px;
   border: 1px solid rgba(255,255,255,.4);
-  background: rgba(255,255,255,.85);
+  background: rgba(255,255,255,.92);
   font-weight: 1000;
-  box-shadow: 0 10px 24px rgba(0,0,0,.18);
+  box-shadow: 0 10px 24px rgba(0,0,0,.16);
 }
 #test-close:active{
-  transform: translateY(2px);
+  transform: translateY(1px);
   box-shadow: 0 6px 14px rgba(0,0,0,.18);
 }
 
