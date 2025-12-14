@@ -41,6 +41,9 @@
 
   const flipCardBtn = document.getElementById("flip-card");
   const flipInner = document.getElementById("flip-inner");
+  // カード以外に同名クラスが出ても確実に対象を取れるようにスコープを限定する
+  const frontFace = document.querySelector("#flip-card .flip-front");
+  const backFace = document.querySelector("#flip-card .flip-back");
 
   const frontEnglish = document.getElementById("front-english");
   const frontKana = document.getElementById("front-kana");
@@ -231,9 +234,16 @@
   }
 
   // Flip（#flip-card / #flip-inner どちらのCSSにも対応）
+  let isFlipped = false;
+
   function setFlipped(flag) {
-    flipCardBtn.classList.toggle("is-flipped", !!flag);
-    flipInner.classList.toggle("is-flipped", !!flag);
+    isFlipped = !!flag;
+    flipCardBtn.classList.toggle("is-flipped", isFlipped);
+    flipInner.classList.toggle("is-flipped", isFlipped);
+
+    // Android Chrome での backface レンダリング抜け対策
+    frontFace?.classList.toggle("face-visible", !isFlipped);
+    backFace?.classList.toggle("face-visible", isFlipped);
   }
 
   function resetFlipToFront() {
@@ -335,10 +345,9 @@
 
     markSeenCurrent();
 
-    const flippedNow = !(flipCardBtn.classList.contains("is-flipped") || flipInner.classList.contains("is-flipped"));
-    setFlipped(flippedNow);
+    setFlipped(!isFlipped);
 
-    tapHintEl.textContent = flippedNow ? "" : "タップしてカードをめくる";
+    tapHintEl.textContent = isFlipped ? "" : "タップしてカードをめくる";
 
     const w = activeWords[index];
     speak(w.english);

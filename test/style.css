@@ -241,6 +241,7 @@ button{
 .flip-back{
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
+　codex/fix-mirror-text-on-word-card-back-fakebl
   /* 180deg 付与でカード本体の回転と合成し、裏面テキストを正面向きにする。 */
   backface-visibility: visible;
   -webkit-backface-visibility: visible;
@@ -261,6 +262,17 @@ button{
   -webkit-transform: rotateY(180deg);
   opacity: 1;
   visibility: visible;
+}
+
+/* 直接クラスで切り替えて backface が出ない端末でも確実に表示する */
+.flip-face.face-visible{
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.flip-face:not(.face-visible){
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 .front-english{
