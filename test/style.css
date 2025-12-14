@@ -215,11 +215,14 @@ button{
 }
 
 /* 表 */
-.flip-front{ }
+.flip-front{ 
+  -webkit-backface-visibility: hidden;  /* ←追加 */
+}
 
 /* 裏 */
 .flip-back{
   transform: rotateY(180deg);
+  -webkit-backface-visibility: hidden;  /* ←この行を追加 */
 }
 
 .front-english{
