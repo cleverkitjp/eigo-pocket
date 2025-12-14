@@ -252,9 +252,9 @@ button{
 
 .flip-card.is-flipped .flip-back,
 .flip-inner.is-flipped .flip-back{
-  /* Safari などで裏面が真っ白になるのを防ぐため、回転を 0deg に戻して正面を向かせる */
-  transform: rotateY(0deg);
-  -webkit-transform: rotateY(0deg);
+  /* Safari などで裏面が真っ白になるのを防ぐため、全体の 180deg 回転と組み合わせて正面を向かせる */
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
   opacity: 1;
   visibility: visible;
 }
