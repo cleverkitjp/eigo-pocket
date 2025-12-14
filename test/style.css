@@ -332,6 +332,12 @@ button{
   backdrop-filter: blur(6px);
 }
 
+#mini-test-area .mini-test-msg{
+  margin: 0 0 10px;
+  font-weight: 900;
+  color: #30445c;
+}
+
 #remaining-to-test{
   font-weight: 1000;
   color:#1c4f9a;
@@ -352,9 +358,83 @@ button{
   box-shadow: 0 6px 14px rgba(120,80,10,.18);
 }
 
+#mini-test-area .mini-test-btn{
+  margin-top: 6px;
+}
+
 /* ===== Stamp card (existing IDs) ===== */
 #today-stamps, #total-stamps, #rank-title, #rank-level{
   font-weight: 1000;
+}
+
+.stamp-card{
+  margin-top: 18px;
+  display: grid;
+  gap: 12px;
+}
+
+.stamp-box{
+  background: rgba(255,255,255,.9);
+  border: 1px solid rgba(255,255,255,.65);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(4px);
+}
+
+.stamp-title{
+  margin: 0 0 8px;
+  font-weight: 900;
+  color: #30445c;
+}
+
+.stamp-stars{
+  font-size: 22px;
+  letter-spacing: 4px;
+}
+
+.stamp-total-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stamp-total-num{
+  font-size: 26px;
+  font-weight: 1000;
+  color: #1c4f9a;
+}
+
+.stamp-unit{
+  margin-left: 4px;
+  font-size: 16px;
+  color: #30445c;
+}
+
+.stamp-badges{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f5f8ff, #e5ecff);
+  color: #1f4fa0;
+  font-weight: 900;
+  border: 1px solid rgba(36,86,180,.16);
+}
+
+.badge-level{
+  background: linear-gradient(180deg, #ffe6c2, #ffc36b);
+  color: #6a3a00;
+  border-color: rgba(160,90,0,.22);
 }
 
 /* ===== Overlay / quiz ===== */
