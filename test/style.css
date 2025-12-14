@@ -239,7 +239,10 @@ button{
 .flip-back{
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
-  -webkit-backface-visibility: hidden;  /* ←この行を追加 */
+  /* 180deg 付与でカード本体の回転と合成し、裏面テキストを正面向きにする。
+     iOS Safari でも文字が消えないよう、通常どおり背面は非表示に保つ。 */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   opacity: 0;
   visibility: hidden;
 }
