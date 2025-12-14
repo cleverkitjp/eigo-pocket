@@ -110,10 +110,17 @@
   <!-- ミニテスト画面 -->
   <div id="test-overlay" class="test-overlay hidden">
     <div class="test-dialog">
+      <div id="test-feedback" class="test-feedback is-hidden">
+        <div id="test-feedback-text" class="test-feedback-text">せいかい！</div>
+        <div id="test-feedback-detail" class="test-feedback-detail"></div>
+      </div>
       <div id="test-question-header" class="test-header">Q1 / 3</div>
       <div id="test-question-text" class="test-question">"apple" の いみは どれ？</div>
       <div id="test-choices" class="test-choices"></div>
       <div class="test-footer">
+        <button id="test-next-button" type="button" class="primary-button is-hidden">
+          つぎへ
+        </button>
         <button id="test-cancel-button" type="button" class="secondary-button">
           カードにもどる
         </button>
@@ -126,6 +133,7 @@
     <div class="test-dialog">
       <div id="result-title" class="result-title">テストけっか</div>
       <div id="result-message" class="result-message">3問中 3問 せいかい！</div>
+      <div id="result-stamp-get" class="result-stamp-get is-hidden">スタンプをGet！</div>
       <div id="result-stamp-info" class="result-stamp-info">
         スタンプ：★☆☆ → ★★☆
       </div>

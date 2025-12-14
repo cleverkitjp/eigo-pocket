@@ -282,10 +282,36 @@ body {
   padding: 18px 16px 14px;
 }
 
+.is-hidden {
+  display: none !important;
+}
+
 .test-header {
   font-size: 13px;
   color: var(--text-sub);
   margin-bottom: 4px;
+}
+
+.test-feedback {
+  margin-bottom: 8px;
+  text-align: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #ffb7ce, #ffd6e6);
+  color: #7a0d33;
+  box-shadow: 0 4px 10px rgba(255, 126, 168, 0.2);
+}
+
+.test-feedback-text {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.test-feedback-detail {
+  font-size: 12px;
+  margin-top: 4px;
+  color: #7a0d33;
 }
 
 .test-question {
@@ -309,6 +335,21 @@ body {
   background: #fafafa;
   text-align: left;
   font-size: 14px;
+}
+
+.choice-button.selected-choice {
+  border-color: #ff9abb;
+  background: #fff1f6;
+}
+
+.choice-button.correct-choice {
+  border-color: #4caf50;
+  background: #e9f7ec;
+  font-weight: 700;
+}
+
+.choice-button.wrong-choice {
+  opacity: 0.6;
 }
 
 .test-footer {
@@ -346,6 +387,13 @@ body {
 .result-message {
   font-size: 14px;
   margin-bottom: 8px;
+}
+
+.result-stamp-get {
+  font-size: 16px;
+  font-weight: 700;
+  color: #d95a00;
+  margin-bottom: 6px;
 }
 
 .result-stamp-info {
