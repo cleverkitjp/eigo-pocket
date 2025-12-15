@@ -13,7 +13,7 @@
   const MAX_STAMPS_PER_DAY = 10;
 
   // この版は startId/endId のステージ定義（あなたの「動いていた版」に合わせる）
-  const STAGES = [
+  let STAGES = [
     { id: 1, name: "ことばの入り口", startId: 1, endId: 40 },
     { id: 2, name: "ひらめきの小道", startId: 41, endId: 80 },
     { id: 3, name: "アルファベットの丘", startId: 81, endId: 120 },
@@ -70,8 +70,26 @@
   const testSubmit = document.getElementById("test-submit");
 
   const toastEl = document.getElementById("toast");
+  const toastMessageEl = document.getElementById("toast-message");
+  const toastCloseBtn = document.getElementById("toast-close");
 
-  const RESULT_AUTO_ADVANCE_MS = 1400;
+  // Data helpers
+  function getStageWords(id) {
+    const sid = Number(id);
+    if (!Number.isFinite(sid)) return [];
+
+    let pool = WORDS.filter(w => Number(w?.stageId) === sid);
+
+    // Fallback: ID 範囲指定があれば利用する
+    if (!pool.length) {
+      const stage = STAGES.find(s => s.id === sid);
+      if (stage && stage.startId != null && stage.endId != null) {
+        pool = WORDS.filter(w => Number(w.id) >= stage.startId && Number(w.id) <= stage.endId);
+      }
+    }
+
+    return pool.sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+  }
 
   // State
   let WORDS = [];
@@ -79,15 +97,18 @@
   let activeWords = [];
   let index = 0;
 
+  let wasEligible = false;
+
   let currentTest = null;
   let selectedChoice = null;
   let answerRevealed = false;
-  let resultTimer = null;
   let optionNodes = [];
   let resultBannerEl = null;
   let answerSummaryEl = null;
   let yourAnswerEl = null;
   let correctAnswerEl = null;
+  let nextCooldownTimer = null;
+  let nextCoolingDown = false;
 
   // Helpers
   function todayKey() {
@@ -173,9 +194,19 @@
     if (index >= activeWords.length) index = 0;
   }
 
-  function starRow(count, max) {
+  function renderStarRow(el, count, max) {
+    if (!el) return;
     const c = Math.max(0, Math.min(max, count));
-    return "★".repeat(c) + "☆".repeat(max - c);
+    el.innerHTML = "";
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < max; i += 1) {
+      const span = document.createElement("span");
+      const filled = i < c;
+      span.className = `stamp-star ${filled ? "filled" : "empty"}`;
+      span.textContent = filled ? "⭐️" : "☆";
+      frag.appendChild(span);
+    }
+    el.appendChild(frag);
   }
 
   const TITLES = ["ひよこ", "見習い", "がんばりや", "たんけん家", "はかせ", "せんせい", "たつじん", "めいじん", "でんせつ", "えいごのたつじん"];
@@ -201,12 +232,22 @@
   }
 
   let toastTimer = null;
-  function toast(msg) {
-    if (!toastEl) return;
-    toastEl.textContent = msg;
+  function hideToast() {
+    if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
+    toastEl?.classList.remove("show");
+  }
+
+  function toast(msg, { autoHide = true, duration = 1400, showClose = false } = {}) {
+    if (!toastEl || !toastMessageEl) return;
+
+    toastMessageEl.textContent = msg;
+    toastEl.classList.toggle("hide-close", !showClose);
     toastEl.classList.add("show");
+
     if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1400);
+    if (autoHide && duration > 0) {
+      toastTimer = setTimeout(() => hideToast(), duration);
+    }
   }
 
   function escapeHtml(s) {
@@ -239,7 +280,7 @@
   }
 
   function renderCurrentStage() {
-    currentStageEl.textContent = `ステージ｜${getStageName(stageId)}`;
+    currentStageEl.textContent = `ステージ${stageId}｜${getStageName(stageId)}`;
   }
 
   // Flip（#flip-card / #flip-inner どちらのCSSにも対応）
@@ -284,7 +325,7 @@
 
   function renderStamps() {
     const today = getTodayStamps();
-    todayStampsEl.textContent = starRow(today, 10);
+    renderStarRow(todayStampsEl, today, 10);
 
     const total = getTotalStamps();
     totalStampsEl.textContent = String(total);
@@ -294,14 +335,24 @@
     rankLevelEl.textContent = `Lv.${r.lv}`;
   }
 
+  function scrollToMiniTest() {
+    if (!miniTestArea) return;
+    miniTestArea.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
   function renderMiniTestUI() {
     const seen = getSeenIds();
     const seenCount = Math.min(10, seen.length);
     const remaining = Math.max(0, 10 - seenCount);
 
-    if (isEligible()) {
+    const eligible = isEligible();
+    const justUnlocked = eligible && !wasEligible;
+    wasEligible = eligible;
+
+    if (eligible) {
       remainingEl.textContent = "ミニテストできるよ！";
       miniTestArea.classList.remove("hidden");
+      if (justUnlocked) scrollToMiniTest();
     } else {
       remainingEl.textContent = `あと${remaining}まいおぼえたらミニテストだよ`;
       miniTestArea.classList.add("hidden");
@@ -317,11 +368,7 @@
 
   // Data selection
   function selectActiveWords() {
-    const stage = STAGES.find(s => s.id === stageId);
-    if (!stage) { activeWords = []; return; }
-    activeWords = WORDS
-      .filter(w => w && Number(w.id) >= stage.startId && Number(w.id) <= stage.endId)
-      .sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+    activeWords = getStageWords(stageId);
   }
 
   // 学習カウント（今日の10枚）
@@ -339,11 +386,8 @@
 
     if (seen.length >= 10 && !isEligible()) {
       // ブロックキー（30語区切り）を保存してミニテスト対象にする
-      const stage = STAGES.find(s => s.id === stageId);
-      if (stage) {
-        const blockKey = Math.floor((Number(w.id) - stage.startId) / 30);
-        setAvailableBlockKey(String(blockKey)); // ★修正：ここが壊れていた
-      }
+      const blockKey = Math.floor(index / 30);
+      setAvailableBlockKey(String(blockKey));
       setEligible(true);
     }
   }
@@ -365,8 +409,24 @@
   }
 
   // Next/Prev
+  function startNextCooldown() {
+    if (!nextBtn) return;
+    nextCoolingDown = true;
+    nextBtn.disabled = true;
+    nextBtn.classList.add("is-cooling");
+    if (nextCooldownTimer) clearTimeout(nextCooldownTimer);
+    nextCooldownTimer = setTimeout(() => {
+      nextCoolingDown = false;
+      nextBtn.disabled = false;
+      nextBtn.classList.remove("is-cooling");
+    }, 1300);
+  }
+
   function goNext() {
+    if (nextCoolingDown) return;
     if (!activeWords.length) return;
+
+    startNextCooldown();
 
     markSeenCurrent();
 
@@ -385,6 +445,9 @@
     index -= 1;
     clampIndex();
     renderCard();
+
+    const w = activeWords[index];
+    speak(w.english);
   }
 
  // ===============================
@@ -419,20 +482,20 @@
     answerSummaryEl = null;
     yourAnswerEl = null;
     correctAnswerEl = null;
-    if (resultTimer) { clearTimeout(resultTimer); resultTimer = null; }
   }
 
   function createTestForBlock(blockKey) {
     const stage = STAGES.find(s => s.id === stageId);
     if (!stage) return null;
 
-    const stagePool = WORDS.filter(w => w.id >= stage.startId && w.id <= stage.endId);
+    const stagePool = getStageWords(stageId);
+    if (!stagePool.length) return null;
 
     const blockIndex = Math.max(0, Number(blockKey) || 0);
-    const start = stage.startId + blockIndex * 30;
-    const end = Math.min(stage.endId, start + 29);
+    const start = blockIndex * 30;
 
-    const blockPool = WORDS.filter(w => w.id >= start && w.id <= end);
+    const blockPool = stagePool.slice(start, start + 30);
+    if (!blockPool.length) return null;
 
     const questionCount = Math.min(3, blockPool.length);
     const picked = pickUniqueRandom(blockPool, w => w.id, questionCount);
@@ -670,22 +733,13 @@
     if (testSubmit) {
       const last = (currentTest.currentQuestionIndex === currentTest.questions.length - 1);
       testSubmit.textContent = last ? "おわり" : "つぎへ";
-      testSubmit.disabled = isCorrect;
-    }
-
-    if (isCorrect) {
-      resultTimer = setTimeout(() => {
-        testSubmit.disabled = false;
-        goToNextQuestion();
-      }, RESULT_AUTO_ADVANCE_MS);
+      testSubmit.disabled = false;
     }
   }
 
   function goToNextQuestion() {
     if (!currentTest) return;
     if (!answerRevealed) return;
-
-    if (resultTimer) { clearTimeout(resultTimer); resultTimer = null; }
 
     currentTest.currentQuestionIndex += 1;
     selectedChoice = null;
@@ -707,12 +761,12 @@
       if (today < MAX_STAMPS_PER_DAY) {
         setTodayStamps(today + 1);
         setTotalStamps(getTotalStamps() + 1);
-        toast("スタンプをGet！");
+        toast("スタンプをGet！", { duration: 2000, autoHide: true, showClose: false });
       } else {
-        toast("きょうは もう10こ いっぱいだよ");
+        toast("きょうは もう10こ いっぱいだよ", { autoHide: false, showClose: true });
       }
     } else {
-      toast(`${currentTest.correctCount}/3 せいかい`);
+      toast(`${currentTest.correctCount}/3 せいかい`, { autoHide: false, showClose: true });
     }
 
     renderStamps();
@@ -726,7 +780,6 @@
     answerSummaryEl = null;
     yourAnswerEl = null;
     correctAnswerEl = null;
-    if (resultTimer) { clearTimeout(resultTimer); resultTimer = null; }
   }
 
   // Load JSON
@@ -740,6 +793,21 @@
       if (Array.isArray(data)) WORDS = data;
       else if (data && Array.isArray(data.words)) WORDS = data.words;
       else WORDS = [];
+
+      if (data && Array.isArray(data.stages)) {
+        const parsedStages = data.stages
+          .map(s => ({
+            id: Number(s.id),
+            name: s.name || `ステージ${s.id}`,
+            startId: s.startId,
+            endId: s.endId,
+          }))
+          .filter(s => Number.isFinite(s.id));
+        if (parsedStages.length) {
+          parsedStages.sort((a, b) => a.id - b.id);
+          STAGES = parsedStages;
+        }
+      }
     } catch {
       WORDS = [];
     }
@@ -750,6 +818,7 @@
     ensureDayReset();
 
     await loadWords();
+    wasEligible = isEligible();
     selectActiveWords();
     renderStageButtons();
     renderAll();
@@ -764,6 +833,9 @@
       if (ev.target === testOverlay) closeTest();
     });
     testSubmit?.addEventListener("click", submitOrNext);
+    toastCloseBtn?.addEventListener("click", hideToast);
+
+    toastEl?.classList.add("hide-close");
   }
 
   init();

@@ -14,8 +14,10 @@
       <h1 class="app-title">えいごポケット</h1>
       <p class="app-subtitle">カードをめくって、スタンプを集めよう。</p>
 
+      <div class="title-divider" aria-hidden="true"></div>
+
       <div class="stage-area">
-        <div class="stage-label">ステージ</div>
+        <div class="stage-label">すきなステージをえらんでね</div>
         <div id="stage-strip" class="stage-strip" aria-label="ステージをえらぶ"></div>
       </div>
     </header>
@@ -109,6 +111,12 @@
         <button id="test-submit" class="test-submit" type="button">答え合わせ</button>
       </div>
     </div>
+  </div>
+
+  <!-- トースト -->
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <span id="toast-message" class="toast-message"></span>
+    <button id="toast-close" class="toast-close" type="button">とじる</button>
   </div>
 
   <script src="app.js?v=5"></script>
