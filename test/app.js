@@ -71,6 +71,8 @@
 
   const toastEl = document.getElementById("toast");
 
+  const RESULT_AUTO_ADVANCE_MS = 1400;
+
   // State
   let WORDS = [];
   let stageId = loadStageId();
@@ -79,6 +81,13 @@
 
   let currentTest = null;
   let selectedChoice = null;
+  let answerRevealed = false;
+  let resultTimer = null;
+  let optionNodes = [];
+  let resultBannerEl = null;
+  let answerSummaryEl = null;
+  let yourAnswerEl = null;
+  let correctAnswerEl = null;
 
   // Helpers
   function todayKey() {
@@ -404,6 +413,13 @@
     testBody.innerHTML = "";
     currentTest = null;
     selectedChoice = null;
+    answerRevealed = false;
+    optionNodes = [];
+    resultBannerEl = null;
+    answerSummaryEl = null;
+    yourAnswerEl = null;
+    correctAnswerEl = null;
+    if (resultTimer) { clearTimeout(resultTimer); resultTimer = null; }
   }
 
   function createTestForBlock(blockKey) {
@@ -526,10 +542,17 @@
 
   function renderTestQuestion() {
     if (!currentTest) return;
+
+    resetResultIndicators();
+
     const q = currentTest.questions[currentTest.currentQuestionIndex];
     if (!q) return;
 
     testBody.innerHTML = "";
+
+    resultBannerEl = document.createElement("div");
+    resultBannerEl.className = "test-result hidden";
+    testBody.appendChild(resultBannerEl);
 
     const box = document.createElement("div");
     box.className = "qbox";
@@ -542,6 +565,7 @@
     q.choices.forEach((opt) => {
       const label = document.createElement("label");
       label.className = "opt";
+      label.dataset.choice = opt;
 
       const input = document.createElement("input");
       input.type = "radio";
@@ -552,13 +576,43 @@
       label.appendChild(input);
       label.appendChild(document.createTextNode(opt));
       box.appendChild(label);
+
+      optionNodes.push({ label, input, choice: opt });
     });
+
+    const summary = document.createElement("div");
+    summary.className = "answer-summary hidden";
+
+    const yourRow = document.createElement("div");
+    yourRow.className = "summary-row";
+    const yourLabel = document.createElement("span");
+    yourLabel.className = "summary-label";
+    yourLabel.textContent = "あなた：";
+    yourAnswerEl = document.createElement("span");
+    yourAnswerEl.className = "answer-pill";
+    yourRow.appendChild(yourLabel);
+    yourRow.appendChild(yourAnswerEl);
+
+    const correctRow = document.createElement("div");
+    correctRow.className = "summary-row";
+    const correctLabel = document.createElement("span");
+    correctLabel.className = "summary-label";
+    correctLabel.textContent = "せいかい：";
+    correctAnswerEl = document.createElement("span");
+    correctAnswerEl.className = "answer-pill answer-pill-correct";
+    correctRow.appendChild(correctLabel);
+    correctRow.appendChild(correctAnswerEl);
+
+    summary.appendChild(yourRow);
+    summary.appendChild(correctRow);
+    answerSummaryEl = summary;
+    box.appendChild(summary);
 
     testBody.appendChild(box);
 
     if (testSubmit) {
-      const last = (currentTest.currentQuestionIndex === currentTest.questions.length - 1);
-      testSubmit.textContent = last ? "おわり" : "つぎへ";
+      testSubmit.textContent = "こたえ合わせ";
+      testSubmit.disabled = false;
     }
   }
 
@@ -568,34 +622,79 @@
     const q = currentTest.questions[currentTest.currentQuestionIndex];
     if (!q) return;
 
+    if (answerRevealed) {
+      goToNextQuestion();
+      return;
+    }
+
     if (!selectedChoice) {
       toast("えらんでね");
       return;
     }
 
     const isCorrect = (selectedChoice === q.answer);
+    answerRevealed = true;
 
     // モーダル内短表示
     testBody.classList.add("flash");
     setTimeout(() => testBody.classList.remove("flash"), 180);
 
-    const badge = document.createElement("div");
-    badge.className = "inline-result";
-    badge.textContent = isCorrect ? "せいかい！" : "ざんねん…";
-    testBody.appendChild(badge);
-
     if (isCorrect) currentTest.correctCount += 1;
 
-    setTimeout(() => {
-      currentTest.currentQuestionIndex += 1;
-      selectedChoice = null;
+    revealAnswer(q, isCorrect);
+  }
 
-      if (currentTest.currentQuestionIndex >= currentTest.questions.length) {
-        finishTest();
-      } else {
-        renderTestQuestion();
-      }
-    }, 650);
+  function revealAnswer(q, isCorrect) {
+    if (resultBannerEl) {
+      resultBannerEl.textContent = isCorrect ? "せいかい！" : "ざんねん…";
+      resultBannerEl.classList.toggle("correct", isCorrect);
+      resultBannerEl.classList.toggle("incorrect", !isCorrect);
+      resultBannerEl.classList.remove("hidden");
+    }
+
+    optionNodes.forEach(({ label, input, choice }) => {
+      input.disabled = true;
+      const isAnswer = choice === q.answer;
+      const isSelected = choice === selectedChoice;
+      label.classList.toggle("is-correct", isAnswer);
+      label.classList.toggle("is-selected", isSelected);
+      label.classList.toggle("is-incorrect", isSelected && !isAnswer);
+    });
+
+    if (answerSummaryEl && yourAnswerEl && correctAnswerEl) {
+      yourAnswerEl.textContent = selectedChoice;
+      correctAnswerEl.textContent = q.answer;
+      answerSummaryEl.classList.remove("hidden");
+    }
+
+    if (testSubmit) {
+      const last = (currentTest.currentQuestionIndex === currentTest.questions.length - 1);
+      testSubmit.textContent = last ? "おわり" : "つぎへ";
+      testSubmit.disabled = isCorrect;
+    }
+
+    if (isCorrect) {
+      resultTimer = setTimeout(() => {
+        testSubmit.disabled = false;
+        goToNextQuestion();
+      }, RESULT_AUTO_ADVANCE_MS);
+    }
+  }
+
+  function goToNextQuestion() {
+    if (!currentTest) return;
+    if (!answerRevealed) return;
+
+    if (resultTimer) { clearTimeout(resultTimer); resultTimer = null; }
+
+    currentTest.currentQuestionIndex += 1;
+    selectedChoice = null;
+
+    if (currentTest.currentQuestionIndex >= currentTest.questions.length) {
+      finishTest();
+    } else {
+      renderTestQuestion();
+    }
   }
 
   function finishTest() {
@@ -608,7 +707,7 @@
       if (today < MAX_STAMPS_PER_DAY) {
         setTodayStamps(today + 1);
         setTotalStamps(getTotalStamps() + 1);
-        toast("スタンプ ゲット！");
+        toast("スタンプをGet！");
       } else {
         toast("きょうは もう10こ いっぱいだよ");
       }
@@ -618,6 +717,16 @@
 
     renderStamps();
     closeTest();
+  }
+
+  function resetResultIndicators() {
+    answerRevealed = false;
+    optionNodes = [];
+    resultBannerEl = null;
+    answerSummaryEl = null;
+    yourAnswerEl = null;
+    correctAnswerEl = null;
+    if (resultTimer) { clearTimeout(resultTimer); resultTimer = null; }
   }
 
   // Load JSON
