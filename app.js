@@ -250,12 +250,16 @@ let currentIndex = 0;
 let totalViewedCount = 0;
 let cardsNeededForTest = 10;
 let testAvailableBlockKey = null;
+let testAvailableBlockWords = [];
+let recentViewedWords = [];
 let isCooldown = false;
+let bonusTestOffer = null;
 
 let isInTest = false;
 let currentTest = null;
 let isAnsweringQuestion = false;
 let pendingNextAction = null;
+let lastCorrectWord = null;
 
 const STORAGE_KEY = "eigo-pocket-progress";
 const MAX_STAMPS_PER_DAY = 3;
@@ -265,6 +269,9 @@ let progress = {
   todayStamps: 0,
   totalStamps: 0,
   clearedBlocks: [],
+  stageStates: {},
+  bonusSerial: 0,
+  lastStageId: 1,
 };
 // ---------- DOM 取得 ----------
 
@@ -294,6 +301,9 @@ const testQuestionText = document.getElementById("test-question-text");
 const testChoicesEl = document.getElementById("test-choices");
 const testNextButton = document.getElementById("test-next-button");
 const testCancelButton = document.getElementById("test-cancel-button");
+const testFeedbackSpeakButton = document.getElementById(
+  "test-feedback-speak"
+);
 
 const resultOverlay = document.getElementById("result-overlay");
 const resultTitleEl = document.getElementById("result-title");
@@ -302,6 +312,10 @@ const resultStampGetEl = document.getElementById("result-stamp-get");
 const resultStampInfoEl = document.getElementById("result-stamp-info");
 const retryTestButton = document.getElementById("retry-test-button");
 const closeResultButton = document.getElementById("close-result-button");
+
+const bonusOverlay = document.getElementById("bonus-overlay");
+const bonusStartButton = document.getElementById("bonus-start-button");
+const bonusSkipButton = document.getElementById("bonus-skip-button");
 
 const stageButtons = document.querySelectorAll(".stage-button");
 
@@ -319,6 +333,9 @@ function loadProgress() {
     progress.todayStamps = 0;
     progress.totalStamps = 0;
     progress.clearedBlocks = [];
+    progress.stageStates = {};
+    progress.bonusSerial = 0;
+    progress.lastStageId = 1;
     return;
   }
   try {
@@ -326,6 +343,13 @@ function loadProgress() {
     const today = getTodayString();
     const cleared = Array.isArray(data.clearedBlocks) ? data.clearedBlocks : [];
     progress.clearedBlocks = cleared.map((x) => String(x));
+    progress.stageStates = typeof data.stageStates === "object" ? data.stageStates : {};
+    progress.bonusSerial = Number.isInteger(data.bonusSerial)
+      ? data.bonusSerial
+      : 0;
+    progress.lastStageId = Number.isInteger(data.lastStageId)
+      ? data.lastStageId
+      : 1;
     if (data.date !== today) {
       progress.date = today;
       progress.todayStamps = 0;
@@ -344,6 +368,7 @@ function loadProgress() {
 }
 
 function saveProgress() {
+  progress.lastStageId = currentStageId;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 }
 
@@ -372,30 +397,107 @@ function getCurrentStageDef() {
   return STAGES.find((s) => s.id === currentStageId) || STAGES[0];
 }
 
-function updateActiveWords() {
-  const stage = getCurrentStageDef();
-  activeWords = WORDS.filter(
-    (w) => w.id >= stage.startId && w.id <= stage.endId
-  );
+function getStageIdForWord(word) {
+  const stage = STAGES.find((s) => word.id >= s.startId && word.id <= s.endId);
+  return stage ? stage.id : null;
+}
 
-  // フィッシャー–イェーツでランダム並び
-  for (let i = activeWords.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [activeWords[i], activeWords[j]] = [activeWords[j], activeWords[i]];
+function getStageState(stageId) {
+  if (!progress.stageStates) progress.stageStates = {};
+  if (!progress.stageStates[stageId]) {
+    progress.stageStates[stageId] = createStageState(stageId);
   }
+  const state = progress.stageStates[stageId];
+  if (state.cycleCompleted === undefined) state.cycleCompleted = false;
+  if (state.completedCycles === undefined) state.completedCycles = 0;
+  return state;
+}
+
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function createStageState(stageId) {
+  const stage = STAGES.find((s) => s.id === stageId);
+  const wordIds = stage
+    ? WORDS.filter((w) => w.id >= stage.startId && w.id <= stage.endId).map(
+        (w) => w.id
+      )
+    : [];
+
+  const shuffled = shuffleArray(wordIds);
+
+  return {
+    order: shuffled,
+    currentIndex: 0,
+    completedCycles: 0,
+    cycleCompleted: false,
+    lastBonusBlockKey: null,
+  };
+}
+
+function getStageWords(stageId) {
+  const stage = STAGES.find((s) => s.id === stageId);
+  if (!stage) return [];
+
+  return WORDS.filter((w) => w.id >= stage.startId && w.id <= stage.endId);
+}
+
+function applyStageState(stageId) {
+  const stageState = getStageState(stageId);
+  if (!Array.isArray(stageState.order) || stageState.order.length === 0) {
+    progress.stageStates[stageId] = createStageState(stageId);
+  }
+
+  const ids = getStageState(stageId).order;
+  activeWords = ids
+    .map((id) => WORDS.find((w) => w.id === id))
+    .filter(Boolean);
+
+  if (activeWords.length === 0) {
+    currentIndex = 0;
+    return;
+  }
+
+  const savedIndex = getStageState(stageId).currentIndex || 0;
+  currentIndex = Math.min(Math.max(savedIndex, 0), activeWords.length - 1);
+}
+
+function persistStageState() {
+  const stageState = getStageState(currentStageId);
+  stageState.currentIndex = currentIndex;
+  saveProgress();
 }
 
 function resetStageState() {
-  updateActiveWords();
-  currentIndex = 0;
+  applyStageState(currentStageId);
   totalViewedCount = 0;
   cardsNeededForTest = 10;
   testAvailableBlockKey = null;
+  testAvailableBlockWords = [];
+  recentViewedWords = [];
   isCooldown = false;
+  bonusTestOffer = null;
+  const stageState = getStageState(currentStageId);
+
+  if (activeWords.length > 0) {
+    totalViewedCount = 1;
+    recentViewedWords.push(activeWords[currentIndex]);
+    updateTestAvailability();
+    if (currentIndex === 0) stageState.cycleCompleted = false;
+  }
+
+  saveProgress();
 }
 
 function setActiveStage(stageId) {
   if (stageId === currentStageId) return;
+  persistStageState();
   currentStageId = stageId;
 
   stageButtons.forEach((btn) => {
@@ -452,13 +554,35 @@ function updateTestInfo() {
   }
 }
 
+function updateTestAvailability() {
+  const remainder = totalViewedCount % 10;
+
+  if (totalViewedCount > 0 && remainder === 0) {
+    const blockIndex = Math.floor((totalViewedCount - 1) / 10);
+    testAvailableBlockKey = `${currentStageId}-${blockIndex}`;
+    testAvailableBlockWords = [...recentViewedWords];
+    cardsNeededForTest = 10;
+  } else {
+    testAvailableBlockKey = null;
+    testAvailableBlockWords = [];
+    cardsNeededForTest = remainder === 0 ? 10 : 10 - remainder;
+  }
+
+  updateTestInfo();
+}
+
 // ---------- 音声 ----------
 
 function speakCurrentWord() {
   if (!activeWords.length) return;
-  if (!("speechSynthesis" in window)) return;
   const w = activeWords[currentIndex];
-  const u = new SpeechSynthesisUtterance(w.english);
+  speakEnglish(w.english);
+}
+
+function speakEnglish(text) {
+  if (!text) return;
+  if (!("speechSynthesis" in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
   u.lang = "en-US";
   u.rate = 0.9;
   window.speechSynthesis.cancel();
@@ -476,10 +600,44 @@ function startNextCooldown() {
   }, 1200);
 }
 
+function recordCardView(word) {
+  if (!word) return;
+  totalViewedCount += 1;
+  recentViewedWords.push(word);
+  if (recentViewedWords.length > 10) recentViewedWords.shift();
+  updateTestAvailability();
+}
+
+function checkBonusTestOffer() {
+  if (!activeWords.length) return;
+  const stageState = getStageState(currentStageId);
+
+  if (currentIndex === 0) {
+    stageState.cycleCompleted = false;
+    saveProgress();
+    return;
+  }
+
+  if (currentIndex !== activeWords.length - 1) return;
+  if (stageState.cycleCompleted) return;
+
+  stageState.completedCycles = (stageState.completedCycles || 0) + 1;
+  stageState.cycleCompleted = true;
+
+  const blockKey = `bonus-${currentStageId}-${stageState.completedCycles}`;
+  stageState.lastBonusBlockKey = blockKey;
+  saveProgress();
+
+  bonusTestOffer = { blockKey, wordPool: [...activeWords] };
+  showBonusPrompt();
+}
+
 function goPrev() {
   if (currentIndex <= 0) return;
   currentIndex -= 1;
+  persistStageState();
   renderCard();
+  checkBonusTestOffer();
 }
 
 function goNext() {
@@ -488,65 +646,97 @@ function goNext() {
   if (isCooldown) return;
 
   currentIndex += 1;
-  totalViewedCount += 1;
-
-  const remainder = totalViewedCount % 10;
-  if (remainder === 0) {
-    const blockIndex = Math.floor((totalViewedCount - 1) / 10);
-    testAvailableBlockKey = `${currentStageId}-${blockIndex}`;
-    cardsNeededForTest = 10;
-  } else {
-    testAvailableBlockKey = null;
-    cardsNeededForTest = 10 - remainder;
-  }
-
+  persistStageState();
+  recordCardView(activeWords[currentIndex]);
   renderCard();
   startNextCooldown();
   speakCurrentWord();
+  checkBonusTestOffer();
 }
 
 // ---------- ミニテスト作成 ----------
 
-function createTestForBlock(blockKey) {
-  const pool = activeWords;
-  if (!pool.length) {
+function pickWrongChoices(word) {
+  const stageId = getStageIdForWord(word);
+  const unitType = word.unitType ?? null;
+  const posGroup = word.posGroup ?? null;
+
+  const candidatePools = [];
+
+  const sameStageWords = stageId ? getStageWords(stageId) : [];
+  candidatePools.push(
+    sameStageWords.filter(
+      (w) =>
+        w.id !== word.id &&
+        (w.unitType ?? null) === unitType &&
+        (w.posGroup ?? null) === posGroup
+    )
+  );
+
+  candidatePools.push(
+    WORDS.filter(
+      (w) =>
+        w.id !== word.id &&
+        (w.unitType ?? null) === unitType &&
+        (w.posGroup ?? null) === posGroup
+    )
+  );
+
+  candidatePools.push(
+    WORDS.filter(
+      (w) => w.id !== word.id && (w.unitType ?? null) === unitType
+    )
+  );
+
+  candidatePools.push(WORDS.filter((w) => w.id !== word.id));
+
+  const wrongChoices = [];
+  const usedJapanese = new Set();
+
+  for (const pool of candidatePools) {
+    const shuffled = shuffleArray(pool);
+    for (const candidate of shuffled) {
+      if (wrongChoices.length >= 3) break;
+      if (candidate.japanese === word.japanese) continue;
+      if (usedJapanese.has(candidate.japanese)) continue;
+      usedJapanese.add(candidate.japanese);
+      wrongChoices.push(candidate.japanese);
+    }
+    if (wrongChoices.length >= 3) break;
+  }
+
+  return wrongChoices.slice(0, 3);
+}
+
+function createTest(blockKey, pool) {
+  const questionPool = pool && pool.length ? pool : activeWords;
+  if (!questionPool.length) {
     return { blockKey, questions: [], currentQuestionIndex: 0, correctCount: 0 };
   }
 
-  const indices = [];
-  while (indices.length < 3 && indices.length < pool.length) {
-    const idx = Math.floor(Math.random() * pool.length);
-    if (!indices.includes(idx)) indices.push(idx);
+  const selectedWords = [];
+  const shuffledPool = shuffleArray(questionPool);
+  const usedIds = new Set();
+
+  for (const word of shuffledPool) {
+    if (selectedWords.length >= 3) break;
+    if (usedIds.has(word.id)) continue;
+    usedIds.add(word.id);
+    selectedWords.push(word);
   }
 
-  const questions = indices.map((idx) => {
-    const word = pool[idx];
+  const questions = selectedWords.map((word) => {
     const correctIndex = Math.floor(Math.random() * 4);
-
-    const wrongPoolIndices = [];
-    for (let i = 0; i < pool.length; i++) if (i !== idx) wrongPoolIndices.push(i);
-
-    const wrongChoices = [];
-    while (wrongChoices.length < 3 && wrongPoolIndices.length > 0) {
-      const wpIndex = Math.floor(Math.random() * wrongPoolIndices.length);
-      const wp = wrongPoolIndices.splice(wpIndex, 1)[0];
-      wrongChoices.push(pool[wp].japanese);
-    }
-
-    while (wrongChoices.length < 3 && pool.length > 0) {
-      const r = pool[Math.floor(Math.random() * pool.length)];
-      if (r.japanese !== word.japanese && !wrongChoices.includes(r.japanese)) {
-        wrongChoices.push(r.japanese);
-      } else if (pool.length <= 3) {
-        wrongChoices.push(r.japanese);
-      }
-    }
+    const wrongChoices = pickWrongChoices(word);
 
     const choices = [];
     let wi = 0;
     for (let i = 0; i < 4; i++) {
-      if (i === correctIndex) choices.push(word.japanese);
-      else choices.push(wrongChoices[wi++] ?? "");
+      if (i === correctIndex) {
+        choices.push(word.japanese);
+      } else {
+        choices.push(wrongChoices[wi++] ?? "");
+      }
     }
 
     return {
@@ -557,16 +747,42 @@ function createTestForBlock(blockKey) {
     };
   });
 
-  return { blockKey, questions, currentQuestionIndex: 0, correctCount: 0 };
+  return {
+    blockKey,
+    questions,
+    currentQuestionIndex: 0,
+    correctCount: 0,
+    pool: questionPool,
+  };
 }
 // ---------- ミニテスト画面 ----------
 
 function openTest() {
   if (testAvailableBlockKey === null) return;
   isInTest = true;
-  currentTest = createTestForBlock(testAvailableBlockKey);
+  currentTest = createTest(testAvailableBlockKey, testAvailableBlockWords);
   renderTestQuestion();
   testOverlay.classList.remove("hidden");
+}
+
+function startBonusTest() {
+  if (!bonusTestOffer) return;
+  isInTest = true;
+  currentTest = createTest(bonusTestOffer.blockKey, bonusTestOffer.wordPool);
+  bonusTestOffer = null;
+  bonusOverlay.classList.add("hidden");
+  renderTestQuestion();
+  testOverlay.classList.remove("hidden");
+}
+
+function skipBonusTest() {
+  bonusOverlay.classList.add("hidden");
+  bonusTestOffer = null;
+}
+
+function showBonusPrompt() {
+  if (!bonusTestOffer) return;
+  bonusOverlay.classList.remove("hidden");
 }
 
 function closeTestOverlay() {
@@ -581,11 +797,18 @@ function resetTestFeedback() {
   testFeedbackTextEl.textContent = "";
   testFeedbackDetailEl.textContent = "";
   testNextButton.classList.add("is-hidden");
+  testFeedbackSpeakButton.classList.add("is-hidden");
+  testFeedbackSpeakButton.disabled = true;
+  lastCorrectWord = null;
   pendingNextAction = null;
 }
 
 function renderTestQuestion() {
   const { questions, currentQuestionIndex } = currentTest;
+  if (!questions.length) {
+    closeTestOverlay();
+    return;
+  }
   const q = questions[currentQuestionIndex];
 
   isAnsweringQuestion = false;
@@ -606,10 +829,15 @@ function renderTestQuestion() {
   });
 }
 
-function showTestFeedback(isCorrect, selectedChoice, correctChoice) {
+function showTestFeedback(isCorrect, selectedChoice, correctChoice, english) {
   testFeedbackTextEl.textContent = isCorrect ? "せいかい！" : "ざんねん…";
   testFeedbackDetailEl.textContent = `あなたのこたえ：${selectedChoice} ／ せいかい：${correctChoice}`;
   testFeedbackEl.classList.remove("is-hidden");
+  lastCorrectWord = english || null;
+  if (lastCorrectWord) {
+    testFeedbackSpeakButton.classList.remove("is-hidden");
+    testFeedbackSpeakButton.disabled = false;
+  }
 }
 
 function handleChoice(selectedIndex) {
@@ -640,7 +868,7 @@ function handleChoice(selectedIndex) {
     btn.disabled = true;
   });
 
-  showTestFeedback(isCorrect, selectedChoice, correctChoice);
+  showTestFeedback(isCorrect, selectedChoice, correctChoice, q.english);
 
   if (isCorrect) currentTest.correctCount += 1;
 
@@ -744,11 +972,15 @@ testNextButton.addEventListener("click", () => {
   action();
 });
 testCancelButton.addEventListener("click", closeTestOverlay);
+testFeedbackSpeakButton.addEventListener("click", () => {
+  if (!lastCorrectWord) return;
+  speakEnglish(lastCorrectWord);
+});
 
 retryTestButton.addEventListener("click", () => {
   if (!currentTest) return;
   const blockKey = currentTest.blockKey;
-  currentTest = createTestForBlock(blockKey);
+  currentTest = createTest(blockKey, currentTest.pool);
   renderTestQuestion();
   resultOverlay.classList.add("hidden");
   testOverlay.classList.remove("hidden");
@@ -758,6 +990,9 @@ closeResultButton.addEventListener("click", () => {
   resultOverlay.classList.add("hidden");
   isInTest = false;
 });
+
+bonusStartButton.addEventListener("click", startBonusTest);
+bonusSkipButton.addEventListener("click", skipBonusTest);
 
 stageButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -771,7 +1006,12 @@ stageButtons.forEach((btn) => {
 function init() {
   loadProgress();
   renderProgress();
-  currentStageId = 1;
+  currentStageId = progress.lastStageId || 1;
+  stageButtons.forEach((btn) => {
+    const id = Number(btn.dataset.stage);
+    if (id === currentStageId) btn.classList.add("is-active");
+    else btn.classList.remove("is-active");
+  });
   resetStageState();
   renderCard();
 }
