@@ -517,6 +517,33 @@ button{
   flex: 1 1 auto;
 }
 
+.test-result{
+  margin: 0 auto 12px;
+  width: min(520px, 100%);
+  text-align: center;
+  font-family: "BIZ UDPGothic", "M PLUS Rounded 1c", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  font-size: 24px;
+  font-weight: 1000;
+  letter-spacing: .08em;
+  color: #0f2f63;
+  background: linear-gradient(180deg, #f9faff, #dfe9ff);
+  border: 2px solid rgba(31,102,193,.28);
+  border-radius: 18px;
+  padding: 10px 12px;
+  box-shadow: 0 12px 30px rgba(0,30,80,.15);
+}
+.test-result.correct{
+  color: #0f3b23;
+  background: linear-gradient(180deg, #e5f9ed, #c6f1d8);
+  border-color: rgba(23,143,94,.42);
+  text-shadow: 0 1px 0 #ffffff;
+}
+.test-result.incorrect{
+  color: #5a1d1d;
+  background: linear-gradient(180deg, #fff1f1, #ffd9d9);
+  border-color: rgba(200,40,40,.28);
+}
+
 .qbox{
   background: #fff;
   border-radius: 18px;
@@ -550,6 +577,59 @@ button{
   align-items: center;
   gap: 10px;
   box-shadow: 0 4px 12px rgba(20,40,80,.10);
+}
+.opt input:disabled{
+  filter: grayscale(.1);
+}
+.opt.is-selected{
+  border-color: rgba(31,102,193,.45);
+  box-shadow: 0 6px 16px rgba(31,102,193,.16);
+}
+.opt.is-correct{
+  background: linear-gradient(180deg, #e9fbf0, #d6f5e4);
+  border-color: rgba(23,143,94,.32);
+  color: #0f3b23;
+}
+.opt.is-incorrect{
+  background: linear-gradient(180deg, #fff3f3, #ffe0e0);
+  border-color: rgba(200,40,40,.22);
+}
+
+.answer-summary{
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px dashed #d4dded;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.summary-row{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.summary-label{
+  font-weight: 900;
+  color: #30445c;
+  font-size: 15px;
+}
+.answer-pill{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: #f3f6fc;
+  border: 1px solid #d6e2f1;
+  color: #12335d;
+  font-weight: 900;
+  line-height: 1.25;
+}
+.answer-pill-correct{
+  background: #e6f7ec;
+  border-color: rgba(23,143,94,.32);
+  color: #0f3b23;
 }
 .opt input{
   width: 18px;
