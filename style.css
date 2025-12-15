@@ -274,6 +274,14 @@ body {
   display: none;
 }
 
+.test-dialog-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: center;
+}
+
 .test-dialog {
   width: 100%;
   max-width: 420px;
@@ -282,10 +290,49 @@ body {
   padding: 18px 16px 14px;
 }
 
+.is-hidden {
+  display: none !important;
+}
+
 .test-header {
   font-size: 13px;
   color: var(--text-sub);
   margin-bottom: 4px;
+}
+
+.test-feedback {
+  text-align: center;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: linear-gradient(120deg, #ffb7ce, #ff9abb 48%, #ffd6e6);
+  color: #6a002a;
+  box-shadow: 0 10px 16px rgba(255, 126, 168, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.test-feedback-floating {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 440px);
+  pointer-events: none;
+}
+
+.test-feedback-text {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  font-family: "M PLUS Rounded 1c", "Noto Sans JP", system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8),
+    0 4px 10px rgba(106, 0, 42, 0.3);
+}
+
+.test-feedback-detail {
+  font-size: 12px;
+  margin-top: 4px;
+  color: #7a0d33;
 }
 
 .test-question {
@@ -309,6 +356,21 @@ body {
   background: #fafafa;
   text-align: left;
   font-size: 14px;
+}
+
+.choice-button.selected-choice {
+  border-color: #ff9abb;
+  background: #fff1f6;
+}
+
+.choice-button.correct-choice {
+  border-color: #4caf50;
+  background: #e9f7ec;
+  font-weight: 700;
+}
+
+.choice-button.wrong-choice {
+  opacity: 0.6;
 }
 
 .test-footer {
@@ -346,6 +408,13 @@ body {
 .result-message {
   font-size: 14px;
   margin-bottom: 8px;
+}
+
+.result-stamp-get {
+  font-size: 16px;
+  font-weight: 700;
+  color: #d95a00;
+  margin-bottom: 6px;
 }
 
 .result-stamp-info {

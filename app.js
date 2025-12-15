@@ -254,6 +254,10 @@ let isCooldown = false;
 
 let isInTest = false;
 let currentTest = null;
+let isAnsweringQuestion = false;
+let pendingNextAction = null;
+
+const CORRECT_FEEDBACK_DELAY_MS = 2200;
 
 const STORAGE_KEY = "eigo-pocket-progress";
 const MAX_STAMPS_PER_DAY = 3;
@@ -284,14 +288,19 @@ const totalStampsEl = document.getElementById("total-stamps");
 const rankLabelEl = document.getElementById("rank-label");
 
 const testOverlay = document.getElementById("test-overlay");
+const testFeedbackEl = document.getElementById("test-feedback");
+const testFeedbackTextEl = document.getElementById("test-feedback-text");
+const testFeedbackDetailEl = document.getElementById("test-feedback-detail");
 const testQuestionHeader = document.getElementById("test-question-header");
 const testQuestionText = document.getElementById("test-question-text");
 const testChoicesEl = document.getElementById("test-choices");
+const testNextButton = document.getElementById("test-next-button");
 const testCancelButton = document.getElementById("test-cancel-button");
 
 const resultOverlay = document.getElementById("result-overlay");
 const resultTitleEl = document.getElementById("result-title");
 const resultMessageEl = document.getElementById("result-message");
+const resultStampGetEl = document.getElementById("result-stamp-get");
 const resultStampInfoEl = document.getElementById("result-stamp-info");
 const retryTestButton = document.getElementById("retry-test-button");
 const closeResultButton = document.getElementById("close-result-button");
@@ -566,11 +575,23 @@ function closeTestOverlay() {
   isInTest = false;
   currentTest = null;
   testOverlay.classList.add("hidden");
+  resetTestFeedback();
+}
+
+function resetTestFeedback() {
+  testFeedbackEl.classList.add("is-hidden");
+  testFeedbackTextEl.textContent = "";
+  testFeedbackDetailEl.textContent = "";
+  testNextButton.classList.add("is-hidden");
+  pendingNextAction = null;
 }
 
 function renderTestQuestion() {
   const { questions, currentQuestionIndex } = currentTest;
   const q = questions[currentQuestionIndex];
+
+  isAnsweringQuestion = false;
+  resetTestFeedback();
 
   testQuestionHeader.textContent =
     `Q${currentQuestionIndex + 1} / ${questions.length}`;
@@ -587,18 +608,62 @@ function renderTestQuestion() {
   });
 }
 
+function showTestFeedback(isCorrect, selectedChoice, correctChoice) {
+  testFeedbackTextEl.textContent = isCorrect ? "せいかい！" : "ざんねん…";
+  testFeedbackDetailEl.textContent = `あなたのこたえ：${selectedChoice} ／ せいかい：${correctChoice}`;
+  testFeedbackEl.classList.remove("is-hidden");
+}
+
 function handleChoice(selectedIndex) {
+  if (isAnsweringQuestion) return;
   const { questions, currentQuestionIndex } = currentTest;
   const q = questions[currentQuestionIndex];
 
-  if (selectedIndex === q.correctIndex) currentTest.correctCount += 1;
+  const choiceButtons = Array.from(
+    testChoicesEl.querySelectorAll(".choice-button")
+  );
 
-  if (currentQuestionIndex + 1 < questions.length) {
-    currentTest.currentQuestionIndex += 1;
-    renderTestQuestion();
+  isAnsweringQuestion = true;
+
+  const selectedChoice = q.choices[selectedIndex] || "";
+  const correctChoice = q.choices[q.correctIndex] || "";
+  const isCorrect = selectedIndex === q.correctIndex;
+
+  if (choiceButtons[selectedIndex]) {
+    choiceButtons[selectedIndex].classList.add("selected-choice");
+  }
+  if (choiceButtons[q.correctIndex]) {
+    choiceButtons[q.correctIndex].classList.add("correct-choice");
+  }
+  choiceButtons.forEach((btn, idx) => {
+    if (idx !== q.correctIndex && idx !== selectedIndex) {
+      btn.classList.add("wrong-choice");
+    }
+    btn.disabled = true;
+  });
+
+  showTestFeedback(isCorrect, selectedChoice, correctChoice);
+
+  if (isCorrect) currentTest.correctCount += 1;
+
+  const goNext = () => {
+    isAnsweringQuestion = false;
+    resetTestFeedback();
+
+    if (currentQuestionIndex + 1 < questions.length) {
+      currentTest.currentQuestionIndex += 1;
+      renderTestQuestion();
+    } else {
+      testOverlay.classList.add("hidden");
+      handleTestResult();
+    }
+  };
+
+  if (isCorrect) {
+    setTimeout(goNext, CORRECT_FEEDBACK_DELAY_MS);
   } else {
-    testOverlay.classList.add("hidden");
-    handleTestResult();
+    pendingNextAction = goNext;
+    testNextButton.classList.remove("is-hidden");
   }
 }
 
@@ -611,6 +676,8 @@ function handleTestResult() {
   let title;
   let message;
   let stampInfo;
+
+  resultStampGetEl.classList.add("is-hidden");
 
   const alreadyCleared = progress.clearedBlocks.includes(String(blockKey));
   const canGetStamp =
@@ -637,6 +704,7 @@ function handleTestResult() {
         "★".repeat(progress.todayStamps) +
         "☆".repeat(MAX_STAMPS_PER_DAY - progress.todayStamps);
       stampInfo = `スタンプ：${beforeStr} → ${afterStr}`;
+      resultStampGetEl.classList.remove("is-hidden");
     } else if (alreadyCleared) {
       title = "ぜんぶ せいかい！";
       message = `${total}問 中 ${correctCount}問 せいかい！`;
@@ -670,6 +738,13 @@ nextButton.addEventListener("click", goNext);
 speakButton.addEventListener("click", speakCurrentWord);
 
 testButton.addEventListener("click", openTest);
+testNextButton.addEventListener("click", () => {
+  if (!pendingNextAction) return;
+  const action = pendingNextAction;
+  pendingNextAction = null;
+  testNextButton.classList.add("is-hidden");
+  action();
+});
 testCancelButton.addEventListener("click", closeTestOverlay);
 
 retryTestButton.addEventListener("click", () => {

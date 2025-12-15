@@ -68,6 +68,7 @@
   const testBody = document.getElementById("test-body");
   const testClose = document.getElementById("test-close");
   const testSubmit = document.getElementById("test-submit");
+  const testFeedback = document.getElementById("test-feedback");
 
   const toastEl = document.getElementById("toast");
 
@@ -79,6 +80,9 @@
 
   let currentTest = null;
   let selectedChoice = null;
+  let awaitingNext = false;
+  let hasFinishedTest = false;
+  let feedbackTimer = null;
 
   // Helpers
   function todayKey() {
@@ -198,6 +202,23 @@
     toastEl.classList.add("show");
     if (toastTimer) clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1400);
+  }
+
+  function showTestFeedback(msg, type, duration = 2000) {
+    if (!testFeedback) return;
+    testFeedback.textContent = msg;
+    testFeedback.classList.remove("correct", "wrong", "show");
+    if (type) testFeedback.classList.add(type);
+    requestAnimationFrame(() => testFeedback.classList.add("show"));
+    if (feedbackTimer) clearTimeout(feedbackTimer);
+    feedbackTimer = setTimeout(() => {
+      testFeedback?.classList.remove("show");
+    }, duration);
+  }
+
+  function hideTestFeedback() {
+    if (feedbackTimer) clearTimeout(feedbackTimer);
+    testFeedback?.classList.remove("show", "correct", "wrong");
   }
 
   function escapeHtml(s) {
@@ -404,6 +425,9 @@
     testBody.innerHTML = "";
     currentTest = null;
     selectedChoice = null;
+    awaitingNext = false;
+    hasFinishedTest = false;
+    hideTestFeedback();
   }
 
   function createTestForBlock(blockKey) {
@@ -529,6 +553,11 @@
     const q = currentTest.questions[currentTest.currentQuestionIndex];
     if (!q) return;
 
+    awaitingNext = false;
+    hasFinishedTest = false;
+    selectedChoice = null;
+    hideTestFeedback();
+
     testBody.innerHTML = "";
 
     const box = document.createElement("div");
@@ -557,13 +586,23 @@
     testBody.appendChild(box);
 
     if (testSubmit) {
-      const last = (currentTest.currentQuestionIndex === currentTest.questions.length - 1);
-      testSubmit.textContent = last ? "おわり" : "つぎへ";
+      testSubmit.textContent = "こたえあわせ";
+      testSubmit.disabled = false;
     }
   }
 
   function submitOrNext() {
     if (!currentTest) return;
+
+    if (hasFinishedTest) {
+      closeTest();
+      return;
+    }
+
+    if (awaitingNext) {
+      proceedAfterReview();
+      return;
+    }
 
     const q = currentTest.questions[currentTest.currentQuestionIndex];
     if (!q) return;
@@ -575,40 +614,87 @@
 
     const isCorrect = (selectedChoice === q.answer);
 
-    // モーダル内短表示
-    testBody.classList.add("flash");
-    setTimeout(() => testBody.classList.remove("flash"), 180);
+    awaitingNext = true;
 
-    const badge = document.createElement("div");
-    badge.className = "inline-result";
-    badge.textContent = isCorrect ? "せいかい！" : "ざんねん…";
-    testBody.appendChild(badge);
+    testBody.classList.add("flash");
+    setTimeout(() => testBody.classList.remove("flash"), 200);
+
+    showTestFeedback(isCorrect ? "せいかい！" : "ざんねん…", isCorrect ? "correct" : "wrong", isCorrect ? 2200 : 1700);
+
+    const reveal = document.createElement("div");
+    reveal.className = "answer-reveal";
+
+    const yourLabel = document.createElement("span");
+    yourLabel.className = "label";
+    yourLabel.textContent = "あなたのこたえ";
+    const yourValue = document.createElement("span");
+    yourValue.className = "value";
+    yourValue.textContent = selectedChoice;
+
+    const correctLabel = document.createElement("span");
+    correctLabel.className = "label";
+    correctLabel.textContent = "せいかい";
+    const correctValue = document.createElement("span");
+    correctValue.className = "value correct";
+    correctValue.textContent = q.answer;
+
+    reveal.appendChild(yourLabel);
+    reveal.appendChild(yourValue);
+    reveal.appendChild(correctLabel);
+    reveal.appendChild(correctValue);
+    testBody.appendChild(reveal);
+
+    testBody.querySelectorAll("input[name='test-choice']").forEach((input) => {
+      input.disabled = true;
+    });
 
     if (isCorrect) currentTest.correctCount += 1;
 
-    setTimeout(() => {
-      currentTest.currentQuestionIndex += 1;
-      selectedChoice = null;
-
-      if (currentTest.currentQuestionIndex >= currentTest.questions.length) {
-        finishTest();
-      } else {
-        renderTestQuestion();
+    if (isCorrect) {
+      if (testSubmit) {
+        testSubmit.disabled = true;
       }
-    }, 650);
+      setTimeout(proceedAfterReview, 2200);
+    } else {
+      if (testSubmit) {
+        const last = (currentTest.currentQuestionIndex === currentTest.questions.length - 1);
+        testSubmit.textContent = last ? "おわり" : "つぎへ";
+        testSubmit.disabled = false;
+      }
+    }
+  }
+
+  function proceedAfterReview() {
+    awaitingNext = false;
+    if (!currentTest) return;
+
+    currentTest.currentQuestionIndex += 1;
+    selectedChoice = null;
+
+    if (currentTest.currentQuestionIndex >= currentTest.questions.length) {
+      finishTest();
+    } else {
+      renderTestQuestion();
+    }
   }
 
   function finishTest() {
     if (!currentTest) return;
 
-    const allCorrect = (currentTest.correctCount === currentTest.questions.length && currentTest.questions.length === 3);
+    awaitingNext = false;
+    hasFinishedTest = true;
+    hideTestFeedback();
 
+    const totalQ = currentTest.questions.length;
+    const allCorrect = (currentTest.correctCount === totalQ && totalQ === 3);
+
+    let stampGained = false;
     if (allCorrect) {
       const today = getTodayStamps();
       if (today < MAX_STAMPS_PER_DAY) {
         setTodayStamps(today + 1);
         setTotalStamps(getTotalStamps() + 1);
-        toast("スタンプ ゲット！");
+        stampGained = true;
       } else {
         toast("きょうは もう10こ いっぱいだよ");
       }
@@ -617,7 +703,34 @@
     }
 
     renderStamps();
-    closeTest();
+
+    testBody.innerHTML = "";
+    const resultCard = document.createElement("div");
+    resultCard.className = "result-card";
+
+    const title = document.createElement("h3");
+    title.className = "result-title";
+    title.textContent = "けっか";
+    resultCard.appendChild(title);
+
+    const scoreRow = document.createElement("div");
+    scoreRow.className = "result-row";
+    scoreRow.innerHTML = `<span class="result-pill">${currentTest.correctCount}/${totalQ} せいかい</span>`;
+    resultCard.appendChild(scoreRow);
+
+    if (stampGained) {
+      const stamp = document.createElement("div");
+      stamp.className = "stamp-get";
+      stamp.textContent = "スタンプをGet！";
+      resultCard.appendChild(stamp);
+    }
+
+    testBody.appendChild(resultCard);
+
+    if (testSubmit) {
+      testSubmit.textContent = "とじる";
+      testSubmit.disabled = false;
+    }
   }
 
   // Load JSON
