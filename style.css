@@ -314,10 +314,6 @@ body {
   color: #7a0d33;
 }
 
-.test-feedback .speak-button {
-  margin-top: 10px;
-}
-
 .test-question {
   font-size: 16px;
   font-weight: 600;
@@ -329,17 +325,6 @@ body {
   flex-direction: column;
   gap: 8px;
   margin-bottom: 12px;
-}
-
-.bonus-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.bonus-actions .primary-button,
-.bonus-actions .secondary-button {
-  flex: 1;
 }
 
 .choice-button {
