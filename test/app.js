@@ -70,8 +70,8 @@
   const testSubmit = document.getElementById("test-submit");
 
   const toastEl = document.getElementById("toast");
-
-  const RESULT_AUTO_ADVANCE_MS = 1400;
+  const toastTextEl = document.getElementById("toast-text");
+  const toastCloseBtn = document.getElementById("toast-close");
 
   // Data helpers
   function getStageWords(id) {
@@ -102,7 +102,6 @@
   let currentTest = null;
   let selectedChoice = null;
   let answerRevealed = false;
-  let resultTimer = null;
   let optionNodes = [];
   let resultBannerEl = null;
   let answerSummaryEl = null;
@@ -223,12 +222,26 @@
   }
 
   let toastTimer = null;
-  function toast(msg) {
+  function hideToast() {
     if (!toastEl) return;
-    toastEl.textContent = msg;
+    toastEl.classList.remove("show");
+    if (toastTimer) {
+      clearTimeout(toastTimer);
+      toastTimer = null;
+    }
+  }
+
+  function toast(msg, { autoHide = true, duration = 1400 } = {}) {
+    if (!toastEl || !toastTextEl) return;
+    toastTextEl.textContent = msg;
     toastEl.classList.add("show");
-    if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1400);
+    if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
+    if (autoHide) {
+      toastTimer = setTimeout(() => {
+        toastEl.classList.remove("show");
+        toastTimer = null;
+      }, duration);
+    }
   }
 
   function escapeHtml(s) {
@@ -463,7 +476,6 @@
     answerSummaryEl = null;
     yourAnswerEl = null;
     correctAnswerEl = null;
-    if (resultTimer) { clearTimeout(resultTimer); resultTimer = null; }
   }
 
   function createTestForBlock(blockKey) {
@@ -715,22 +727,13 @@
     if (testSubmit) {
       const last = (currentTest.currentQuestionIndex === currentTest.questions.length - 1);
       testSubmit.textContent = last ? "おわり" : "つぎへ";
-      testSubmit.disabled = isCorrect;
-    }
-
-    if (isCorrect) {
-      resultTimer = setTimeout(() => {
-        testSubmit.disabled = false;
-        goToNextQuestion();
-      }, RESULT_AUTO_ADVANCE_MS);
+      testSubmit.disabled = false;
     }
   }
 
   function goToNextQuestion() {
     if (!currentTest) return;
     if (!answerRevealed) return;
-
-    if (resultTimer) { clearTimeout(resultTimer); resultTimer = null; }
 
     currentTest.currentQuestionIndex += 1;
     selectedChoice = null;
@@ -752,12 +755,12 @@
       if (today < MAX_STAMPS_PER_DAY) {
         setTodayStamps(today + 1);
         setTotalStamps(getTotalStamps() + 1);
-        toast("スタンプをGet！");
+        toast("スタンプをGet！", { duration: 2000 });
       } else {
-        toast("きょうは もう10こ いっぱいだよ");
+        toast("きょうは もう10こ いっぱいだよ", { autoHide: false });
       }
     } else {
-      toast(`${currentTest.correctCount}/3 せいかい`);
+      toast(`${currentTest.correctCount}/3 せいかい`, { autoHide: false });
     }
 
     renderStamps();
@@ -771,7 +774,6 @@
     answerSummaryEl = null;
     yourAnswerEl = null;
     correctAnswerEl = null;
-    if (resultTimer) { clearTimeout(resultTimer); resultTimer = null; }
   }
 
   // Load JSON
@@ -825,6 +827,7 @@
       if (ev.target === testOverlay) closeTest();
     });
     testSubmit?.addEventListener("click", submitOrNext);
+    toastCloseBtn?.addEventListener("click", hideToast);
   }
 
   init();

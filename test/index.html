@@ -14,6 +14,8 @@
       <h1 class="app-title">えいごポケット</h1>
       <p class="app-subtitle">カードをめくって、スタンプを集めよう。</p>
 
+      <div class="title-divider" aria-hidden="true"></div>
+
       <div class="stage-area">
         <div class="stage-label">すきなステージをえらんでね</div>
         <div id="stage-strip" class="stage-strip" aria-label="ステージをえらぶ"></div>
@@ -91,6 +93,11 @@
 
     <!-- 共有フッター -->
     <div id="shared-footer" class="shared-footer"></div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <span id="toast-text" class="toast-text"></span>
+    <button id="toast-close" type="button" class="toast-close" aria-label="とじる">OK</button>
   </div>
 
   <!-- ミニテスト（モーダル） -->
