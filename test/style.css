@@ -493,59 +493,111 @@ button{
   display:flex;
   align-items:center;
   justify-content:center;
-  padding: 16px;
+  padding: 12px;
   z-index: 2000;
 }
 
 .test-modal{
-  width: min(760px, 96vw);
-  max-height: min(86vh, 720px);
+  width: min(720px, 94vw);
+  max-height: min(80vh, 640px);
   background: #ffffff;
-  border-radius: 24px;
+  border-radius: 20px;
   border: 1px solid rgba(0,0,0,.06);
-  box-shadow: 0 26px 60px rgba(0,0,0,.28);
+  box-shadow: 0 22px 52px rgba(0,0,0,.26);
   overflow: hidden;
   display:flex;
   flex-direction: column;
   position: relative;
 }
 
+.bonus-overlay.hidden{ display:none; }
+.bonus-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  z-index: 1800;
+}
+.bonus-modal{
+  width: min(520px, 94vw);
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 18px 42px rgba(0,0,0,.22);
+  border: 1px solid rgba(0,0,0,.05);
+  padding: 20px 18px 18px;
+  text-align: center;
+}
+.bonus-title{
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 1000;
+  color: #234169;
+  line-height: 1.4;
+}
+.bonus-actions{
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.bonus-btn{
+  min-width: 140px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #d6e2f1;
+  background: linear-gradient(180deg, #f8fbff, #f0f4ff);
+  color: #1b3a6a;
+  font-weight: 1000;
+  box-shadow: 0 8px 18px rgba(20,40,80,.12);
+}
+.bonus-yes{
+  background: linear-gradient(180deg, #ffd978, #ffc44f);
+  color: #1d2e3f;
+  border-color: rgba(160,110,10,.26);
+}
+.bonus-no{
+  background: linear-gradient(180deg, #f1f5ff, #e1e9ff);
+}
+
 .test-head{
-  padding: 16px 18px;
+  padding: 12px 14px;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap: 10px;
+  gap: 8px;
   background: linear-gradient(180deg, #f6f8ff, #eef4ff);
   border-bottom: 1px solid rgba(0,0,0,.04);
 }
 .test-title{
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 1000;
   color: #143b78;
 }
 
 .test-body{
-  padding: 16px 18px 6px;
+  padding: 12px 14px 6px;
   overflow-y: auto;
   flex: 1 1 auto;
 }
 
 .test-result{
-  margin: 0 auto 12px;
-  width: min(520px, 100%);
+  margin: 0 auto 10px;
+  width: min(480px, 100%);
   text-align: center;
   font-family: "BIZ UDPGothic", "M PLUS Rounded 1c", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 1000;
-  letter-spacing: .08em;
+  letter-spacing: .06em;
   color: #0f2f63;
   background: linear-gradient(180deg, #f9faff, #dfe9ff);
   border: 2px solid rgba(31,102,193,.28);
-  border-radius: 18px;
-  padding: 10px 12px;
-  box-shadow: 0 12px 30px rgba(0,30,80,.15);
+  border-radius: 16px;
+  padding: 8px 10px;
+  box-shadow: 0 10px 26px rgba(0,30,80,.14);
 }
 .test-result.correct{
   color: #0f3b23;
@@ -559,40 +611,40 @@ button{
   border-color: rgba(200,40,40,.28);
 }
 
-.qbox{
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 14px 30px rgba(0,0,0,.14);
-  padding: 16px 14px 14px;
-  border: 1px solid rgba(0,0,0,.05);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+  .qbox{
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 12px 26px rgba(0,0,0,.14);
+    padding: 12px 12px 12px;
+    border: 1px solid rgba(0,0,0,.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 
-.qtitle{
-  font-weight: 1100;
-  color: #173a70;
-  line-height: 1.35;
-  font-size: 21px; /* 問題文を大きめに */
-  margin: 0;
-}
+  .qtitle{
+    font-weight: 1100;
+    color: #173a70;
+    line-height: 1.35;
+    font-size: 19px; /* 問題文を少しコンパクトに */
+    margin: 0;
+  }
 
-/* options buttons inside modal */
-.opt{
-  width: 100%;
-  text-align: left;
-  border-radius: 14px;
-  padding: 12px 12px;
-  font-size: 18px;
-  color: #1b2b3c;
-  border: 1px solid #dbe6f3;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 4px 12px rgba(20,40,80,.10);
-}
+  /* options buttons inside modal */
+  .opt{
+    width: 100%;
+    text-align: left;
+    border-radius: 12px;
+    padding: 10px 11px;
+    font-size: 17px;
+    color: #1b2b3c;
+    border: 1px solid #dbe6f3;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(20,40,80,.10);
+  }
 .opt input:disabled{
   filter: grayscale(.1);
 }
@@ -624,6 +676,7 @@ button{
   gap: 6px;
   flex-wrap: wrap;
 }
+.speak-row{ justify-content: flex-end; }
 .summary-label{
   font-weight: 900;
   color: #30445c;
@@ -646,6 +699,15 @@ button{
   border-color: rgba(23,143,94,.32);
   color: #0f3b23;
 }
+.speak-btn{
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid #d6e2f1;
+  background: linear-gradient(180deg, #f0f6ff, #e4edff);
+  color: #1b3a6a;
+  font-weight: 1000;
+  box-shadow: 0 6px 14px rgba(20,40,80,.12);
+}
 .opt input{
   width: 18px;
   height: 18px;
@@ -653,23 +715,23 @@ button{
   flex: 0 0 auto;
 }
 
-.test-foot{
-  padding: 12px 16px 16px;
-  border-top: 1px solid rgba(0,0,0,.04);
-  background: linear-gradient(180deg, #f9fbff, #f0f4ff);
-}
+  .test-foot{
+    padding: 10px 14px 14px;
+    border-top: 1px solid rgba(0,0,0,.04);
+    background: linear-gradient(180deg, #f9fbff, #f0f4ff);
+  }
 
-#test-submit{
-  width: 100%;
-  border-radius: 16px;
-  padding: 14px 12px;
-  font-size: 18px;
-  font-weight: 1000;
-  color: #1b2b3c;
-  border: 1px solid rgba(0,0,0,.06);
-  background: linear-gradient(180deg, #ffd978, #ffc44f);
-  box-shadow: 0 12px 22px rgba(120,80,10,.15);
-}
+  #test-submit{
+    width: 100%;
+    border-radius: 14px;
+    padding: 12px 12px;
+    font-size: 17px;
+    font-weight: 1000;
+    color: #1b2b3c;
+    border: 1px solid rgba(0,0,0,.06);
+    background: linear-gradient(180deg, #ffd978, #ffc44f);
+    box-shadow: 0 10px 20px rgba(120,80,10,.15);
+  }
 #test-submit:active{
   transform: translateY(1px);
   box-shadow: 0 6px 14px rgba(120,80,10,.18);
@@ -696,17 +758,19 @@ button{
 .toast{
   position: fixed;
   left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
+  top: 46%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  background: rgba(23, 52, 94, 0.94);
+  max-width: min(520px, 92vw);
+  justify-content: center;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(23, 52, 94, 0.96);
   color: #ffffff;
   font-weight: 900;
-  box-shadow: 0 12px 26px rgba(0,0,0,.22);
+  box-shadow: 0 14px 30px rgba(0,0,0,.26);
   border: 1px solid rgba(255,255,255,.18);
   opacity: 0;
   pointer-events: none;
@@ -721,6 +785,8 @@ button{
 
 .toast-text{
   white-space: pre-wrap;
+  font-size: 16px;
+  text-align: center;
 }
 
 .toast-close{
@@ -768,6 +834,17 @@ button{
   .app-title{ font-size: 30px; }
   .current-stage{ font-size: 22px; }
   .flip-inner{ height: 230px; }
+}
+
+@media (max-width: 480px){
+  .test-modal{ max-height: 82vh; border-radius: 18px; }
+  .test-head{ padding: 10px 12px; }
+  .test-title{ font-size: 17px; }
+  .test-body{ padding: 10px 12px 6px; }
+  .qtitle{ font-size: 18px; }
+  .opt{ padding: 9px 10px; font-size: 16px; }
+  #test-submit{ padding: 11px 12px; font-size: 16px; border-radius: 12px; }
+  .toast{ top: 50%; }
 }
 
 /* ===== 共有フッター：中央寄せ（footer.html側の要素にも効かせる） ===== */
