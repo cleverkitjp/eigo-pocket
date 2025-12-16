@@ -100,6 +100,16 @@
     <button id="toast-close" type="button" class="toast-close" aria-label="とじる">OK</button>
   </div>
 
+  <div id="bonus-overlay" class="bonus-overlay hidden" role="dialog" aria-modal="true" aria-label="おまけのミニテスト">
+    <div class="bonus-modal">
+      <div class="bonus-title">1周したね！おまけのミニテストだよ！</div>
+      <div class="bonus-actions">
+        <button id="bonus-yes" class="bonus-btn bonus-yes" type="button">やる</button>
+        <button id="bonus-no" class="bonus-btn bonus-no" type="button">いまはやらない</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ミニテスト（モーダル） -->
   <div id="test-overlay" class="test-overlay hidden" role="dialog" aria-modal="true" aria-label="ミニテスト">
     <div class="test-modal">
@@ -118,7 +128,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=6"></script>
   <script>
     // cleverkitjp 共有footer（全ツール共通）
     (function(){

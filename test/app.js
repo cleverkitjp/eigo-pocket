@@ -31,9 +31,7 @@
   const KEY_TOTAL = "eigoPocket:totalStamps";
   const KEY_TODAY = "eigoPocket:todayStamps";
   const KEY_DAY = "eigoPocket:dayKey";
-  const KEY_SEEN = "eigoPocket:seenIds";
-  const KEY_ELIGIBLE = "eigoPocket:testEligible";
-  const KEY_AVAILABLE_BLOCK = "eigoPocket:availableBlockKey";
+  const KEY_STAGE_STATE = "eigoPocket:stageState";
 
   // DOM
   const stageStrip = document.getElementById("stage-strip");
@@ -68,6 +66,11 @@
   const testBody = document.getElementById("test-body");
   const testClose = document.getElementById("test-close");
   const testSubmit = document.getElementById("test-submit");
+  const testTitleEl = document.querySelector(".test-title");
+
+  const bonusOverlay = document.getElementById("bonus-overlay");
+  const bonusYesBtn = document.getElementById("bonus-yes");
+  const bonusNoBtn = document.getElementById("bonus-no");
 
   const toastEl = document.getElementById("toast");
   const toastTextEl = document.getElementById("toast-text");
@@ -97,18 +100,23 @@
   let activeWords = [];
   let index = 0;
 
-  let wasEligible = false;
-
   let currentTest = null;
   let selectedChoice = null;
   let answerRevealed = false;
   let optionNodes = [];
+  let speakAnswerBtn = null;
   let resultBannerEl = null;
   let answerSummaryEl = null;
   let yourAnswerEl = null;
   let correctAnswerEl = null;
   let nextCooldownTimer = null;
   let nextCoolingDown = false;
+
+  let recentQueue = [];
+  let miniTestEligible = false;
+  let prevMiniEligible = false;
+  let stageStateMap = loadStageStateMap();
+  let bonusPromptVisible = false;
 
   // Helpers
   function todayKey() {
@@ -125,9 +133,6 @@
     if (saved !== tk) {
       localStorage.setItem(KEY_DAY, tk);
       localStorage.setItem(KEY_TODAY, "0");
-      localStorage.setItem(KEY_SEEN, JSON.stringify([]));
-      localStorage.setItem(KEY_ELIGIBLE, "0");
-      localStorage.removeItem(KEY_AVAILABLE_BLOCK);
     }
   }
 
@@ -139,6 +144,37 @@
 
   function saveStageId(id) {
     localStorage.setItem(KEY_STAGE, String(id));
+  }
+
+  function loadStageStateMap() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(KEY_STAGE_STATE) || "{}");
+      return (raw && typeof raw === "object") ? raw : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function saveStageStateMap(map) {
+    localStorage.setItem(KEY_STAGE_STATE, JSON.stringify(map || {}));
+  }
+
+  function getStageState(id) {
+    const key = String(id);
+    const state = stageStateMap[key] || {};
+    return {
+      index: Number.isFinite(state.index) ? state.index : 0,
+      cycleVisited: Array.isArray(state.cycleVisited) ? state.cycleVisited : [],
+      bonusReady: !!state.bonusReady,
+    };
+  }
+
+  function setStageState(id, patch) {
+    const key = String(id);
+    const current = getStageState(id);
+    const next = { ...current, ...patch };
+    stageStateMap = { ...stageStateMap, [key]: next };
+    saveStageStateMap(stageStateMap);
   }
 
   function getStageName(id) {
@@ -161,37 +197,81 @@
     localStorage.setItem(KEY_TODAY, String(Math.max(0, n)));
   }
 
-  function getSeenIds() {
-    try {
-      const arr = JSON.parse(localStorage.getItem(KEY_SEEN) || "[]");
-      return Array.isArray(arr) ? arr : [];
-    } catch {
-      return [];
+  function resetMiniTestProgress() {
+    recentQueue = [];
+    miniTestEligible = false;
+    prevMiniEligible = false;
+  }
+
+  function recordCycleVisit() {
+    if (!activeWords.length) return;
+    const w = activeWords[index];
+    if (!w || w.id == null) return;
+
+    const st = getStageState(stageId);
+    const visited = new Set(st.cycleVisited || []);
+    visited.add(w.id);
+
+    const completed = (visited.size >= activeWords.length);
+    const nextVisited = completed ? [] : Array.from(visited);
+    const nextBonus = st.bonusReady || completed;
+
+    setStageState(stageId, { cycleVisited: nextVisited, bonusReady: nextBonus });
+
+    if (nextBonus) {
+      tryShowBonusPrompt();
     }
   }
-  function setSeenIds(arr) {
-    localStorage.setItem(KEY_SEEN, JSON.stringify(arr));
+
+  function tryShowBonusPrompt() {
+    const st = getStageState(stageId);
+    if (!st.bonusReady) return;
+    if (!bonusOverlay || bonusPromptVisible) return;
+    if (testOverlay && !testOverlay.classList.contains("hidden")) return;
+
+    bonusOverlay.classList.remove("hidden");
+    bonusPromptVisible = true;
   }
 
-  function isEligible() {
-    return localStorage.getItem(KEY_ELIGIBLE) === "1";
-  }
-  function setEligible(v) {
-    localStorage.setItem(KEY_ELIGIBLE, v ? "1" : "0");
+  function hideBonusPrompt() {
+    if (bonusOverlay) {
+      bonusOverlay.classList.add("hidden");
+    }
+    bonusPromptVisible = false;
   }
 
-  function getAvailableBlockKey() {
-    return localStorage.getItem(KEY_AVAILABLE_BLOCK);
+  function handleBonusDecision(accept) {
+    hideBonusPrompt();
+    if (accept) {
+      startBonusTest();
+    } else {
+      setStageState(stageId, { bonusReady: false });
+    }
   }
-  function setAvailableBlockKey(v) {
-    if (v == null) localStorage.removeItem(KEY_AVAILABLE_BLOCK);
-    else localStorage.setItem(KEY_AVAILABLE_BLOCK, String(v));
+
+  function startBonusTest() {
+    const stagePool = getStageWords(stageId);
+    const test = createTestFromPool(stagePool, "bonus");
+    if (!test) {
+      setStageState(stageId, { bonusReady: false });
+      return;
+    }
+
+    setStageState(stageId, { bonusReady: false });
+    currentTest = test;
+    selectedChoice = null;
+    testOverlay.classList.remove("hidden");
+    renderTestQuestion();
   }
 
   function clampIndex() {
     if (activeWords.length <= 0) { index = 0; return; }
     if (index < 0) index = activeWords.length - 1;
     if (index >= activeWords.length) index = 0;
+  }
+
+  function saveCurrentIndex() {
+    setStageState(stageId, { index });
   }
 
   function starRow(count, max, { filled = "★", empty = "☆" } = {}) {
@@ -264,7 +344,6 @@
       btn.addEventListener("click", () => {
         stageId = s.id;
         saveStageId(stageId);
-        index = 0;
         selectActiveWords();
         renderStageButtons();
         renderAll();
@@ -315,6 +394,9 @@
     frontEnglish.textContent = w.english || "";
     frontKana.textContent = w.kana || "";
     backJapanese.textContent = w.japanese || "";
+
+    markSeenCurrent();
+    recordCycleVisit();
   }
 
   function renderStamps() {
@@ -335,13 +417,12 @@
   }
 
   function renderMiniTestUI() {
-    const seen = getSeenIds();
-    const seenCount = Math.min(10, seen.length);
+    const seenCount = Math.min(10, recentQueue.length);
     const remaining = Math.max(0, 10 - seenCount);
 
-    const eligible = isEligible();
-    const justUnlocked = eligible && !wasEligible;
-    wasEligible = eligible;
+    const eligible = miniTestEligible;
+    const justUnlocked = eligible && !prevMiniEligible;
+    prevMiniEligible = eligible;
 
     if (eligible) {
       remainingEl.textContent = "ミニテストできるよ！";
@@ -358,11 +439,17 @@
     renderCard();
     renderStamps();
     renderMiniTestUI();
+    tryShowBonusPrompt();
   }
 
   // Data selection
   function selectActiveWords() {
     activeWords = getStageWords(stageId);
+    const st = getStageState(stageId);
+    index = st.index || 0;
+    clampIndex();
+    resetMiniTestProgress();
+    bonusPromptVisible = false;
   }
 
   // 学習カウント（今日の10枚）
@@ -372,25 +459,19 @@
     const w = activeWords[index];
     if (w == null || w.id == null) return;
 
-    const seen = getSeenIds();
-    if (!seen.includes(w.id)) {
-      seen.push(w.id);
-      setSeenIds(seen);
+    recentQueue.push(w);
+    if (recentQueue.length > 10) {
+      recentQueue.shift();
     }
 
-    if (seen.length >= 10 && !isEligible()) {
-      // ブロックキー（30語区切り）を保存してミニテスト対象にする
-      const blockKey = Math.floor(index / 30);
-      setAvailableBlockKey(String(blockKey));
-      setEligible(true);
+    if (recentQueue.length >= 10) {
+      miniTestEligible = true;
     }
   }
 
   // Flip action
   function toggleFlipAndSpeak() {
     if (!activeWords.length) return;
-
-    markSeenCurrent();
 
     setFlipped(!isFlipped);
 
@@ -422,10 +503,9 @@
 
     startNextCooldown();
 
-    markSeenCurrent();
-
     index += 1;
     clampIndex();
+    saveCurrentIndex();
     renderCard();
 
     const w = activeWords[index];
@@ -438,6 +518,7 @@
     if (!activeWords.length) return;
     index -= 1;
     clampIndex();
+    saveCurrentIndex();
     renderCard();
 
     const w = activeWords[index];
@@ -448,16 +529,13 @@
   // Mini Test（フリーズしない choices 生成）
   // ===============================
   function openTest() {
-    if (!isEligible()) return;
+    if (!miniTestEligible) return;
 
-    const blockKey = getAvailableBlockKey();
-    if (blockKey == null) return;
-
-    currentTest = createTestForBlock(blockKey);
+    const pool = recentQueue.slice(-10);
+    currentTest = createTestFromPool(pool, "mini");
     if (!currentTest) return;
 
-    setEligible(false);
-    setSeenIds([]);
+    resetMiniTestProgress();
 
     selectedChoice = null;
     testOverlay.classList.remove("hidden");
@@ -476,28 +554,26 @@
     answerSummaryEl = null;
     yourAnswerEl = null;
     correctAnswerEl = null;
+    speakAnswerBtn = null;
   }
 
-  function createTestForBlock(blockKey) {
-    const stage = STAGES.find(s => s.id === stageId);
-    if (!stage) return null;
-
+  function createTestFromPool(pool, kind) {
     const stagePool = getStageWords(stageId);
     if (!stagePool.length) return null;
 
-    const blockIndex = Math.max(0, Number(blockKey) || 0);
-    const start = blockIndex * 30;
+    const questionWords = pickQuestionWords({
+      primaryPool: pool,
+      stagePool,
+      allPool: WORDS,
+      count: 3,
+    });
 
-    const blockPool = stagePool.slice(start, start + 30);
-    if (!blockPool.length) return null;
+    if (questionWords.length < 3) return null;
 
-    const questionCount = Math.min(3, blockPool.length);
-    const picked = pickUniqueRandom(blockPool, w => w.id, questionCount);
-
-    const questions = picked.map(word => {
+    const questions = questionWords.map((word, idx) => {
       const correct = (word.japanese || "").trim();
-      const choices = buildChoicesSafe({
-        correct,
+      const choices = buildTieredChoices({
+        correctWord: word,
         stagePool,
         allPool: WORDS,
         maxChoices: 4,
@@ -507,86 +583,93 @@
         english: word.english,
         answer: correct,
         choices,
+        type: idx === 2 ? "en-jp" : "en-jp",
       };
     });
 
     return {
-      blockKey,
+      kind,
       questions,
       currentQuestionIndex: 0,
       correctCount: 0,
     };
   }
 
-  function pickUniqueRandom(arr, keyFn, n) {
-    const a = Array.isArray(arr) ? arr.slice() : [];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
+  function pickQuestionWords({ primaryPool, stagePool, allPool, count }) {
+    const selected = [];
     const seen = new Set();
-    const out = [];
-    for (const item of a) {
-      const k = keyFn(item);
-      if (k == null || seen.has(k)) continue;
-      seen.add(k);
-      out.push(item);
-      if (out.length >= n) break;
+
+    const tiers = [primaryPool, stagePool, allPool];
+    tiers.forEach(pool => addRandomFromPool(pool));
+
+    return selected.slice(0, count);
+
+    function addRandomFromPool(pool) {
+      if (!Array.isArray(pool) || selected.length >= count) return;
+      const candidates = pool.filter(w => w && w.id != null && !seen.has(w.id));
+      shuffleArray(candidates);
+      for (const w of candidates) {
+        if (selected.length >= count) break;
+        selected.push(w);
+        seen.add(w.id);
+      }
     }
-    return out;
   }
 
-  function buildChoicesSafe({ correct, stagePool, allPool, maxChoices }) {
+  function buildTieredChoices({ correctWord, stagePool, allPool, maxChoices }) {
     const choices = [];
     const used = new Set();
+    const correct = (correctWord?.japanese || "").trim();
+    const unitType = correctWord?.unitType;
+    const posGroup = correctWord?.posGroup || correctWord?.pos;
 
-    function pushChoice(text) {
+    function push(text) {
       const t = String(text || "").trim();
-      if (!t) return false;
-      if (used.has(t)) return false;
+      if (!t || used.has(t)) return;
       used.add(t);
       choices.push(t);
-      return true;
     }
 
-    // 正解
-    pushChoice(correct);
+    push(correct);
 
-    // ステージ内 → 全体 の順に足す（無限ループしない）
-    addFromPool(stagePool);
-    if (choices.length < maxChoices) addFromPool(allPool);
+    const tiers = [
+      (w) => w.stageId === stageId && w.unitType === unitType && matchPosGroup(w, posGroup),
+      (w) => w.unitType === unitType && matchPosGroup(w, posGroup),
+      (w) => w.unitType === unitType,
+      () => true,
+    ];
 
-    // どうしても足りない場合の保険
-    while (choices.length < maxChoices) {
-      pushChoice("（まだないよ）");
-    }
+    tiers.forEach(filterFn => {
+      if (choices.length >= maxChoices) return;
+      addFromPool(stagePool, filterFn);
+      if (choices.length < maxChoices) addFromPool(allPool, filterFn);
+    });
 
     shuffleArray(choices);
-    return choices;
+    return choices.slice(0, maxChoices);
 
-    function addFromPool(pool) {
-      if (!Array.isArray(pool) || pool.length === 0) return;
-
-      const cand = [];
+    function addFromPool(pool, predicate) {
+      if (!Array.isArray(pool)) return;
+      const candidates = [];
       const local = new Set();
-      for (const w of pool) {
+      pool.forEach(w => {
+        if (!predicate(w)) return;
         const jp = String(w?.japanese || "").trim();
-        if (!jp) continue;
-        if (jp === correct) continue;
-        if (local.has(jp)) continue;
+        if (!jp || jp === correct || local.has(jp)) return;
         local.add(jp);
-        cand.push(jp);
-      }
+        candidates.push(jp);
+      });
 
-      for (let i = cand.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [cand[i], cand[j]] = [cand[j], cand[i]];
-      }
-
-      for (const jp of cand) {
+      shuffleArray(candidates);
+      for (const jp of candidates) {
         if (choices.length >= maxChoices) break;
-        pushChoice(jp);
+        push(jp);
       }
+    }
+
+    function matchPosGroup(word, target) {
+      const pg = word?.posGroup || word?.pos;
+      return target ? pg === target : true;
     }
   }
 
@@ -601,6 +684,11 @@
     if (!currentTest) return;
 
     resetResultIndicators();
+
+    if (testTitleEl) {
+      const label = currentTest.kind === "bonus" ? "おまけのミニテスト" : "ミニテスト";
+      testTitleEl.textContent = `${label}（3問）`;
+    }
 
     const q = currentTest.questions[currentTest.currentQuestionIndex];
     if (!q) return;
@@ -665,6 +753,16 @@
     answerSummaryEl = summary;
     box.appendChild(summary);
 
+    const speakRow = document.createElement("div");
+    speakRow.className = "summary-row speak-row hidden";
+    speakAnswerBtn = document.createElement("button");
+    speakAnswerBtn.type = "button";
+    speakAnswerBtn.className = "speak-btn";
+    speakAnswerBtn.textContent = "はつおん";
+    speakAnswerBtn.addEventListener("click", () => speak(q.english));
+    speakRow.appendChild(speakAnswerBtn);
+    box.appendChild(speakRow);
+
     testBody.appendChild(box);
 
     if (testSubmit) {
@@ -724,6 +822,12 @@
       answerSummaryEl.classList.remove("hidden");
     }
 
+    const speakRow = testBody.querySelector(".speak-row");
+    if (speakRow && speakAnswerBtn) {
+      speakRow.classList.remove("hidden");
+      speakAnswerBtn.disabled = false;
+    }
+
     if (testSubmit) {
       const last = (currentTest.currentQuestionIndex === currentTest.questions.length - 1);
       testSubmit.textContent = last ? "おわり" : "つぎへ";
@@ -774,6 +878,8 @@
     answerSummaryEl = null;
     yourAnswerEl = null;
     correctAnswerEl = null;
+
+    tryShowBonusPrompt();
   }
 
   // Load JSON
@@ -812,7 +918,6 @@
     ensureDayReset();
 
     await loadWords();
-    wasEligible = isEligible();
     selectActiveWords();
     renderStageButtons();
     renderAll();
@@ -828,6 +933,8 @@
     });
     testSubmit?.addEventListener("click", submitOrNext);
     toastCloseBtn?.addEventListener("click", hideToast);
+    bonusYesBtn?.addEventListener("click", () => handleBonusDecision(true));
+    bonusNoBtn?.addEventListener("click", () => handleBonusDecision(false));
   }
 
   init();
