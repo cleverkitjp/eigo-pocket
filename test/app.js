@@ -117,6 +117,7 @@
   let prevMiniEligible = false;
   let stageStateMap = loadStageStateMap();
   let bonusPromptVisible = false;
+  let resumeToastShown = false;
 
   // Helpers
   function todayKey() {
@@ -166,6 +167,7 @@
       index: Number.isFinite(state.index) ? state.index : 0,
       cycleVisited: Array.isArray(state.cycleVisited) ? state.cycleVisited : [],
       bonusReady: !!state.bonusReady,
+      cycleNotified: state.cycleNotified !== false,
     };
   }
 
@@ -215,8 +217,9 @@
     const completed = (visited.size >= activeWords.length);
     const nextVisited = completed ? [] : Array.from(visited);
     const nextBonus = st.bonusReady || completed;
+    const nextCycleNotified = completed ? false : st.cycleNotified;
 
-    setStageState(stageId, { cycleVisited: nextVisited, bonusReady: nextBonus });
+    setStageState(stageId, { cycleVisited: nextVisited, bonusReady: nextBonus, cycleNotified: nextCycleNotified });
 
     if (nextBonus) {
       tryShowBonusPrompt();
@@ -279,7 +282,7 @@
     return filled.repeat(c) + empty.repeat(max - c);
   }
 
-  const TITLES = ["ひよこ", "見習い", "がんばりや", "たんけん家", "はかせ", "せんせい", "たつじん", "めいじん", "でんせつ", "えいごのたつじん"];
+  const TITLES = ["はじめの一歩", "見習い", "がんばりや", "たんけん家", "チャレンジャー", "エキスパート", "たつじん", "めいじん", "マスター", "レジェンド"];
   const STAMPS_PER_LEVEL = 20;
 
   function calcRank(total) {
@@ -395,6 +398,7 @@
     frontKana.textContent = w.kana || "";
     backJapanese.textContent = w.japanese || "";
 
+    showCycleStartMessageIfNeeded();
     markSeenCurrent();
     recordCycleVisit();
   }
@@ -409,6 +413,41 @@
     const r = calcRank(total);
     rankTitleEl.textContent = r.title;
     rankLevelEl.textContent = `Lv.${r.lv}`;
+  }
+
+  function showCycleStartMessageIfNeeded() {
+    if (!activeWords.length) return;
+    const st = getStageState(stageId);
+    if (st.cycleNotified) return;
+    if (index !== 0) return;
+
+    toast("なんどでも、ちょうせんだ！");
+    setStageState(stageId, { cycleNotified: true });
+  }
+
+  function showLevelUpMessages(prevTotal, updatedTotal) {
+    const before = calcRank(prevTotal);
+    const after = calcRank(updatedTotal);
+    if (after.lv <= before.lv) return false;
+
+    toast("レベルアップ！");
+    if (after.title !== before.title) {
+      setTimeout(() => toast(`${after.title}に レベルアップ！`), 1100);
+    }
+    return true;
+  }
+
+  function showResumeMessageIfResuming() {
+    if (resumeToastShown) return;
+    const rawState = localStorage.getItem(KEY_STAGE_STATE);
+    if (!rawState) return;
+
+    const st = getStageState(stageId);
+    if (!activeWords.length) return;
+    if (!Number.isFinite(st.index) || st.index <= 0) return;
+
+    toast("つづきから、はじめるよ");
+    resumeToastShown = true;
   }
 
   function scrollToMiniTest() {
@@ -855,11 +894,16 @@
     const allCorrect = (currentTest.correctCount === currentTest.questions.length && currentTest.questions.length === 3);
 
     if (allCorrect) {
+      const prevTotal = getTotalStamps();
       const today = getTodayStamps();
       if (today < MAX_STAMPS_PER_DAY) {
         setTodayStamps(today + 1);
-        setTotalStamps(getTotalStamps() + 1);
-        toast("スタンプをGet！", { duration: 2000 });
+        const updatedTotal = prevTotal + 1;
+        setTotalStamps(updatedTotal);
+        const leveledUp = showLevelUpMessages(prevTotal, updatedTotal);
+        if (!leveledUp) {
+          toast("スタンプをGet！", { duration: 2000 });
+        }
       } else {
         toast("きょうは もう10こ いっぱいだよ", { autoHide: false });
       }
@@ -921,6 +965,7 @@
     selectActiveWords();
     renderStageButtons();
     renderAll();
+    showResumeMessageIfResuming();
 
     flipCardBtn?.addEventListener("click", toggleFlipAndSpeak);
     nextBtn?.addEventListener("click", goNext);
