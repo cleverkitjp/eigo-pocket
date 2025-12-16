@@ -559,10 +559,18 @@
 
   function createTestFromPool(pool, kind) {
     const stagePool = getStageWords(stageId);
-    if (!pool || pool.length === 0 || !stagePool.length) return null;
+    if (!stagePool.length) return null;
 
-    const uniquePool = pickUniqueRandom(pool, w => w.id, Math.min(3, pool.length));
-    const questions = uniquePool.map((word, idx) => {
+    const questionWords = pickQuestionWords({
+      primaryPool: pool,
+      stagePool,
+      allPool: WORDS,
+      count: 3,
+    });
+
+    if (questionWords.length < 3) return null;
+
+    const questions = questionWords.map((word, idx) => {
       const correct = (word.japanese || "").trim();
       const choices = buildTieredChoices({
         correctWord: word,
@@ -587,22 +595,25 @@
     };
   }
 
-  function pickUniqueRandom(arr, keyFn, n) {
-    const a = Array.isArray(arr) ? arr.slice() : [];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
+  function pickQuestionWords({ primaryPool, stagePool, allPool, count }) {
+    const selected = [];
     const seen = new Set();
-    const out = [];
-    for (const item of a) {
-      const k = keyFn(item);
-      if (k == null || seen.has(k)) continue;
-      seen.add(k);
-      out.push(item);
-      if (out.length >= n) break;
+
+    const tiers = [primaryPool, stagePool, allPool];
+    tiers.forEach(pool => addRandomFromPool(pool));
+
+    return selected.slice(0, count);
+
+    function addRandomFromPool(pool) {
+      if (!Array.isArray(pool) || selected.length >= count) return;
+      const candidates = pool.filter(w => w && w.id != null && !seen.has(w.id));
+      shuffleArray(candidates);
+      for (const w of candidates) {
+        if (selected.length >= count) break;
+        selected.push(w);
+        seen.add(w.id);
+      }
     }
-    return out;
   }
 
   function buildTieredChoices({ correctWord, stagePool, allPool, maxChoices }) {
