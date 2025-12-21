@@ -489,7 +489,7 @@
     {
       "id": 43,
       "stageId": 1,
-      "english": "My name is ～.",
+      "english": "My name is ....",
       "kana": "マイ ネーム イズ ～",
       "japanese": "わたしの なまえは ～です",
       "unitType": "phrase",
@@ -653,7 +653,7 @@
     {
       "id": 59,
       "stageId": 2,
-      "english": "to ～",
+      "english": "to ...",
       "kana": "トゥ",
       "japanese": "～へ",
       "unitType": "word",
@@ -1223,7 +1223,7 @@
     {
       "id": 116,
       "stageId": 3,
-      "english": "play with ～",
+      "english": "play with ...",
       "kana": "プレイ ウィズ ～",
       "japanese": "～といっしょにあそぶ",
       "unitType": "idiom",
@@ -2355,7 +2355,7 @@
     {
       "id": 229,
       "stageId": 5,
-      "english": "in ～",
+      "english": "in ...",
       "kana": "イン",
       "japanese": "～の中に",
       "unitType": "word",
@@ -2365,7 +2365,7 @@
     {
       "id": 230,
       "stageId": 5,
-      "english": "on ～",
+      "english": "on ...",
       "kana": "オン",
       "japanese": "～の上に",
       "unitType": "word",
@@ -2375,7 +2375,7 @@
     {
       "id": 231,
       "stageId": 5,
-      "english": "at ～",
+      "english": "at ...",
       "kana": "アット",
       "japanese": "～で",
       "unitType": "word",
@@ -2385,7 +2385,7 @@
     {
       "id": 232,
       "stageId": 5,
-      "english": "from ～",
+      "english": "from ...",
       "kana": "フロム",
       "japanese": "～から",
       "unitType": "word",
@@ -2395,7 +2395,7 @@
     {
       "id": 233,
       "stageId": 5,
-      "english": "for ～",
+      "english": "for ...",
       "kana": "フォー",
       "japanese": "～のために",
       "unitType": "word",
@@ -2405,7 +2405,7 @@
     {
       "id": 234,
       "stageId": 5,
-      "english": "with ～",
+      "english": "with ...",
       "kana": "ウィズ",
       "japanese": "いっしょに",
       "unitType": "word",
@@ -2415,7 +2415,7 @@
     {
       "id": 235,
       "stageId": 5,
-      "english": "look at ～",
+      "english": "look at ...",
       "kana": "ルック アット ～",
       "japanese": "～を見る",
       "unitType": "idiom",
@@ -2425,7 +2425,7 @@
     {
       "id": 236,
       "stageId": 5,
-      "english": "listen to ～",
+      "english": "listen to ...",
       "kana": "リスン トゥ ～",
       "japanese": "～を聞く",
       "unitType": "idiom",
@@ -2725,7 +2725,7 @@
     {
       "id": 266,
       "stageId": 6,
-      "english": "wait for ～",
+      "english": "wait for ...",
       "kana": "ウェイト フォー ～",
       "japanese": "～をまつ",
       "unitType": "idiom",
@@ -2735,7 +2735,7 @@
     {
       "id": 267,
       "stageId": 6,
-      "english": "look for ～",
+      "english": "look for ...",
       "kana": "ルック フォー ～",
       "japanese": "～をさがす",
       "unitType": "idiom",
@@ -2745,7 +2745,7 @@
     {
       "id": 268,
       "stageId": 6,
-      "english": "turn on ～",
+      "english": "turn on ...",
       "kana": "ターン オン ～",
       "japanese": "～をつける",
       "unitType": "phrase",
@@ -2755,7 +2755,7 @@
     {
       "id": 269,
       "stageId": 6,
-      "english": "turn off ～",
+      "english": "turn off ...",
       "kana": "ターン オフ ～",
       "japanese": "～をけす",
       "unitType": "phrase",
@@ -3585,7 +3585,7 @@
     {
       "id": 352,
       "stageId": 8,
-      "english": "talk to ～",
+      "english": "talk to ...",
       "kana": "トーク トゥ ～",
       "japanese": "～と話す",
       "unitType": "idiom",
@@ -4145,7 +4145,7 @@
     {
       "id": 408,
       "stageId": 9,
-      "english": "put on ～",
+      "english": "put on ...",
       "kana": "プット オン ～",
       "japanese": "～をきる",
       "unitType": "idiom",
@@ -4155,7 +4155,7 @@
     {
       "id": 409,
       "stageId": 9,
-      "english": "take off ～",
+      "english": "take off ...",
       "kana": "テイク オフ ～",
       "japanese": "～をぬぐ",
       "unitType": "idiom",
@@ -5057,7 +5057,7 @@
     {
       "id": 499,
       "stageId": 10,
-      "english": "give up ～",
+      "english": "give up ...",
       "kana": "ギブ アップ ～",
       "japanese": "～をあきらめる",
       "unitType": "idiom",
