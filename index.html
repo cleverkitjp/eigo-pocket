@@ -1,160 +1,156 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>えいごポケット｜こども向け英単語カード</title>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F6517NYNFF"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-F6517NYNFF');
-</script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="小学生向け・発音つき英単語カード学習ツール。スマホ最適化、シンプルUI。10まいめくるごとにミニテスト。">
-  <link rel="stylesheet" href="style.css">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9727255179923866" crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="version" content="flip-fix-release" />
+  <title>えいごポケット|小学生向けの英単語帳</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <div class="app-root">
-
-    <!-- ヘッダー -->
-    <header class="app-header">
+  <div class="page">
+    <!-- タイトルカード -->
+    <header class="title-card">
       <h1 class="app-title">えいごポケット</h1>
-      <p class="app-subtitle">こども向け えいたんごカード（発音つき）</p>
+      <p class="app-subtitle">カードをめくって、スタンプを集めよう。</p>
+
+      <div class="title-divider" aria-hidden="true"></div>
+
+      <div class="stage-area">
+        <div class="stage-label">すきなステージをえらんでね</div>
+        <div id="stage-strip" class="stage-strip" aria-label="ステージをえらぶ"></div>
+      </div>
     </header>
 
-    <!-- ステージ選択 -->
-    <section class="stage-bar">
-      <div class="stage-scroll">
-        <button class="stage-button is-active" type="button" data-stage="1">はじまりの森</button>
-        <button class="stage-button" type="button" data-stage="2">ことばの川</button>
-        <button class="stage-button" type="button" data-stage="3">おんがくの丘</button>
-        <button class="stage-button" type="button" data-stage="4">ひかりの草原</button>
-        <button class="stage-button" type="button" data-stage="5">ふしぎな町</button>
-        <button class="stage-button" type="button" data-stage="6">そらの城</button>
-        <button class="stage-button" type="button" data-stage="7">ほしの王国</button>
+    <!-- 現在ステージ表示（タイトルとカードの間） -->
+    <div id="current-stage" class="current-stage">ステージ｜-</div>
+
+    <!-- 単語カード -->
+    <section class="learn-card">
+      <div class="learn-top">
+        <div id="progress" class="progress">0/0</div>
+        <div id="tap-hint" class="tap-hint">タップしてカードをめくる</div>
+      </div>
+
+      <button id="flip-card" class="flip-card" type="button" aria-label="カードをめくる">
+        <div class="flip-inner" id="flip-inner">
+          <!-- 表：えいご + はつおん -->
+          <div class="flip-face flip-front">
+            <div id="front-english" class="front-english">loading...</div>
+            <div id="front-kana" class="front-kana"></div>
+          </div>
+
+          <!-- 裏：にほんご -->
+          <div class="flip-face flip-back">
+            <div id="back-japanese" class="back-japanese"></div>
+          </div>
+        </div>
+      </button>
+
+      <div class="nav-row">
+        <button id="prev-btn" class="nav-btn nav-prev" type="button">◀ まえへ</button>
+        <button id="next-btn" class="nav-btn nav-next" type="button">つぎへ ▶</button>
       </div>
     </section>
 
-    <!-- スタンプ -->
-    <section class="status-bar">
-      <div class="status-item">
-        <span class="status-label">きょうのスタンプ</span>
-        <span id="today-stamps" class="status-value">☆☆☆</span>
+    <!-- スタンプ / ミニテスト -->
+    <section class="stamp-card">
+      <div id="remaining-to-test" class="remaining-to-test">あと10まいおぼえたらミニテストだよ</div>
+
+      <!-- ミニテストは「権利獲得後」ここに出現 -->
+      <div id="mini-test-area" class="mini-test-area hidden">
+        <div class="mini-test-msg">ぜんもんせいかいでスタンプがもらえるよ</div>
+        <button id="mini-test-btn" class="mini-test-btn" type="button">ミニテストをする（3問）</button>
       </div>
 
-      <div class="status-item status-item-total">
-        <div class="status-total-line">
-          <span class="status-label">あつめたスタンプ</span>
-          <span id="total-stamps" class="status-value">0こ</span>
+      <div class="stamp-box stamp-today">
+        <div class="stamp-title">きょうのスタンプ（1日10こまで）</div>
+        <div id="today-stamps" class="stamp-stars">☆☆☆☆☆☆☆☆☆☆</div>
+      </div>
+
+      <div class="stamp-box stamp-total">
+        <div class="stamp-title">あつめたスタンプ</div>
+        <div class="stamp-total-row">
+          <div class="stamp-total-num">
+            <span id="total-stamps">0</span><span class="stamp-unit">こ</span>
+          </div>
+          <div class="stamp-badges">
+            <span id="rank-title" class="badge">はじめの一歩</span>
+            <span id="rank-level" class="badge badge-level">Lv.1</span>
+          </div>
         </div>
-        <div id="rank-label" class="status-rank">（ビギナー）</div>
       </div>
     </section>
 
-    <!-- カード -->
-    <main class="main-area">
-      <section class="card-area">
-        <div class="word-card" id="word-card">
-          <div class="card-section card-english">
-            <div class="card-label">えいご</div>
-            <div id="word-english" class="card-text-english">-</div>
-          </div>
-          <div class="card-section card-kana">
-            <div class="card-label">よみかた</div>
-            <div id="word-kana" class="card-text-kana"></div>
-          </div>
-          <div class="card-section card-japanese">
-            <div class="card-label">いみ</div>
-            <div id="word-japanese" class="card-text-japanese"></div>
-          </div>
-          <button id="speak-button" class="speak-button" type="button">
-            🔊 はつおんを きく
-          </button>
-        </div>
-      </section>
+<!-- おうちのかたへ -->
+<section class="info-card">
+  <h2 class="info-title">おうちのかたへ</h2>
+  <ul class="info-list">
+    <li>
+      小学生が、毎日少しずつでも無理なく続けられることを大切にして作っています。
+    </li>
+    <li>
+      カードを10枚学習すると、3問のミニテストにチャレンジできます。
+      全問正解するとスタンプが1つもらえます。
+    </li>
+    <li>
+      スタンプを集めることで、学習の進み具合に応じてレベルアップしていきます。
+    </li>
+    <li>
+      中学校での英語学習につながる、基本的な英単語・フレーズ約500語を収録しています。
+    </li>
+  </ul>
+</section>
 
-      <!-- ナビゲーション -->
-      <section class="nav-area">
-        <button id="prev-button" class="nav-button" type="button">&larr; まえ</button>
-        <div class="nav-progress">
-          <span id="card-counter">0 / 0</span>
-        </div>
-        <button id="next-button" class="nav-button" type="button">つぎ &rarr;</button>
-      </section>
 
-      <!-- ミニテスト -->
-      <section class="test-section">
-        <div id="test-info" class="test-info">
-          あと <span id="cards-to-test">10</span> まい みると、ミニテストが ひらけます
-        </div>
-        <button id="test-button" class="test-button" type="button" disabled>
-          ⭐ ミニテストに チャレンジ（3問）
-        </button>
-      </section>
-
-      <!-- 説明 -->
-      <section class="helper-section">
-        <p class="helper-text">
-          🔍 つかいかた：ステージを えらんで、カードを めくりながら「🔊 はつおん」を きいてみよう。<br>
-          10まい みたら ミニテスト！ 3問ぜんぶ せいかい できたら、スタンプが 1こ もらえるよ（1日に 3こまで）。
-        </p>
-      </section>
-    </main>
+    <!-- 共有フッター -->
+    <div id="shared-footer" class="shared-footer"></div>
   </div>
 
-  <!-- ミニテスト画面 -->
-  <div id="test-overlay" class="test-overlay hidden">
-    <div class="test-dialog">
-      <div id="test-feedback" class="test-feedback is-hidden">
-        <div id="test-feedback-text" class="test-feedback-text">せいかい！</div>
-        <div id="test-feedback-detail" class="test-feedback-detail"></div>
-      </div>
-      <div id="test-question-header" class="test-header">Q1 / 3</div>
-      <div id="test-question-text" class="test-question">"apple" の いみは どれ？</div>
-      <div id="test-choices" class="test-choices"></div>
-      <div class="test-footer">
-        <button id="test-next-button" type="button" class="primary-button is-hidden">
-          つぎへ
-        </button>
-        <button id="test-cancel-button" type="button" class="secondary-button">
-          カードにもどる
-        </button>
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <span id="toast-text" class="toast-text"></span>
+    <button id="toast-close" type="button" class="toast-close" aria-label="とじる">OK</button>
+  </div>
+
+  <div id="bonus-overlay" class="bonus-overlay hidden" role="dialog" aria-modal="true" aria-label="おまけのミニテスト">
+    <div class="bonus-modal">
+      <div class="bonus-title">1周したね！おまけのミニテストだよ！</div>
+      <div class="bonus-actions">
+        <button id="bonus-yes" class="bonus-btn bonus-yes" type="button">やる</button>
+        <button id="bonus-no" class="bonus-btn bonus-no" type="button">いまはやらない</button>
       </div>
     </div>
   </div>
 
-  <!-- テスト結果 -->
-  <div id="result-overlay" class="test-overlay hidden">
-    <div class="test-dialog">
-      <div id="result-title" class="result-title">テストけっか</div>
-      <div id="result-message" class="result-message">3問中 3問 せいかい！</div>
-      <div id="result-stamp-get" class="result-stamp-get is-hidden">スタンプをGet！</div>
-      <div id="result-stamp-info" class="result-stamp-info">
-        スタンプ：★☆☆ → ★★☆
+  <!-- ミニテスト（モーダル） -->
+  <div id="test-overlay" class="test-overlay hidden" role="dialog" aria-modal="true" aria-label="ミニテスト">
+    <div class="test-modal">
+      <div class="test-head">
+        <div class="test-title">ミニテスト（3問）</div>
+        <button id="test-close" class="test-close" type="button" aria-label="閉じる">✕</button>
       </div>
-      <div class="test-footer">
-        <button id="retry-test-button" type="button" class="primary-button">
-          もういちど テストする
-        </button>
-        <button id="close-result-button" type="button" class="secondary-button">
-          カードにもどる
-        </button>
+
+      <div id="test-body" class="test-body">
+        <!-- JSで生成 -->
+      </div>
+
+      <div class="test-foot">
+        <button id="test-submit" class="test-submit" type="button">答え合わせ</button>
       </div>
     </div>
   </div>
 
-  <!-- JS（app.js だけ） -->
-  <script src="app.js"></script>
-
-  <footer>
-    <p class="back-to-top">
-     <a href="https://cleverkitjp.github.io/">cleverkitjp トップページへ戻る</a>
-    </p>
-  </footer>
+  <script src="app.js?v=6"></script>
+  <script>
+    // cleverkitjp 共有footer（全ツール共通）
+    (function(){
+      const el = document.getElementById('shared-footer');
+      const url = 'https://cleverkitjp.github.io/footer.html';
+      fetch(url, { cache: 'no-cache' })
+        .then(r => r.text())
+        .then(html => { el.innerHTML = html; })
+        .catch(() => { el.innerHTML = '<div class="footer-fallback">cleverkitjp</div>'; });
+    })();
+  </script>
 </body>
 </html>
