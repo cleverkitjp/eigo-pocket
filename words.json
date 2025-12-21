@@ -65,9 +65,9 @@
     {
       "id": 2,
       "stageId": 1,
-      "english": "a",
-      "kana": "ア",
-      "japanese": "ひとつの",
+      "english": "a pen",
+      "kana": "ア ペン",
+      "japanese": "1ぽんのペン",
       "unitType": "word",
       "pos": "noun",
       "tags": []
@@ -149,9 +149,9 @@
     {
       "id": 10,
       "stageId": 1,
-      "english": "an",
-      "kana": "アン",
-      "japanese": "ひとつの",
+      "english": "an apple",
+      "kana": "アン アップル",
+      "japanese": "ひとつの りんご",
       "unitType": "word",
       "pos": "noun",
       "tags": []
@@ -169,9 +169,9 @@
     {
       "id": 12,
       "stageId": 1,
-      "english": "pen",
-      "kana": "ペン",
-      "japanese": "ペン",
+      "english": "two pens",
+      "kana": "トゥー ペンズ",
+      "japanese": "2ほんのペン",
       "unitType": "word",
       "pos": "noun",
       "tags": []
@@ -403,9 +403,9 @@
     {
       "id": 35,
       "stageId": 1,
-      "english": "apple",
-      "kana": "アップル",
-      "japanese": "りんご",
+      "english": "three apples",
+      "kana": "スリー アップルズ",
+      "japanese": "3つのりんご",
       "unitType": "word",
       "pos": "noun",
       "tags": []
