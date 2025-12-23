@@ -22,6 +22,7 @@
   <meta name="twitter:image:alt" content="えいごポケットの学習画面イメージ">
   <link rel="canonical" href="https://cleverkitjp.github.io/eigo-pocket/">
   <link rel="icon" href="icon.png" type="image/png" sizes="844x844">
+  <link rel="stylesheet" href="https://cleverkitjp.github.io/common.css">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6517NYNFF"></script>
   <script>
    window.dataLayer = window.dataLayer || [];
@@ -31,6 +32,8 @@
    gtag('config', 'G-F6517NYNFF');
   </script>
   <script defer data-domain="cleverkitjp.github.io" src="https://plausible.io/js/script.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9727255179923866"
+     crossorigin="anonymous"></script>
   <script type="application/ld+json">
   {
    "@context": "https://schema.org",
@@ -138,8 +141,6 @@
 </section>
 
 
-    <!-- 共有フッター -->
-    <div id="shared-footer" class="shared-footer"></div>
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite">
@@ -176,15 +177,19 @@
   </div>
 
   <script src="app.js?v=6"></script>
+  <div id="ck-footer-container"></div>
   <script>
-    // cleverkitjp 共有footer（全ツール共通）
-    (function(){
-      const el = document.getElementById('shared-footer');
-      const url = 'https://cleverkitjp.github.io/footer.html';
-      fetch(url, { cache: 'no-cache' })
-        .then(r => r.text())
-        .then(html => { el.innerHTML = html; })
-        .catch(() => { el.innerHTML = '<div class="footer-fallback">cleverkitjp</div>'; });
+    (function() {
+      var container = document.getElementById('ck-footer-container');
+      if (!container) return;
+
+      fetch('https://cleverkitjp.github.io/footer.html')
+        .then(function(r) { return r.text(); })
+        .then(function(html) {
+          container.innerHTML = html;
+          try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
+        })
+        .catch(function(e) {});
     })();
   </script>
 </body>
